@@ -8,7 +8,7 @@ import { FinanInfoModule } from './modules/finan-info/finan-info.module';
   imports: [
     TypeOrmModule.forRoot({
       type: 'mysql',
-      host: 'vm',
+      host: 'localhost',
       port: 3306,
       username: 'root',
       password: 'root',

@@ -1,0 +1,38 @@
+version: "3.5"
+
+services: 
+  mysql:
+    image: mysql:latest
+    container_name: nstock-db
+    domainname: nstock-db
+    hostname: nstock-db
+    ports:
+      - "3306:3306"
+    networks:
+      - nstock-sync-network
+    volumes:
+      - mysql-kstock:/var/lib/mysql
+      - ./docker_data/logs/mysql:/var/log/mysql:delegated
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: root
+
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: nstock-rbmq
+    ports:
+        - 5672:5672
+        - 15672:15672
+    volumes:
+        - ./docker_data/rabbitmq/mnesia/:/var/lib/rabbitmq/mnesia
+        - ./docker_data/rabbitmq/log/:/var/log/rabbitmq
+    networks:
+        - nstock-sync-network
+
+volumes:
+  mysql-kstock:
+    driver: local
+
+networks:
+  nstock-sync-network:
