@@ -19,16 +19,19 @@ services:
       MYSQL_PASSWORD: root
 
   rabbitmq:
-    image: rabbitmq:3-management-alpine
+    image: rabbitmq:3-management
     container_name: nstock-rbmq
     ports:
         - 5672:5672
         - 15672:15672
     volumes:
         - ./docker_data/rabbitmq/mnesia/:/var/lib/rabbitmq/mnesia
-        - ./docker_data/rabbitmq/log/:/var/log/rabbitmq
+        # - ./docker_data/rabbitmq/log/:/var/log/rabbitmq
     networks:
         - nstock-sync-network
+    environment:
+      RABBITMQ_DEFAULT_USER: rabbitmq
+      RABBITMQ_DEFAULT_PASS: rabbitmq
 
 volumes:
   mysql-kstock:
