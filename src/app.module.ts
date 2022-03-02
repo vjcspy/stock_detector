@@ -4,16 +4,11 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { FinanInfoModule } from '@module/finan-info/finan-info.module';
 import { CoreModule } from '@module/core/core.module';
-import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ConfigService } from '@nestjs/config';
 import databaseCfg from '@cfg/database.cfg';
-import rabbitmqCfg from '@cfg/rabbitmq.cfg';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({
-      isGlobal: true,
-      load: [rabbitmqCfg],
-    }),
     TypeOrmModule.forRoot({
       type: 'mysql',
       host: databaseCfg().host,
