@@ -30,7 +30,10 @@ export const corGetPageFn = async (
         numOfRecords: _aData.length,
       };
     }
-    return null;
+    return {
+      affectedRows: 0,
+      numOfRecords: 0,
+    };
   } catch (e) {
     console.log('error', e);
 

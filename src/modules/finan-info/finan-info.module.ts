@@ -9,6 +9,7 @@ import { StockPriceEntity } from './entity/stockPrice.entity';
 import { StockPriceSyncStatusEntity } from './entity/stockPriceSyncStatus.entity';
 import { CorporationState } from '@module/finan-info/provider/corporation.state';
 import rabbitmq from '@cfg/rabbitmq.cfg';
+import { CorController } from './controller/cor.controller';
 
 @Module({
   imports: [
@@ -41,6 +42,7 @@ import rabbitmq from '@cfg/rabbitmq.cfg';
     }),
     CoreModule,
   ],
+  controllers: [CorController],
   providers: [CorporationState],
 })
 export class FinanInfoModule {

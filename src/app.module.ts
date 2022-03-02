@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Logger, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -6,9 +6,11 @@ import { FinanInfoModule } from '@module/finan-info/finan-info.module';
 import { CoreModule } from '@module/core/core.module';
 import { ConfigService } from '@nestjs/config';
 import databaseCfg from '@cfg/database.cfg';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
   imports: [
+    ScheduleModule.forRoot(),
     TypeOrmModule.forRoot({
       type: 'mysql',
       host: databaseCfg().host,
@@ -26,7 +28,8 @@ import databaseCfg from '@cfg/database.cfg';
   providers: [AppService],
 })
 export class AppModule {
+  private readonly logger = new Logger('Application');
   constructor(private configService: ConfigService) {
-    console.info('App version: ', this.configService.get('APP_VERSION'));
+    this.logger.log('App version: ', this.configService.get('APP_VERSION'));
   }
 }
