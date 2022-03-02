@@ -10,6 +10,11 @@ import { StockPriceSyncStatusEntity } from './entity/stockPriceSyncStatus.entity
 import { CorporationState } from '@module/finan-info/provider/corporation.state';
 import rabbitmq from '@cfg/rabbitmq.cfg';
 
+console.log(
+  `amqp://${rabbitmq().user}:${rabbitmq().pass}@${rabbitmq().host}:${
+    rabbitmq().port
+  }`,
+);
 @Module({
   imports: [
     TypeOrmModule.forFeature([

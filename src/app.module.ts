@@ -6,6 +6,7 @@ import { FinanInfoModule } from '@module/finan-info/finan-info.module';
 import { CoreModule } from '@module/core/core.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import rabbitmq from './config/rabbitmq.cfg';
+import databaseCfg from '@cfg/database.cfg';
 
 @Module({
   imports: [
@@ -15,10 +16,10 @@ import rabbitmq from './config/rabbitmq.cfg';
     }),
     TypeOrmModule.forRoot({
       type: 'mysql',
-      host: 'vm',
-      port: 3306,
-      username: 'root',
-      password: 'root',
+      host: databaseCfg().host,
+      port: databaseCfg().port,
+      username: databaseCfg().user,
+      password: databaseCfg().pass,
       database: 'nstock',
       autoLoadEntities: true,
       synchronize: true,
