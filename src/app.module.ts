@@ -4,9 +4,15 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { FinanInfoModule } from '@module/finan-info/finan-info.module';
 import { CoreModule } from '@module/core/core.module';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import rabbitmq from './config/rabbitmq.cfg';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+      load: [rabbitmq],
+    }),
     TypeOrmModule.forRoot({
       type: 'mysql',
       host: 'vm',
@@ -23,4 +29,8 @@ import { CoreModule } from '@module/core/core.module';
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule {
+  constructor(private configService: ConfigService) {
+    console.info('App version: ', this.configService.get('APP_VERSION'));
+  }
+}

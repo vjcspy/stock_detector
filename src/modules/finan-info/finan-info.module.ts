@@ -8,6 +8,7 @@ import { FinancialIndicatorStatusEntity } from './entity/financialIndicatorStatu
 import { StockPriceEntity } from './entity/stockPrice.entity';
 import { StockPriceSyncStatusEntity } from './entity/stockPriceSyncStatus.entity';
 import { CorporationState } from '@module/finan-info/provider/corporation.state';
+import rabbitmq from '@cfg/rabbitmq.cfg';
 
 @Module({
   imports: [
@@ -28,7 +29,9 @@ import { CorporationState } from '@module/finan-info/provider/corporation.state'
           },
         },
       ],
-      uri: 'amqp://rabbitmq:rabbitmq@vm:5672',
+      uri: `amqp://${rabbitmq().user}:${rabbitmq().pass}@${rabbitmq().host}:${
+        rabbitmq().port
+      }`,
       channels: {
         'finan.info.channel-1': {
           prefetchCount: 1,
