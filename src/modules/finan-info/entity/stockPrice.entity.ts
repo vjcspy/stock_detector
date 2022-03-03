@@ -19,70 +19,131 @@ export class StockPriceEntity {
   })
   date: Date;
 
-  @Column('decimal', { precision: 8, scale: 3 })
-  change: number;
+  /**
+   * ------------------------- Giá điều chỉnh
+   */
 
-  @Column('decimal', { precision: 8, scale: 3 })
-  adAverage: number;
-
-  @Column('decimal', { precision: 8, scale: 3 })
-  adChange: number;
-
-  @Column('decimal', { precision: 8, scale: 3 })
+  @Column('mediumint')
   adClose: number;
 
-  @Column('decimal', { precision: 8, scale: 3 })
+  @Column('mediumint')
   adHigh: number;
 
-  @Column('decimal', { precision: 8, scale: 3 })
+  @Column('mediumint')
   adLow: number;
 
-  @Column('decimal', { precision: 8, scale: 3 })
+  @Column('mediumint')
   adOpen: number;
 
   @Column('decimal', { precision: 8, scale: 3 })
-  average: number;
+  adRatio: number;
 
-  @Column('decimal', { precision: 8, scale: 3 })
-  basicPrice: number;
+  /**
+   * ------------------------- Mua
+   */
+  @Column('decimal', { precision: 10, scale: 3 })
+  buyAvg: number;
 
-  @Column('decimal', { precision: 8, scale: 3 })
-  ceilingPrice: number;
+  // Số lệnh đặt mua
+  @Column('int', { unsigned: true })
+  buyCount: number;
 
-  @Column('decimal', { precision: 8, scale: 3 })
-  close: number;
+  // KL đặt mua
+  @Column('int', { unsigned: true })
+  buyQuantity: number;
 
-  @Column('decimal', { precision: 8, scale: 3 })
-  open: number;
+  /**
+   * Nước ngoài mua
+   */
+  @Column('int', { unsigned: true })
+  buyForeignQuantity: number;
 
-  @Column('decimal', { precision: 8, scale: 3 })
-  floorPrice: number;
+  @Column('int', { unsigned: true })
+  buyForeignValue: number;
 
-  @Column('decimal', { precision: 8, scale: 3 })
-  high: number;
+  @Column('int', { unsigned: true })
+  currentForeignRoom: number;
 
-  @Column('decimal', { precision: 8, scale: 3 })
-  low: number;
+  /**
+   * ------------------------- Thông tin khác
+   */
+  @Column('decimal', { precision: 8, scale: 3, nullable: true })
+  dealVolume: number;
 
-  @Column({
-    type: 'bigint',
-  })
-  nmValue: number;
+  @Column('decimal', { precision: 8, scale: 3, nullable: true })
+  exchange: number;
 
-  @Column({
-    type: 'int',
-  })
-  nmVolume: number;
+  @Column('int', { nullable: true })
+  mảtketCap: number;
 
-  @Column({
-    type: 'float',
-    unsigned: false,
-  })
-  pctChange: number;
+  @Column('int', { unsigned: true })
+  pricePreviousClose: number;
 
-  @Column()
-  floor: string;
+  @Column('int', { unsigned: true })
+  putthroughValue: number;
 
-  @Column()
-  type: string;
+  @Column('int', { unsigned: true })
+  putthroughVolume: number;
+
+  @Column('int', { unsigned: true })
+  shares: number;
+
+  /**
+   * ------------------------- Giá
+   */
+  @Column('decimal', { precision: 10, scale: 3 })
+  priceAverage: number;
+
+  @Column('int', { unsigned: true })
+  priceBasic: number;
+
+  @Column('int', { unsigned: true })
+  priceClose: number;
+
+  @Column('int', { unsigned: true })
+  priceHigh: number;
+
+  @Column('int', { unsigned: true })
+  priceLow: number;
+
+  @Column('int', { unsigned: true })
+  priceOpen: number;
+
+  /**
+   * ------------------------- Bán
+   */
+  @Column('decimal', { precision: 10, scale: 3 })
+  sellAvg: number;
+
+  // Số lệnh đặt mua
+  @Column('int', { unsigned: true })
+  sellCount: number;
+
+  // KL đặt mua
+  @Column('int', { unsigned: true })
+  sellQuantity: number;
+
+  /**
+   * Nước ngoài bán
+   */
+  @Column('int', { unsigned: true })
+  sellForeignQuantity: number;
+
+  @Column('int', { unsigned: true })
+  sellForeignValue: number;
+
+  /**
+   * ------------------------- Khớp lệnh
+   */
+  @Column('int', { unsigned: true })
+  totalTrade: number;
+
+  @Column('int', { unsigned: true })
+  totalValue: number;
+
+  @Column('int', { unsigned: true })
+  totalVolume: number;
+
+  @Column('int', { unsigned: true })
+  volume: number;
 }

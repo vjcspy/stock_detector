@@ -10,6 +10,8 @@ import { StockPriceSyncStatusEntity } from './entity/stockPriceSyncStatus.entity
 import { CorporationState } from '@module/finan-info/provider/corporation.state';
 import rabbitmq from '@cfg/rabbitmq.cfg';
 import { CorController } from './controller/cor.controller';
+import { StockPriceRequest } from '@module/finan-info/requests/bsc/price.request';
+import { PriceController } from '@module/finan-info/controller/price.controller';
 
 @Module({
   imports: [
@@ -42,8 +44,8 @@ import { CorController } from './controller/cor.controller';
     }),
     CoreModule,
   ],
-  controllers: [CorController],
-  providers: [CorporationState],
+  controllers: [CorController, PriceController],
+  providers: [CorporationState, StockPriceRequest],
 })
 export class FinanInfoModule {
   constructor(protected corporationState: CorporationState) {
