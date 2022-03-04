@@ -7,7 +7,6 @@ import { CoreModule } from '@module/core/core.module';
 import { ConfigService } from '@nestjs/config';
 import databaseCfg from '@cfg/database.cfg';
 import { ScheduleModule } from '@nestjs/schedule';
-import { HttpModule } from '@nestjs/axios';
 
 @Module({
   imports: [

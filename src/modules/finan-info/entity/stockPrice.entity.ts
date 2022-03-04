@@ -5,15 +5,19 @@ import {
   PrimaryGeneratedColumn,
   Unique,
 } from 'typeorm';
-import { entityWithSourceMapping } from '@module/core/decorator/entity/entity-with-source-mapping';
+import {
+  EntityWithSourceMapping,
+  SourceMapping,
+} from '@module/core/decorator/entity/source-mapping/entity-with-source-mapping';
 
 @Entity()
 @Unique(['code', 'date'])
-@entityWithSourceMapping
+@EntityWithSourceMapping
 export class StockPriceEntity extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
+  @SourceMapping('Symbol')
   @Column({
     nullable: false,
     type: 'varchar',
