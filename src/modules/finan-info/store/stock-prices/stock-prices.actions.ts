@@ -1,6 +1,7 @@
 import { createAction } from '@reduxjs/toolkit';
 import * as moment from 'moment';
 import { generateAction } from '@module/core/util/store/createAction';
+import { Moment } from 'moment';
 
 const STOCK_PRICES_START = 'STOCK_PRICES_START';
 export const stockPricesStartAction = createAction<{
@@ -14,11 +15,10 @@ export const checkStockPriceStatusAction = createAction(
 
 const GET_STOCK_PRICES = 'GET_STOCK_PRICES';
 const getStockPrices = generateAction<
-  { code: string; year: number; lastDate?: moment.Moment },
+  { code: string; lastDate: moment.Moment; endDate: Moment },
   {
     data: any;
     code: string;
-    year: number;
   }
 >(GET_STOCK_PRICES);
 

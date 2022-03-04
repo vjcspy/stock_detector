@@ -1,9 +1,7 @@
 import { getConnection } from 'typeorm';
 import { StockPriceEntity } from '@module/finan-info/entity/stockPrice.entity';
 import { StockPriceSyncStatusEntity } from '@module/finan-info/entity/stockPriceSyncStatus.entity';
-
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const _ = require('lodash');
+import * as _ from 'lodash';
 
 export const savePrices = async (code: string, priceData: any) => {
   let syncSuccess: any = false;
@@ -16,9 +14,9 @@ export const savePrices = async (code: string, priceData: any) => {
 
     // lets now open a new transaction:
     await queryRunner.startTransaction();
-    const stockPrices = _.map(priceData.data, (p) => {
+    const stockPrices = _.map(priceData.items, (p) => {
       const _p: any = { ...p };
-      _p['date'] = new Date(p['date']);
+      _p['date'] = new Date(p['Date']);
       return _p;
     });
     const last = _.last(stockPrices);
@@ -48,3 +46,4 @@ export const savePrices = async (code: string, priceData: any) => {
 
   return syncSuccess;
 };
+

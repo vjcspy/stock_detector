@@ -1,8 +1,16 @@
-import { Column, Entity, PrimaryGeneratedColumn, Unique } from 'typeorm';
+import {
+  BaseEntity,
+  Column,
+  Entity,
+  PrimaryGeneratedColumn,
+  Unique,
+} from 'typeorm';
+import { entityWithSourceMapping } from '@module/core/decorator/entity/entity-with-source-mapping';
 
 @Entity()
 @Unique(['code', 'date'])
-export class StockPriceEntity {
+@entityWithSourceMapping
+export class StockPriceEntity extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 

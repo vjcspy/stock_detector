@@ -13,10 +13,10 @@ import {
   stockPricesFinishedAction,
   stockPricesStartAction,
 } from './stock-prices.actions';
-import { StockPricesValues } from './stock-prices.values';
 import { createEffect } from '@module/core/util/store/createEffect';
 import { ofType } from '@module/core/util/store/ofType';
-import { getPrice } from '@module/finan-info/requests/vndirect/price';
+import { getPriceFromBSC } from '@module/finan-info/requests/bsc/price.request';
+import { StockPricesValues } from '@module/finan-info/store/stock-prices/stock-prices.values';
 
 const checkStockPriceStatus$ = createEffect((action$) =>
   action$.pipe(
@@ -24,24 +24,26 @@ const checkStockPriceStatus$ = createEffect((action$) =>
     concatMap((action) => {
       return from(getCurrentStatus(action.payload.code)).pipe(
         map((currentStatus) => {
+          const curDate = moment();
           if (currentStatus) {
             const lastDate = moment(currentStatus.lastDate);
-            if (lastDate.year() < moment().year()) {
+            if (lastDate.isSameOrBefore(curDate)) {
               return getStockPricesAction({
                 code: action.payload.code,
-                year: lastDate.year() + 1,
+                lastDate,
+                endDate: curDate,
               });
             } else {
-              return getStockPricesAction({
+              return stockPricesFinishedAction({
                 code: action.payload.code,
-                year: lastDate.year(),
-                lastDate,
               });
             }
           } else {
+            const lastDate = moment(`${StockPricesValues.START_YEAR}-01-01`);
             return getStockPricesAction({
               code: action.payload.code,
-              year: StockPricesValues.START_YEAR,
+              lastDate,
+              endDate: curDate,
             });
           }
         }),
@@ -54,7 +56,13 @@ const getStockPrice$ = createEffect((action$) =>
   action$.pipe(
     ofType(getStockPricesAction),
     concatMap((action) =>
-      from(getPrice(action.payload.code, action.payload.year)).pipe(
+      from(
+        getPriceFromBSC(
+          action.payload.code,
+          action.payload.lastDate,
+          action.payload.endDate,
+        ),
+      ).pipe(
         map((priceData) => {
           if (priceData === null) {
             return getStockPricesErrorAction({
@@ -64,7 +72,6 @@ const getStockPrice$ = createEffect((action$) =>
             return getStockPricesAfterAction({
               data: priceData,
               code: action.payload.code,
-              year: action.payload.year,
             });
           }
         }),
@@ -80,91 +87,23 @@ const whenGotStockPrices$ = createEffect((action$, state$) =>
     concatMap((d) => {
       const action = d[0];
       const stockPriceState: StockPriceState = d[1];
-      if (action.payload.data.totalElements === 0) {
-        const successYear = action.payload.year;
-        if (moment().year() > successYear) {
-          return of(
-            getStockPricesAction({
-              code: action.payload.code,
-              year: action.payload.year + 1,
-            }),
-          );
-        } else {
-          return of(
-            stockPricesFinishedAction({
-              code: action.payload.code,
-            }),
-          );
-        }
-      } else {
-        const saveData = action.payload.data;
-        if (!Array.isArray(saveData.data) || saveData.data.length === 0) {
-          return of(
-            saveStockPriceErrorAction({
-              error: new Error('Tai sao du lieu lai tra ve rong'),
-            }),
-          );
-        }
 
-        if (action.payload.year === moment().year()) {
-          const lastDate = stockPriceState.lastDate;
-          saveData['data'] = saveData.data.filter((p: any) =>
-            lastDate.isBefore(moment(p['date'], 'YYYY-MM-DD')),
-          );
-          if (saveData['data'].length === 0) {
-            // khong co du lieu de save
-            return of(stockPricesFinishedAction());
+      return from(
+        savePrices(action.payload.code, { items: action.payload.data }),
+      ).pipe(
+        map((res) => {
+          if (res === true) {
+            return saveStockPriceAfterAction({
+              code: action.payload.code,
+              year: action.payload.year,
+            });
+          } else {
+            return saveStockPriceErrorAction({
+              error: res,
+            });
           }
-        }
-
-        return from(savePrices(action.payload.code, saveData)).pipe(
-          map((res) => {
-            if (res === true) {
-              return saveStockPriceAfterAction({
-                code: action.payload.code,
-                year: action.payload.year,
-              });
-            } else {
-              return saveStockPriceErrorAction({
-                error: res,
-              });
-            }
-          }),
-        );
-      }
-    }),
-  ),
-);
-
-const repeat$ = createEffect((action$) =>
-  action$.pipe(
-    ofType(saveStockPriceAfterAction),
-    concatMap((action) => {
-      const successYear = action.payload.year;
-      if (moment().year() > successYear) {
-        return of(
-          getStockPricesAction({
-            code: action.payload.code,
-            year: action.payload.year + 1,
-          }),
-        );
-      } else {
-        return of(
-          stockPricesFinishedAction({
-            code: action.payload.code,
-          }),
-        );
-      }
-    }),
-  ),
-);
-
-const exit$ = createEffect((action$) =>
-  action$.pipe(
-    ofType(stockPricesFinishedAction),
-    map(() => {
-      process.exit(0);
-      return EMPTY;
+        }),
+      );
     }),
   ),
 );
@@ -173,6 +112,4 @@ export const stockPricesEffects = [
   checkStockPriceStatus$,
   getStockPrice$,
   whenGotStockPrices$,
-  repeat$,
-  exit$,
 ];
