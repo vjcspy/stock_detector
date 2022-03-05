@@ -1,7 +1,6 @@
 import { createReducer } from '@reduxjs/toolkit';
 import * as moment from 'moment';
-
-import { getStockPricesAction } from './stock-prices.actions';
+import { getStockPricesAction } from '@module/finan-info/store/stock-price/stock-price.actions';
 
 export interface StockPriceState {
   lastDate?: moment.Moment;

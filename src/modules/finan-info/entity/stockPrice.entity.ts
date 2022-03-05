@@ -10,9 +10,9 @@ import {
   SourceMapping,
 } from '@module/core/decorator/entity/source-mapping/entity-with-source-mapping';
 
+@EntityWithSourceMapping
 @Entity()
 @Unique(['code', 'date'])
-@EntityWithSourceMapping
 export class StockPriceEntity extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
@@ -83,7 +83,7 @@ export class StockPriceEntity extends BaseEntity {
   buyForeignQuantity: number;
 
   @SourceMapping('BuyForeignValue')
-  @Column('int', { unsigned: true })
+  @Column('bigint', { unsigned: true })
   buyForeignValue: number;
 
   @SourceMapping('CurrentForeignRoom')
@@ -110,7 +110,7 @@ export class StockPriceEntity extends BaseEntity {
   pricePreviousClose: number;
 
   @SourceMapping('PutThroughValue')
-  @Column('int', { unsigned: true, default: 0 })
+  @Column('bigint', { unsigned: true, default: 0 })
   putThroughValue: number;
 
   @SourceMapping('PutThroughVolume')
@@ -173,18 +173,18 @@ export class StockPriceEntity extends BaseEntity {
   sellForeignQuantity: number;
 
   @SourceMapping('SellForeignValue')
-  @Column('int', { unsigned: true })
+  @Column('bigint', { unsigned: true })
   sellForeignValue: number;
 
   /**
    * ------------------------- Khớp lệnh
    */
   @SourceMapping('TotalTrade')
-  @Column('int', { unsigned: true })
+  @Column('bigint', { unsigned: true })
   totalTrade: number;
 
   @SourceMapping('TotalValue')
-  @Column('int', { unsigned: true })
+  @Column('bigint', { unsigned: true })
   totalValue: number;
 
   @SourceMapping('TotalVolume')

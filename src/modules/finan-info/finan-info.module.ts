@@ -12,6 +12,7 @@ import rabbitmq from '@cfg/rabbitmq.cfg';
 import { CorController } from './controller/cor.controller';
 import { StockPriceRequest } from '@module/finan-info/requests/bsc/price.request';
 import { PriceController } from '@module/finan-info/controller/price.controller';
+import { StockPriceState } from '@module/finan-info/provider/stock-price.state';
 
 @Module({
   imports: [
@@ -45,10 +46,14 @@ import { PriceController } from '@module/finan-info/controller/price.controller'
     CoreModule,
   ],
   controllers: [CorController, PriceController],
-  providers: [CorporationState, StockPriceRequest],
+  providers: [CorporationState, StockPriceRequest, StockPriceState],
 })
 export class FinanInfoModule {
-  constructor(protected corporationState: CorporationState) {
+  constructor(
+    protected corporationState: CorporationState,
+    protected stockPriceState: StockPriceState,
+  ) {
     this.corporationState.config();
+    this.stockPriceState.config();
   }
 }

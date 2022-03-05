@@ -1,12 +1,16 @@
 import 'reflect-metadata';
 import { Map } from 'immutable';
+import _ from 'lodash';
 
 // eslint-disable-next-line @typescript-eslint/ban-types
 export function EntityWithSourceMapping<T extends { new (...args: any[]): {} }>(
   constructor: T,
 ) {
   // NOTE: bắt buộc phải sử dụng this, trong context của object
-  constructor.prototype.convertSourceData = function (data: any) {
+  constructor.prototype.convertSourceData = function (
+    data: any,
+    plainObject = true,
+  ) {
     if (typeof data !== 'object') {
       return null;
     }
@@ -40,6 +44,14 @@ export function EntityWithSourceMapping<T extends { new (...args: any[]): {} }>(
         throw new Error(`SourceMapping error with key: ${sourceKey}`);
       }
     });
+
+    if (plainObject === false) {
+      _.forEach(convertData, (_v, _k) => {
+        this[_k] = _v;
+      });
+
+      return this;
+    }
 
     return convertData;
   };

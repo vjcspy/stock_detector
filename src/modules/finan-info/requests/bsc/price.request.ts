@@ -2,8 +2,8 @@ import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
 import moment, { Moment } from 'moment';
 import { map } from 'rxjs';
-import { StockPricesValues } from '@module/finan-info/store/stock-prices/stock-prices.values';
 import { fetch } from '@module/core/util/fetch';
+import { StockPriceValues } from '@module/finan-info/store/stock-price/stock-price.values';
 
 @Injectable()
 export class StockPriceRequest {
@@ -11,7 +11,7 @@ export class StockPriceRequest {
 
   getPrice(code: string, lastDate?: Moment, endDate?: Moment) {
     if (typeof lastDate === 'undefined') {
-      lastDate = moment(`${StockPricesValues.START_YEAR}-01-01`);
+      lastDate = moment(`${StockPriceValues.START_YEAR}-01-01`);
     }
 
     if (typeof endDate === 'undefined') {
@@ -60,7 +60,7 @@ export const getPriceFromBSC = async (
   endDate?: Moment,
 ) => {
   if (typeof lastDate === 'undefined') {
-    lastDate = moment(`${StockPricesValues.START_YEAR}-01-01`);
+    lastDate = moment(`${StockPriceValues.START_YEAR}-01-01`);
   }
 
   if (typeof endDate === 'undefined') {

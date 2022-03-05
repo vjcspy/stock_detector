@@ -1,9 +1,11 @@
 import moment from 'moment';
-import { concatMap, EMPTY, from, map, of, withLatestFrom } from 'rxjs';
+import { concatMap, from, map, withLatestFrom } from 'rxjs';
 
 import { getCurrentStatus } from './fns/getCurrentStatus';
 import { savePrices } from './fns/savePrices';
-import { StockPriceState } from './stock-price.reducer';
+import { createEffect } from '@module/core/util/store/createEffect';
+import { ofType } from '@module/core/util/store/ofType';
+import { getPriceFromBSC } from '@module/finan-info/requests/bsc/price.request';
 import {
   getStockPricesAction,
   getStockPricesAfterAction,
@@ -12,11 +14,8 @@ import {
   saveStockPriceErrorAction,
   stockPricesFinishedAction,
   stockPricesStartAction,
-} from './stock-prices.actions';
-import { createEffect } from '@module/core/util/store/createEffect';
-import { ofType } from '@module/core/util/store/ofType';
-import { getPriceFromBSC } from '@module/finan-info/requests/bsc/price.request';
-import { StockPricesValues } from '@module/finan-info/store/stock-prices/stock-prices.values';
+} from '@module/finan-info/store/stock-price/stock-price.actions';
+import { StockPriceValues } from '@module/finan-info/store/stock-price/stock-price.values';
 
 const checkStockPriceStatus$ = createEffect((action$) =>
   action$.pipe(
@@ -39,7 +38,7 @@ const checkStockPriceStatus$ = createEffect((action$) =>
               });
             }
           } else {
-            const lastDate = moment(`${StockPricesValues.START_YEAR}-01-01`);
+            const lastDate = moment(`${StockPriceValues.START_YEAR}-01-01`);
             return getStockPricesAction({
               code: action.payload.code,
               lastDate,
@@ -86,20 +85,18 @@ const whenGotStockPrices$ = createEffect((action$, state$) =>
     withLatestFrom(state$, (v1, v2) => [v1, v2.stockPrice]),
     concatMap((d) => {
       const action = d[0];
-      const stockPriceState: StockPriceState = d[1];
-
       return from(
         savePrices(action.payload.code, { items: action.payload.data }),
       ).pipe(
         map((res) => {
-          if (res === true) {
+          if (res.syncSuccess === true) {
             return saveStockPriceAfterAction({
               code: action.payload.code,
               year: action.payload.year,
             });
           } else {
             return saveStockPriceErrorAction({
-              error: res,
+              error: res.error,
             });
           }
         }),
@@ -108,7 +105,7 @@ const whenGotStockPrices$ = createEffect((action$, state$) =>
   ),
 );
 
-export const stockPricesEffects = [
+export const stockPriceEffects = [
   checkStockPriceStatus$,
   getStockPrice$,
   whenGotStockPrices$,
