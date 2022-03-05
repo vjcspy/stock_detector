@@ -25,6 +25,9 @@ export class StockPriceEntity extends BaseEntity {
   })
   code: string;
 
+  @SourceMapping('Date', (data: any) => {
+    return new Date(data['Date']);
+  })
   @Column({
     type: 'date',
     nullable: false,
@@ -35,127 +38,160 @@ export class StockPriceEntity extends BaseEntity {
    * ------------------------- Giá điều chỉnh
    */
 
+  @SourceMapping('AdjClose')
   @Column('mediumint')
   adClose: number;
 
+  @SourceMapping('AdjHigh')
   @Column('mediumint')
   adHigh: number;
 
+  @SourceMapping('AdjLow')
   @Column('mediumint')
   adLow: number;
 
+  @SourceMapping('AdjOpen')
   @Column('mediumint')
   adOpen: number;
 
+  @SourceMapping('AdjRatio')
   @Column('decimal', { precision: 8, scale: 3 })
   adRatio: number;
 
   /**
    * ------------------------- Mua
    */
+  @SourceMapping('BuyAvg')
   @Column('decimal', { precision: 10, scale: 3 })
   buyAvg: number;
 
   // Số lệnh đặt mua
+  @SourceMapping('BuyCount')
   @Column('int', { unsigned: true })
   buyCount: number;
 
   // KL đặt mua
+  @SourceMapping('BuyQuantity')
   @Column('int', { unsigned: true })
   buyQuantity: number;
 
   /**
    * Nước ngoài mua
    */
+  @SourceMapping('BuyForeignQuantity')
   @Column('int', { unsigned: true })
   buyForeignQuantity: number;
 
+  @SourceMapping('BuyForeignValue')
   @Column('int', { unsigned: true })
   buyForeignValue: number;
 
-  @Column('int', { unsigned: true })
+  @SourceMapping('CurrentForeignRoom')
+  @Column('int', { unsigned: true, default: 0 })
   currentForeignRoom: number;
 
   /**
    * ------------------------- Thông tin khác
    */
-  @Column('decimal', { precision: 8, scale: 3, nullable: true })
+  @SourceMapping('DealVolume')
+  @Column('int', { unsigned: true, default: 0 })
   dealVolume: number;
 
+  @SourceMapping('Exchange')
   @Column('decimal', { precision: 8, scale: 3, nullable: true })
   exchange: number;
 
-  @Column('int', { nullable: true })
-  mảtketCap: number;
+  @SourceMapping('MarketCap')
+  @Column('int', { unsigned: true, default: 0 })
+  marketCap: number;
 
-  @Column('int', { unsigned: true })
+  @SourceMapping('PricePreviousClose')
+  @Column('int', { unsigned: true, default: 0 })
   pricePreviousClose: number;
 
-  @Column('int', { unsigned: true })
-  putthroughValue: number;
+  @SourceMapping('PutThroughValue')
+  @Column('int', { unsigned: true, default: 0 })
+  putThroughValue: number;
 
-  @Column('int', { unsigned: true })
-  putthroughVolume: number;
+  @SourceMapping('PutThroughVolume')
+  @Column('int', { unsigned: true, default: 0 })
+  putThroughVolume: number;
 
-  @Column('int', { unsigned: true })
+  @SourceMapping('Shares')
+  @Column('int', { unsigned: true, default: 0 })
   shares: number;
 
   /**
    * ------------------------- Giá
    */
+  @SourceMapping('PriceAverage')
   @Column('decimal', { precision: 10, scale: 3 })
   priceAverage: number;
 
+  @SourceMapping('PriceBasic')
   @Column('int', { unsigned: true })
   priceBasic: number;
 
+  @SourceMapping('PriceClose')
   @Column('int', { unsigned: true })
   priceClose: number;
 
+  @SourceMapping('PriceHigh')
   @Column('int', { unsigned: true })
   priceHigh: number;
 
+  @SourceMapping('PriceLow')
   @Column('int', { unsigned: true })
   priceLow: number;
 
+  @SourceMapping('PriceOpen')
   @Column('int', { unsigned: true })
   priceOpen: number;
 
   /**
    * ------------------------- Bán
    */
+  @SourceMapping('SellAvg')
   @Column('decimal', { precision: 10, scale: 3 })
   sellAvg: number;
 
   // Số lệnh đặt mua
+  @SourceMapping('SellCount')
   @Column('int', { unsigned: true })
   sellCount: number;
 
   // KL đặt mua
+  @SourceMapping('SellQuantity')
   @Column('int', { unsigned: true })
   sellQuantity: number;
 
   /**
    * Nước ngoài bán
    */
+  @SourceMapping('SellForeignQuantity')
   @Column('int', { unsigned: true })
   sellForeignQuantity: number;
 
+  @SourceMapping('SellForeignValue')
   @Column('int', { unsigned: true })
   sellForeignValue: number;
 
   /**
    * ------------------------- Khớp lệnh
    */
+  @SourceMapping('TotalTrade')
   @Column('int', { unsigned: true })
   totalTrade: number;
 
+  @SourceMapping('TotalValue')
   @Column('int', { unsigned: true })
   totalValue: number;
 
+  @SourceMapping('TotalVolume')
   @Column('int', { unsigned: true })
   totalVolume: number;
 
+  @SourceMapping('Volume')
   @Column('int', { unsigned: true })
   volume: number;
 }
