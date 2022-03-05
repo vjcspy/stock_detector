@@ -13,6 +13,7 @@ import { CorController } from './controller/cor.controller';
 import { StockPriceRequest } from '@module/finan-info/requests/bsc/price.request';
 import { PriceController } from '@module/finan-info/controller/price.controller';
 import { StockPriceState } from '@module/finan-info/provider/stock-price.state';
+import { QUEUE_PROVIDES } from '@module/finan-info/queue';
 
 @Module({
   imports: [
@@ -32,6 +33,13 @@ import { StockPriceState } from '@module/finan-info/provider/stock-price.state';
             durable: true,
           },
         },
+        {
+          name: 'finan.info.sync-stock-price',
+          type: 'topic',
+          options: {
+            durable: true,
+          },
+        },
       ],
       uri: `amqp://${rabbitmq().user}:${rabbitmq().pass}@${rabbitmq().host}:${
         rabbitmq().port
@@ -46,7 +54,12 @@ import { StockPriceState } from '@module/finan-info/provider/stock-price.state';
     CoreModule,
   ],
   controllers: [CorController, PriceController],
-  providers: [CorporationState, StockPriceRequest, StockPriceState],
+  providers: [
+    CorporationState,
+    StockPriceRequest,
+    StockPriceState,
+    ...QUEUE_PROVIDES,
+  ],
 })
 export class FinanInfoModule {
   constructor(

@@ -6,8 +6,6 @@ module.exports = {
   },
   plugins: [
     "@typescript-eslint/eslint-plugin",
-    "simple-import-sort",
-    "import"
   ],
   extends: [
     "plugin:@typescript-eslint/recommended",
