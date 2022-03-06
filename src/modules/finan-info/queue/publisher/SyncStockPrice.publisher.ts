@@ -18,7 +18,7 @@ export class SyncStockPricePublisher {
     _.forEach(cors, (cor) => {
       this.amqpConnection.publish(
         'finan.info.sync-stock-price',
-        'finan.info.sync-stock-price',
+        'finan.info.sync-stock-price.cor',
         cor.code,
         {},
       );
