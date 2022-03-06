@@ -12,6 +12,15 @@ export class SyncStockPriceConsumer {
     },
   })
   public async rpcHandler(msg: any) {
-    console.log(`Received pub/sub message: ${JSON.stringify(msg)}`);
+    console.log(`Receive pub/sub message: ${JSON.stringify(msg)}`);
+    /*
+     * TODO: Do nó không có cơ chế no-ack nên bắt buốc phải không được trả về value
+     * */
+    return new Promise<void>((resolve) => {
+      setTimeout(() => {
+        console.log(`Done pub/sub message: ${JSON.stringify(msg)}`);
+        resolve();
+      }, 3000);
+    });
   }
 }
