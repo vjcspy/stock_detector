@@ -26,9 +26,11 @@ const requestFinancialIndicator = generateAction<
     code: string;
   }
 >('REQUEST_FINANCIAL_INDICATOR', prefix);
-export const requestFinanceInfoAction = requestFinancialIndicator.ACTION;
-export const requestFinanceInfoAfterAction = requestFinancialIndicator.AFTER;
-export const requestFinanceInfoErrorAction = requestFinancialIndicator.ERROR;
+export const requestFinancialIndicatorAction = requestFinancialIndicator.ACTION;
+export const requestFinancialIndicatorAfterAction =
+  requestFinancialIndicator.AFTER;
+export const requestFinancialIndicatorErrorAction =
+  requestFinancialIndicator.ERROR;
 
 const saveFinancialIndicator = generateAction<
   any,

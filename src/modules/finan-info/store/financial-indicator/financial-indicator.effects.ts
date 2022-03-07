@@ -1,11 +1,12 @@
 import { createEffect } from '@module/core/util/store/createEffect';
 import {
-  requestFinanceInfoAction,
+  requestFinancialIndicatorAction,
+  requestFinancialIndicatorAfterAction,
+  requestFinancialIndicatorErrorAction,
   startGetFinanceInfoAction,
-  startGetFinanceInfoErrorAction,
 } from '@module/finan-info/store/financial-indicator/financial-indicator.actions';
 import { ofType } from '@module/core/util/store/ofType';
-import { EMPTY, from, map, switchMap, withLatestFrom } from 'rxjs';
+import { catchError, from, map, of, switchMap, withLatestFrom } from 'rxjs';
 import { getFinanceInfoStatus } from '@module/finan-info/store/financial-indicator/fns/getFinanceInfoStatus';
 import {
   FinancialIndicatorState,
@@ -31,14 +32,14 @@ const whenStartSync$ = createEffect((action$) => {
                  * Do không biết với năm hiện tại thì đang ở page nào nên bắt buốc phải request lại từ đầu
                  * Truyền vào lastYear nhằm mục đích là CÓ THỂ dùng để filter chỉ update những thằng sau lastYear thôi
                  * */
-                return requestFinanceInfoAction({
+                return requestFinancialIndicatorAction({
                   code,
                   page: FinancialIndicatorValues.START_PAGE_FOR_YEAR,
                   lastYear: parseInt(syncStatus.year),
                 });
               } else {
                 // Vẫn lấy page đầu tiên trong trường hợp có update (Chưa kiểm toán, kiểm toán)
-                return requestFinanceInfoAction({
+                return requestFinancialIndicatorAction({
                   code,
                   page: 1,
                   lastYear: moment().year() - 1,
@@ -46,14 +47,14 @@ const whenStartSync$ = createEffect((action$) => {
               }
             } else {
               if (parseInt(syncStatus.year) < moment().year() - 1) {
-                return requestFinanceInfoAction({
+                return requestFinancialIndicatorAction({
                   code,
                   page: FinancialIndicatorValues.START_PAGE_FOR_QUARTER,
                   lastYear: parseInt(syncStatus.year),
                 });
               } else {
                 // Vẫn lấy page đầu tiên trong trường hợp có update (Chưa kiểm toán, kiểm toán)
-                return requestFinanceInfoAction({
+                return requestFinancialIndicatorAction({
                   code,
                   page: 1,
                   lastYear: moment().year() - 1,
@@ -62,7 +63,7 @@ const whenStartSync$ = createEffect((action$) => {
             }
           } else {
             // Chưa request bao giờ
-            return requestFinanceInfoAction({
+            return requestFinancialIndicatorAction({
               code,
               page: termType === FinancialTermTypeEnum.YEAR ? 5 : 8,
             });
@@ -75,7 +76,7 @@ const whenStartSync$ = createEffect((action$) => {
 
 const requestFinancialInfoPage$ = createEffect((action$, state$) =>
   action$.pipe(
-    ofType(requestFinanceInfoAction),
+    ofType(requestFinancialIndicatorAction),
     withLatestFrom(state$, (v1, v2) => [v1, v2.financialIndicator]),
     switchMap((d) => {
       const action: any = d[0];
@@ -88,11 +89,26 @@ const requestFinancialInfoPage$ = createEffect((action$, state$) =>
         ),
       ).pipe(
         map((res) => {
-          return EMPTY;
+          return requestFinancialIndicatorAfterAction({
+            code: action.payload.code,
+            data: res,
+          });
         }),
+        catchError((err: any) =>
+          from(
+            of(
+              requestFinancialIndicatorErrorAction({
+                error: err,
+              }),
+            ),
+          ),
+        ),
       );
     }),
   ),
 );
 
-export const FinancialIndicatorEffects = [whenStartSync$];
+export const FinancialIndicatorEffects = [
+  whenStartSync$,
+  requestFinancialInfoPage$,
+];
