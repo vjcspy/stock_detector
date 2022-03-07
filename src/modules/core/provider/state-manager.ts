@@ -7,7 +7,7 @@ import logger from 'redux-logger';
   scope: Scope.DEFAULT,
 })
 export class StateManager {
-  protected _storeManager = createStoreManager(
+  public static _storeManager = createStoreManager(
     {
       // eslint-disable-next-line @typescript-eslint/no-empty-function
       empty: createReducer({}, () => {}),
@@ -15,9 +15,9 @@ export class StateManager {
     [],
     [logger],
   );
-  protected _storeInstance = configureStore({
-    reducer: this._storeManager.reduce,
-    middleware: [...this._storeManager.middleware()],
+  public static _storeInstance = configureStore({
+    reducer: StateManager._storeManager.reduce,
+    middleware: [...StateManager._storeManager.middleware()],
     devTools:
       process?.env?.NODE_ENV == 'production' ||
       process?.env?.NEXT_PUBLIC_NODE_ENV == 'production'
@@ -34,10 +34,14 @@ export class StateManager {
   }
 
   public getStoreManager() {
-    return this._storeManager;
+    return StateManager._storeManager;
   }
 
   public getStore() {
-    return this._storeInstance;
+    return StateManager._storeInstance;
   }
 }
+
+export const getStateManager = () => ({
+  store: StateManager._storeInstance,
+});

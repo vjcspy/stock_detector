@@ -8,11 +8,6 @@ export const stockPricesStartAction = createAction<{
   code: string;
 }>(STOCK_PRICES_START);
 
-const CHECK_STOCK_PRICE_STATUS = 'CHECK_STOCK_PRICE_STATUS';
-export const checkStockPriceStatusAction = createAction(
-  CHECK_STOCK_PRICE_STATUS,
-);
-
 const GET_STOCK_PRICES = 'GET_STOCK_PRICES';
 const getStockPrices = generateAction<
   { code: string; lastDate: moment.Moment; endDate: Moment },
@@ -31,11 +26,9 @@ const saveStockPrice = generateAction<
   Record<string, any>,
   {
     code: string;
-    year: number;
   }
 >(SAVE_STOCK_PRICES);
 
-export const saveStockPriceAction = saveStockPrice.ACTION;
 export const saveStockPriceAfterAction = saveStockPrice.AFTER;
 export const saveStockPriceErrorAction = saveStockPrice.ERROR;
 

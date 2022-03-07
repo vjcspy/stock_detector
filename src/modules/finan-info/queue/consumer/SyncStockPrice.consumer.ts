@@ -1,8 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { RabbitSubscribe } from '@golevelup/nestjs-rabbitmq';
+import { RabbitmqSubscribeConsumerAbstract } from '@module/core/queue/RabbitmqConsumerAbstract';
+import { ConsumeMessage } from 'amqplib';
+import { getStateManager } from '@module/core/provider/state-manager';
+import { stockPricesStartAction } from '@module/finan-info/store/stock-price/stock-price.actions';
 
 @Injectable()
-export class SyncStockPriceConsumer {
+export class SyncStockPriceConsumer extends RabbitmqSubscribeConsumerAbstract {
   @RabbitSubscribe({
     exchange: 'finan.info.sync-stock-price',
     routingKey: 'finan.info.sync-stock-price.cor',
@@ -11,16 +15,16 @@ export class SyncStockPriceConsumer {
       durable: true,
     },
   })
-  public async rpcHandler(msg: any) {
-    console.log(`Receive pub/sub message: ${JSON.stringify(msg)}`);
-    /*
-     * TODO: Do nó không có cơ chế no-ack nên bắt buốc phải không được trả về value
-     * */
-    return new Promise<void>((resolve) => {
-      setTimeout(() => {
-        console.log(`Done pub/sub message: ${JSON.stringify(msg)}`);
-        resolve();
-      }, 3000);
-    });
+  public async pubSubHandler(msg: any, amqpMsg: ConsumeMessage) {
+    setTimeout(() => {
+      if (typeof msg === 'string') {
+        getStateManager().store.dispatch(
+          stockPricesStartAction({
+            code: msg,
+          }),
+        );
+      }
+    }, 0);
+    return this.subscribe(msg, amqpMsg);
   }
 }

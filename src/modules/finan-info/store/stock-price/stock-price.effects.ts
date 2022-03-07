@@ -1,5 +1,5 @@
 import moment from 'moment';
-import { concatMap, from, map, withLatestFrom } from 'rxjs';
+import { concatMap, EMPTY, from, map, withLatestFrom } from 'rxjs';
 
 import { getCurrentStatus } from './fns/getCurrentStatus';
 import { savePrices } from './fns/savePrices';
@@ -16,6 +16,7 @@ import {
   stockPricesStartAction,
 } from '@module/finan-info/store/stock-price/stock-price.actions';
 import { StockPriceValues } from '@module/finan-info/store/stock-price/stock-price.values';
+import { SyncStockPriceConsumer } from '@module/finan-info/queue/consumer/SyncStockPrice.consumer';
 
 const checkStockPriceStatus$ = createEffect((action$) =>
   action$.pipe(
@@ -92,7 +93,6 @@ const whenGotStockPrices$ = createEffect((action$, state$) =>
           if (res.syncSuccess === true) {
             return saveStockPriceAfterAction({
               code: action.payload.code,
-              year: action.payload.year,
             });
           } else {
             return saveStockPriceErrorAction({
@@ -105,8 +105,29 @@ const whenGotStockPrices$ = createEffect((action$, state$) =>
   ),
 );
 
+const handleFinishSave$ = createEffect((action$) =>
+  action$.pipe(
+    ofType(saveStockPriceAfterAction),
+    map((action) => {
+      return stockPricesFinishedAction({ code: action.payload.code });
+    }),
+  ),
+);
+
+const whenFinish$ = createEffect((action$) =>
+  action$.pipe(
+    ofType(stockPricesFinishedAction),
+    map(() => {
+      SyncStockPriceConsumer.resolve();
+      return EMPTY;
+    }),
+  ),
+);
+
 export const stockPriceEffects = [
   checkStockPriceStatus$,
   getStockPrice$,
   whenGotStockPrices$,
+  handleFinishSave$,
+  whenFinish$,
 ];
