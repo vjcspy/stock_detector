@@ -10,7 +10,6 @@ export class FinancialIndicatorStatusEntity {
     nullable: false,
     type: 'varchar',
     length: '10',
-    unique: true,
   })
   code: string;
 

@@ -58,6 +58,67 @@ export class FinancialIndicatorsEntity {
   })
   auditedStatus: string;
 
+  /*
+   * --------------- Cơ cấu chi phí
+   * */
+  // Giá vốn hàng bán/doanh thu thuần
+  @Column('decimal', { precision: 10, scale: 3, nullable: true })
+  costOfGoodSoldOverNetRevenue: number;
+
+  // Chi phí bán hàng/Doanh thu thuần
+  @Column('decimal', { precision: 10, scale: 3, nullable: true })
+  sellingExpensesOverNetRevenue: number;
+
+  // Chi phí quản lý doanh nghiệp/Doanh thu thuần
+  @Column('decimal', { precision: 10, scale: 3, nullable: true })
+  generalAndAdministrativeExpensesOverNetRevenue: number;
+
+  // Chi phí lãi vay/doanh thu
+  @Column('decimal', { precision: 10, scale: 3, nullable: true })
+  interestExpensesOverNetRevenue: number;
+
+  /*
+   * --------------- Cơ cấu tài sản dài hạn
+   * */
+  // Tài sản dài hạn/tổng tài sản
+  @Column('decimal', { precision: 10, scale: 3, nullable: true })
+  longTermAssetsOverTotalAssets: number;
+  // Tài sản cố định/tổng tài sản
+  @Column('decimal', { precision: 10, scale: 3, nullable: true })
+  fixedAssetsOverTotalAssets: number;
+
+  /*
+   * --------------- Cơ cấu tài sản ngắn hạn
+   * */
+
+  /*
+   * --------------- Nhóm chỉ số dòng tiền
+   * */
+
+  /*
+   * --------------- Nhóm chỉ số hiệu quả hoạt động
+   * */
+
+  /*
+   * --------------- Nhóm chỉ số sinh lợi
+   * */
+
+  /*
+   * --------------- Nhóm chỉ số thanh khoản
+   * */
+
+  /*
+   * --------------- Nhóm chỉ số tăng trưởng
+   * */
+
+  /*
+   * --------------- Nhóm chỉ số đòn bẩy tài chính
+   * */
+
+  /*
+   * --------------- Nhóm chỉ số định giá
+   * */
+
   @Column('decimal', { precision: 10, scale: 3, nullable: true })
   eps: number;
 
