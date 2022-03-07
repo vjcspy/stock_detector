@@ -3,17 +3,18 @@ import { CoreModule } from '@module/core/core.module';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CorEntity } from './entity/cor.entity';
-import { CorporationState } from '@module/finan-info/provider/corporation.state';
 import rabbitmq from '@cfg/rabbitmq.cfg';
 import { CorController } from './controller/cor.controller';
-import { StockPriceRequest } from '@module/finan-info/requests/bsc/price.request';
 import { PriceController } from '@module/finan-info/controller/price.controller';
-import { StockPriceState } from '@module/finan-info/provider/stock-price.state';
 import { QUEUE_PROVIDES } from '@module/finan-info/queue';
 import { StockPriceEntity } from '@module/finan-info/entity/stock-price.entity';
 import { FinancialIndicatorsEntity } from '@module/finan-info/entity/financial-indicators.entity';
 import { StockPriceSyncStatusEntity } from '@module/finan-info/entity/stock-price-sync-status.entity';
 import { FinancialIndicatorStatusEntity } from '@module/finan-info/entity/financial-indicatorStatus.entity';
+import { FINANCIAL_PROVIDERS } from '@module/finan-info/provider/state';
+import { CorporationState } from '@module/finan-info/provider/state/corporation.state';
+import { StockPriceState } from '@module/finan-info/provider/state/stock-price.state';
+import { FinancialIndicatorState } from '@module/finan-info/provider/state/financial-indicator.state';
 
 @Module({
   imports: [
@@ -54,19 +55,16 @@ import { FinancialIndicatorStatusEntity } from '@module/finan-info/entity/financ
     CoreModule,
   ],
   controllers: [CorController, PriceController],
-  providers: [
-    CorporationState,
-    StockPriceRequest,
-    StockPriceState,
-    ...QUEUE_PROVIDES,
-  ],
+  providers: [...QUEUE_PROVIDES, ...FINANCIAL_PROVIDERS],
 })
 export class FinanInfoModule {
   constructor(
-    protected corporationState: CorporationState,
-    protected stockPriceState: StockPriceState,
+    private corporationState: CorporationState,
+    private stockPriceState: StockPriceState,
+    private financialIndicatorState: FinancialIndicatorState,
   ) {
     this.corporationState.config();
     this.stockPriceState.config();
+    this.financialIndicatorState.config();
   }
 }
