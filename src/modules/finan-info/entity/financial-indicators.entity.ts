@@ -271,12 +271,12 @@ export class FinancialIndicatorsEntity {
   // Tỷ lệ lãi EBIT
   @SourceMapping(null, convertSourceFn(11))
   @Column('decimal', { precision: 10, scale: 3, nullable: true })
-  eBITMargin: number;
+  ebitMargin: number;
 
   // Tỷ lệ lãi EBITDA
   @SourceMapping(null, convertSourceFn(12))
   @Column('decimal', { precision: 10, scale: 3, nullable: true })
-  eBITDAOverNetRevenue: number;
+  ebitDAOverNetRevenue: number;
 
   // Tỷ suất sinh lợi trên doanh thu thuần
   @SourceMapping(null, convertSourceFn(13))
@@ -286,7 +286,7 @@ export class FinancialIndicatorsEntity {
   // Tỷ suất lợi nhuận trên vốn chủ sở hữu bình quân (ROEA)
   @SourceMapping(null, convertSourceFn(14))
   @Column('decimal', { precision: 10, scale: 3, nullable: true })
-  rOE: number;
+  roe: number;
 
   // Tỷ suất sinh lợi trên vốn dài hạn bình quân (ROCE)
   @SourceMapping(null, convertSourceFn(15))
@@ -296,7 +296,7 @@ export class FinancialIndicatorsEntity {
   // Tỷ suất sinh lợi trên tổng tài sản bình quân (ROAA)
   @SourceMapping(null, convertSourceFn(16))
   @Column('decimal', { precision: 10, scale: 3, nullable: true })
-  rOA: number;
+  roa: number;
 
   /*
    * --------------- Nhóm chỉ số thanh khoản
@@ -432,17 +432,17 @@ export class FinancialIndicatorsEntity {
   // Chỉ số giá thị trường trên thu nhập (P/E)
   @SourceMapping(null, convertSourceFn(3))
   @Column('decimal', { precision: 10, scale: 3, nullable: true })
-  pOverE: number;
+  pe: number;
 
   // Chỉ số giá thị trường trên giá trị sổ sách (P/B)
   @SourceMapping(null, convertSourceFn(4))
   @Column('decimal', { precision: 10, scale: 3, nullable: true })
-  pOverB: number;
+  pb: number;
 
   // Chỉ số giá thị trường trên doanh thu thuần (P/S)
   @SourceMapping(null, convertSourceFn(5))
   @Column('decimal', { precision: 10, scale: 3, nullable: true })
-  pOverS: number;
+  ps: number;
 
   // Tỷ suất cổ tức
   @SourceMapping(null, convertSourceFn(6))
@@ -457,10 +457,10 @@ export class FinancialIndicatorsEntity {
   // Giá trị doanh nghiệp trên lợi nhuận trước thuế và lãi vay (EV/EBIT)
   @SourceMapping(null, convertSourceFn(8))
   @Column('decimal', { precision: 10, scale: 3, nullable: true })
-  eVOverEBIT: number;
+  evOverEBIT: number;
 
   // Giá trị doanh nghiệp trên lợi nhuận trước thuế, khấu hao và lãi vay (EV/EBITDA)
   @SourceMapping(null, convertSourceFn(9))
   @Column('decimal', { precision: 10, scale: 3, nullable: true })
-  eVOverEBITDA: number;
+  evOverEBITDA: number;
 }
