@@ -23,6 +23,7 @@ import {
 import moment from 'moment';
 import { FinancialIndicatorValues } from '@module/finan-info/store/financial-indicator/financial-indicator.values';
 import { retrieveFinanceInfo } from '@module/finan-info/requests/vietstock/financeInfo';
+import { saveFinanceInfo } from '@module/finan-info/store/financial-indicator/fns/saveFinaceInfo';
 
 const whenStartSync$ = createEffect((action$) => {
   return action$.pipe(
@@ -124,7 +125,17 @@ const saveData$ = createEffect((action$, state$) =>
       const action: any = d[0];
       const financialIndicatorState: FinancialIndicatorState = d[1];
 
-      return EMPTY;
+      return from(
+        saveFinanceInfo(
+          action.payload.code,
+          action.payload.data,
+          financialIndicatorState.termType,
+        ),
+      ).pipe(
+        map((res) => {
+          return EMPTY;
+        }),
+      );
     }),
   ),
 );
@@ -132,4 +143,5 @@ const saveData$ = createEffect((action$, state$) =>
 export const FinancialIndicatorEffects = [
   whenStartSync$,
   requestFinancialInfoPage$,
+  saveData$,
 ];

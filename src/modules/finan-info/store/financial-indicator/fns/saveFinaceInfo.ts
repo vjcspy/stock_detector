@@ -1,0 +1,99 @@
+import * as _ from 'lodash';
+import { parseInt } from 'lodash';
+import { getConnection } from 'typeorm';
+import { FinancialIndicatorsEntity } from '@module/finan-info/entity/financial-indicators.entity';
+import { FinancialIndicatorStatusEntity } from '@module/finan-info/entity/financial-indicatorStatus.entity';
+
+export const saveFinanceInfo = async (
+  code: string,
+  data: any,
+  termType: number,
+) => {
+  let syncSuccess: any = 0;
+
+  const connection = getConnection();
+  const queryRunner = connection.createQueryRunner();
+  try {
+    // establish real database connection using our new query runner
+    await queryRunner.connect();
+
+    // lets now open a new transaction:
+    await queryRunner.startTransaction();
+    const financeInfos = parseFinanceInfoData(code, data[0], data[1], termType);
+    await queryRunner.manager.upsert(FinancialIndicatorsEntity, financeInfos, [
+      'code',
+      'periodBegin',
+      'periodEnd',
+    ]);
+    await queryRunner.manager.upsert(
+      FinancialIndicatorStatusEntity,
+      {
+        code,
+        termType: termType,
+        year: _.last(financeInfos)['year'],
+        quarter: _.last(financeInfos)['quarter'],
+      },
+      {
+        conflictPaths: ['code', 'termType'],
+      },
+    );
+
+    // commit transaction now:
+    await queryRunner.commitTransaction();
+    console.log(
+      `sync success code: ${code} year: ${_.last(financeInfos)['year']}`,
+    );
+    syncSuccess = {
+      success: true,
+      lastYear: _.last(financeInfos)['year'],
+      lastQuarter: _.last(financeInfos)['quarter'],
+    };
+  } catch (e) {
+    syncSuccess = e;
+    console.error(e);
+    // since we have errors let's rollback changes we made
+    await queryRunner.rollbackTransaction();
+  } finally {
+    // you need to release query runner which is manually created:
+    await queryRunner.release();
+  }
+
+  return syncSuccess;
+};
+
+const parseFinanceInfoData = (
+  code: string,
+  timeData: any[],
+  financeInfoData: any[],
+  termType: number,
+) => {
+  const data: any[] = [];
+  timeData.forEach((time: any) => {
+    const sourceData: any[] = [];
+    _.forEach(financeInfoData, (groupInfo: any) => {
+      if (Array.isArray(groupInfo)) {
+        _.forEach(groupInfo, (info: any) => {
+          sourceData.push({ ...info });
+        });
+      }
+    });
+
+    const financeInfoObject = {
+      code,
+      quarter:
+        time?.ReportTermID == 1 ? null : parseInt(time.TermCode.substr(1)),
+      year: time.YearPeriod,
+      termType,
+      periodBegin: time.PeriodBegin,
+      periodEnd: time.PeriodEnd,
+      united: time.United,
+      auditedStatus: time.AuditedStatus,
+      // @ts-ignore
+      ...new FinancialIndicatorsEntity().convertSourceData(sourceData),
+    };
+
+    data.push(financeInfoObject);
+  });
+
+  return data;
+};
