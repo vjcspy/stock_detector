@@ -1,6 +1,7 @@
 import { createReducer } from '@reduxjs/toolkit';
 import {
   requestFinancialIndicatorAction,
+  saveFinanceInfoPageAfterAction,
   startGetFinanceInfoAction,
 } from '@module/finan-info/store/financial-indicator/financial-indicator.actions';
 
@@ -32,6 +33,11 @@ export const financialIndicatorReducer = createReducer(
         state.page = action.payload.page;
         state.lastYear = action.payload.lastYear;
         state.lastQuarter = action.payload.lastQuarter;
+      })
+      .addCase(saveFinanceInfoPageAfterAction, (state, action) => {
+        if (state.page > 1) {
+          state.page = state.page - 1;
+        }
       });
   },
 );

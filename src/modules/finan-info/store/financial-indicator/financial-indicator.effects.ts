@@ -3,6 +3,8 @@ import {
   requestFinancialIndicatorAction,
   requestFinancialIndicatorAfterAction,
   requestFinancialIndicatorErrorAction,
+  saveFinanceInfoPageAfterAction,
+  saveFinanceInfoPageErrorAction,
   startGetFinanceInfoAction,
 } from '@module/finan-info/store/financial-indicator/financial-indicator.actions';
 import { ofType } from '@module/core/util/store/ofType';
@@ -135,9 +137,18 @@ const saveData$ = createEffect((action$, state$) =>
           financialIndicatorState.termType,
         ),
       ).pipe(
-        map((res) => {
-          return EMPTY;
+        map(() => {
+          return saveFinanceInfoPageAfterAction({});
         }),
+        catchError((error) =>
+          from(
+            of(
+              saveFinanceInfoPageErrorAction({
+                error,
+              }),
+            ),
+          ),
+        ),
       );
     }),
   ),
