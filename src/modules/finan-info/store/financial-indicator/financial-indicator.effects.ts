@@ -34,7 +34,7 @@ const whenStartSync$ = createEffect((action$) => {
       return from(getFinanceInfoStatus(code, termType)).pipe(
         map((syncStatus) => {
           if (syncStatus) {
-            if (syncStatus.termType === 1) {
+            if (syncStatus.termType === FinancialTermTypeEnum.YEAR) {
               if (parseInt(syncStatus.year) < moment().year() - 1) {
                 /*
                  * Trường hợp này là đã chạy trước đó nhung bị dừng đột ngột
@@ -74,7 +74,10 @@ const whenStartSync$ = createEffect((action$) => {
             // Chưa request bao giờ
             return requestFinancialIndicatorAction({
               code,
-              page: termType === FinancialTermTypeEnum.YEAR ? 5 : 8,
+              page:
+                termType === FinancialTermTypeEnum.YEAR
+                  ? FinancialIndicatorValues.START_PAGE_FOR_YEAR
+                  : FinancialIndicatorValues.START_PAGE_FOR_QUARTER,
             });
           }
         }),

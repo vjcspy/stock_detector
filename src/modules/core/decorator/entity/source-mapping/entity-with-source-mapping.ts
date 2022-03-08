@@ -15,15 +15,12 @@ export function EntityWithSourceMapping<T extends { new (...args: any[]): {} }>(
       return null;
     }
 
-    if (Array.isArray(data)) {
-      return null;
-    }
-
     const sourceMappingMetadata: Map<string, any> = Reflect.getMetadata(
       sourceMappingMetadataKey,
       this,
     );
     const convertData: any = {};
+
     // _.forEach(data, (value: any, key: string) => {
     // const _propertyName = sourceMappingMetadata.get(key);
     // if (typeof _propertyName === 'string') {
@@ -33,7 +30,7 @@ export function EntityWithSourceMapping<T extends { new (...args: any[]): {} }>(
 
     sourceMappingMetadata.forEach((propertyOrObjectMapping, sourceKey) => {
       if (typeof propertyOrObjectMapping === 'string') {
-        convertData[propertyOrObjectMapping] = data[sourceKey];
+        convertData[propertyOrObjectMapping] = data[sourceKey] ?? null;
       } else if (
         typeof propertyOrObjectMapping?.convertFn === 'function' &&
         typeof propertyOrObjectMapping?.propertyName === 'string'
@@ -69,7 +66,7 @@ export function SourceMapping(key: string, convertFn?: (data: any) => any) {
       sourceMappingMetadata = Map();
     }
     sourceMappingMetadata = sourceMappingMetadata.set(
-      key,
+      key ?? propertyName,
       typeof convertFn === 'function'
         ? { propertyName, convertFn }
         : propertyName,

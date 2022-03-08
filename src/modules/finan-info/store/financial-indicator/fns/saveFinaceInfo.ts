@@ -68,15 +68,19 @@ const parseFinanceInfoData = (
   termType: number,
 ) => {
   const data: any[] = [];
-  timeData.forEach((time: any) => {
+  timeData.forEach((time: any, index: number) => {
     const sourceData: any[] = [];
     _.forEach(financeInfoData, (groupInfo: any) => {
       if (Array.isArray(groupInfo)) {
         _.forEach(groupInfo, (info: any) => {
-          sourceData.push({ ...info });
+          sourceData.push({ ...info, value: info[`Value${index + 1}`] });
         });
       }
     });
+
+    const sourceDataConverted =
+      // @ts-ignore
+      new FinancialIndicatorsEntity().convertSourceData(sourceData);
 
     const financeInfoObject = {
       code,
@@ -88,8 +92,7 @@ const parseFinanceInfoData = (
       periodEnd: time.PeriodEnd,
       united: time.United,
       auditedStatus: time.AuditedStatus,
-      // @ts-ignore
-      ...new FinancialIndicatorsEntity().convertSourceData(sourceData),
+      ...sourceDataConverted,
     };
 
     data.push(financeInfoObject);

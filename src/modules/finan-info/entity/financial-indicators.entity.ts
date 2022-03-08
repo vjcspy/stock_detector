@@ -1,5 +1,8 @@
 import { Column, Entity, PrimaryGeneratedColumn, Unique } from 'typeorm';
-import { SourceMapping } from '@module/core/decorator/entity/source-mapping/entity-with-source-mapping';
+import {
+  EntityWithSourceMapping,
+  SourceMapping,
+} from '@module/core/decorator/entity/source-mapping/entity-with-source-mapping';
 import * as _ from 'lodash';
 
 const convertSourceFn = (sourceId: number) => {
@@ -15,6 +18,7 @@ const convertSourceFn = (sourceId: number) => {
   };
 };
 
+@EntityWithSourceMapping
 @Entity()
 @Unique(['code', 'periodBegin', 'periodEnd'])
 export class FinancialIndicatorsEntity {
