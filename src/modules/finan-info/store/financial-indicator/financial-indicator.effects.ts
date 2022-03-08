@@ -27,6 +27,7 @@ import moment from 'moment';
 import { FinancialIndicatorValues } from '@module/finan-info/store/financial-indicator/financial-indicator.values';
 import { retrieveFinanceInfo } from '@module/finan-info/requests/vietstock/financeInfo';
 import { saveFinanceInfo } from '@module/finan-info/store/financial-indicator/fns/saveFinaceInfo';
+import { SyncFinancialIndicatorYearConsumer } from '@module/finan-info/queue/consumer/SyncFinancialIndicatorYear.consumer';
 
 const whenStartSync$ = createEffect((action$) => {
   return action$.pipe(
@@ -161,9 +162,26 @@ const repeat$ = createEffect((action$, state$) =>
   ),
 );
 
+const whenFinish$ = createEffect((action$, state$) =>
+  action$.pipe(
+    ofType(finishGetFinanceInfoAfterAction),
+    withLatestFrom(state$, (v1, v2) => [v1, v2.financialIndicator]),
+    map((d) => {
+      const financialIndicatorState: FinancialIndicatorState = d[1];
+      if (financialIndicatorState.termType === FinancialTermTypeEnum.YEAR) {
+        SyncFinancialIndicatorYearConsumer.resolve();
+      } else {
+        SyncFinancialIndicatorYearConsumer.resolve();
+      }
+      return EMPTY;
+    }),
+  ),
+);
+
 export const FinancialIndicatorEffects = [
   whenStartSync$,
   requestFinancialInfoPage$,
   saveData$,
   repeat$,
+  whenFinish$,
 ];

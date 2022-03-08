@@ -16,6 +16,7 @@ import { CorporationState } from '@module/finan-info/provider/state/corporation.
 import { StockPriceState } from '@module/finan-info/provider/state/stock-price.state';
 import { FinancialIndicatorState } from '@module/finan-info/provider/state/financial-indicator.state';
 import { FinancialIndicatorController } from '@module/finan-info/controller/financial-indicator.controller';
+import { SyncFinancialIndicatorPublisher } from '@module/finan-info/queue/publisher/SyncFinancialIndicator.publisher';
 
 @Module({
   imports: [
@@ -37,6 +38,13 @@ import { FinancialIndicatorController } from '@module/finan-info/controller/fina
         },
         {
           name: 'finan.info.sync-stock-price',
+          type: 'topic',
+          options: {
+            durable: true,
+          },
+        },
+        {
+          name: SyncFinancialIndicatorPublisher.EXCHANGE,
           type: 'topic',
           options: {
             durable: true,
