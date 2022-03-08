@@ -358,7 +358,7 @@ export class FinancialIndicatorsEntity {
   trailingEPS: number;
 
   // Giá trị sổ sách của cổ phiếu (BVPS)
-  @Column('decimal', { precision: 10, scale: 3, nullable: true })
+  @Column('mediumint', { unsigned: true, nullable: true })
   bookValuePerShareBVPS: number;
 
   // Chỉ số giá thị trường trên thu nhập (P/E)
