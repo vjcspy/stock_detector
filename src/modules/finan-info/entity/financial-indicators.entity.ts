@@ -1,5 +1,19 @@
 import { Column, Entity, PrimaryGeneratedColumn, Unique } from 'typeorm';
 import { SourceMapping } from '@module/core/decorator/entity/source-mapping/entity-with-source-mapping';
+import * as _ from 'lodash';
+
+const convertSourceFn = (sourceId: number) => {
+  return (sourceData: any) => {
+    const data = _.find(sourceData, (value) => value?.ID == sourceId);
+
+    return data &&
+      typeof data['value'] !== 'undefined' &&
+      parseFloat(data['value']) < 1000000 &&
+      parseFloat(data['value']) > -1000000
+      ? data['value']
+      : null;
+  };
+};
 
 @Entity()
 @Unique(['code', 'periodBegin', 'periodEnd'])
@@ -63,6 +77,7 @@ export class FinancialIndicatorsEntity {
    * --------------- Cơ cấu chi phí
    * */
   // Giá vốn hàng bán/doanh thu thuần
+  @SourceMapping(null, convertSourceFn(57))
   @Column('decimal', { precision: 10, scale: 3, nullable: true })
   costOfGoodSoldOverNetRevenue: number;
 

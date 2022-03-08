@@ -6,7 +6,15 @@ import {
   startGetFinanceInfoAction,
 } from '@module/finan-info/store/financial-indicator/financial-indicator.actions';
 import { ofType } from '@module/core/util/store/ofType';
-import { catchError, from, map, of, switchMap, withLatestFrom } from 'rxjs';
+import {
+  catchError,
+  EMPTY,
+  from,
+  map,
+  of,
+  switchMap,
+  withLatestFrom,
+} from 'rxjs';
 import { getFinanceInfoStatus } from '@module/finan-info/store/financial-indicator/fns/getFinanceInfoStatus';
 import {
   FinancialIndicatorState,
@@ -104,6 +112,19 @@ const requestFinancialInfoPage$ = createEffect((action$, state$) =>
           ),
         ),
       );
+    }),
+  ),
+);
+
+const saveData$ = createEffect((action$, state$) =>
+  action$.pipe(
+    ofType(requestFinancialIndicatorAfterAction),
+    withLatestFrom(state$, (v1, v2) => [v1, v2.financialIndicator]),
+    switchMap((d) => {
+      const action: any = d[0];
+      const financialIndicatorState: FinancialIndicatorState = d[1];
+
+      return EMPTY;
     }),
   ),
 );
