@@ -15,6 +15,7 @@ import { FINANCIAL_PROVIDERS } from '@module/finan-info/provider/state';
 import { CorporationState } from '@module/finan-info/provider/state/corporation.state';
 import { StockPriceState } from '@module/finan-info/provider/state/stock-price.state';
 import { FinancialIndicatorState } from '@module/finan-info/provider/state/financial-indicator.state';
+import { FinancialIndicatorController } from '@module/finan-info/controller/financial-indicator.controller';
 
 @Module({
   imports: [
@@ -54,7 +55,7 @@ import { FinancialIndicatorState } from '@module/finan-info/provider/state/finan
     }),
     CoreModule,
   ],
-  controllers: [CorController, PriceController],
+  controllers: [CorController, PriceController, FinancialIndicatorController],
   providers: [...QUEUE_PROVIDES, ...FINANCIAL_PROVIDERS],
 })
 export class FinanInfoModule {

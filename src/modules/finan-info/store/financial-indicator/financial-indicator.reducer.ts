@@ -1,6 +1,6 @@
 import { createReducer } from '@reduxjs/toolkit';
 import {
-  requestFinanceInfoAction,
+  requestFinancialIndicatorAction,
   startGetFinanceInfoAction,
 } from '@module/finan-info/store/financial-indicator/financial-indicator.actions';
 
@@ -28,7 +28,7 @@ export const financialIndicatorReducer = createReducer(
         state.code = action.payload.code;
         state.termType = action.payload.termType;
       })
-      .addCase(requestFinanceInfoAction, (state, action) => {
+      .addCase(requestFinancialIndicatorAction, (state, action) => {
         state.page = action.payload.page;
         state.lastYear = action.payload.lastYear;
         state.lastQuarter = action.payload.lastQuarter;
