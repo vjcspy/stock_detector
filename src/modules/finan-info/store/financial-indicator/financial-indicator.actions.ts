@@ -2,17 +2,15 @@ import { generateAction } from '@module/core/util/store/createAction';
 
 const prefix = '$%FINANCE_INFO$%';
 
-const START_GET_FINANCIAL_INDICATOR = 'START_GET_FINANCIAL_INDICATOR';
-const startGetFinancialIndicator = generateAction<
+const GET_FINANCIAL_INDICATOR = 'GET_FINANCIAL_INDICATOR';
+const getFinancialIndicator = generateAction<
   { termType: number; code: string },
-  {
-    data: any;
-  }
->(START_GET_FINANCIAL_INDICATOR, prefix);
+  any
+>(GET_FINANCIAL_INDICATOR, prefix);
 
-export const startGetFinanceInfoAction = startGetFinancialIndicator.ACTION;
-export const startGetFinanceInfoAfterAction = startGetFinancialIndicator.AFTER;
-export const startGetFinanceInfoErrorAction = startGetFinancialIndicator.ERROR;
+export const startGetFinanceInfoAction = getFinancialIndicator.ACTION;
+export const finishGetFinanceInfoAfterAction = getFinancialIndicator.AFTER;
+export const getFinanceInfoErrorAction = getFinancialIndicator.ERROR;
 
 const requestFinancialIndicator = generateAction<
   {
