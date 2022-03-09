@@ -2,7 +2,7 @@ import moment from 'moment';
 import * as winston from 'winston';
 import { format } from 'winston';
 
-import stringify from 'json-stringify-safe';
+import process from 'process';
 
 const {
   combine,
@@ -16,14 +16,14 @@ const {
 
 const addTimeStamp = format((info: any) => {
   info.message = `${moment().format(' YYYY-MM-DD, HH:mm:ss ')} [${
-    info?.metadata?.context ?? ''
+    info?.metadata?.context ?? process.pid
   }] : ${info.message}`;
 
   return info;
 });
 
-export const initDefaultLogger = () => {
-  return winston.createLogger({
+export const initDefaultLogger = (filePath?: string) => {
+  const _logger = winston.createLogger({
     // level: 'silly',
     // levels: winston.config.cli.levels,
     format: combine(
@@ -38,6 +38,16 @@ export const initDefaultLogger = () => {
     ),
     transports: [],
   });
+
+  if (typeof filePath !== 'undefined') {
+    const trans = [
+      new winston.transports.File({ filename: `logs/${filePath}` }),
+    ];
+
+    trans.forEach((tran) => _logger.add(tran));
+  }
+
+  return _logger;
 };
 
 export const fileLogger = () => {

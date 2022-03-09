@@ -9,25 +9,25 @@ import { FinancialTermTypeEnum } from '@module/finan-info/store/financial-indica
 
 @Injectable()
 export class SyncFinancialIndicatorQuarterConsumer extends RabbitmqSubscribeConsumerAbstract {
-  @RabbitSubscribe({
-    exchange: SyncFinancialIndicatorPublisher.EXCHANGE,
-    routingKey: SyncFinancialIndicatorPublisher.ROUTING_KEY,
-    queue: 'finan.info.queue.sync-financial-indicator-quarter-queue',
-    queueOptions: {
-      durable: true,
-    },
-  })
-  public async pubSubHandler(msg: any, amqpMsg: ConsumeMessage) {
-    setTimeout(() => {
-      if (typeof msg === 'string') {
-        getStateManager().store.dispatch(
-          startGetFinanceInfoAction({
-            code: msg,
-            termType: FinancialTermTypeEnum.QUARTER,
-          }),
-        );
-      }
-    }, 0);
-    return this.subscribe(msg, amqpMsg);
-  }
+  // @RabbitSubscribe({
+  //   exchange: SyncFinancialIndicatorPublisher.EXCHANGE,
+  //   routingKey: SyncFinancialIndicatorPublisher.ROUTING_KEY,
+  //   queue: 'finan.info.queue.sync-financial-indicator-quarter-queue',
+  //   queueOptions: {
+  //     durable: true,
+  //   },
+  // })
+  // public async pubSubHandler(msg: any, amqpMsg: ConsumeMessage) {
+  //   setTimeout(() => {
+  //     if (typeof msg === 'string') {
+  //       getStateManager().store.dispatch(
+  //         startGetFinanceInfoAction({
+  //           code: msg,
+  //           termType: FinancialTermTypeEnum.QUARTER,
+  //         }),
+  //       );
+  //     }
+  //   }, 0);
+  //   return this.subscribe(msg, amqpMsg);
+  // }
 }

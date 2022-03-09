@@ -1,7 +1,6 @@
 import { createReducer } from '@reduxjs/toolkit';
 import {
   requestFinancialIndicatorAction,
-  saveFinanceInfoPageAfterAction,
   startGetFinanceInfoAction,
 } from '@module/finan-info/store/financial-indicator/financial-indicator.actions';
 
