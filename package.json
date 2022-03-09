@@ -9,7 +9,8 @@
       "prebuild": "rimraf dist",
       "build": "nest build",
       "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
-      "start": "ts-node src/index.ts",
+      "start": "yarn run start:dev",
+      "start:ts": "ts-node src/index.ts",
       "start:dev": "nest start --watch",
       "start:debug": "nest start --debug --watch",
       "start:prod": "node dist/main",
@@ -32,6 +33,7 @@
       "@nestjs/typeorm": "^8.0.3",
       "@reduxjs/toolkit": "^1.8.0",
       "immutable": "^4.0.0",
+      "json-stringify-safe": "^5.0.1",
       "moment": "^2.29.1",
       "mysql2": "^2.3.3",
       "node-html-parser": "^5.2.0",
@@ -40,7 +42,8 @@
       "reflect-metadata": "^0.1.13",
       "rimraf": "^3.0.2",
       "rxjs": "^7.2.0",
-      "typeorm": "^0.2.44"
+      "typeorm": "^0.2.44",
+      "winston": "^3.6.0"
    },
    "devDependencies": {
       "@nestjs/cli": "^8.0.0",

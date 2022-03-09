@@ -5,3 +5,6 @@ build/
 tmp/
 temp/
 docker_data/
+logs/
+
+.env

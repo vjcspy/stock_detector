@@ -6,6 +6,7 @@ import { ConfigModule } from '@nestjs/config';
 import rabbitmqCfg from '@cfg/rabbitmq.cfg';
 import databaseCfg from '@cfg/database.cfg';
 import { HttpModule } from '@nestjs/axios';
+import { FileLogger } from '@module/core/provider/file-logger';
 
 @Module({
   imports: [
@@ -15,8 +16,8 @@ import { HttpModule } from '@nestjs/axios';
     }),
     HttpModule,
   ],
-  providers: [StateManager],
-  exports: [StateManager, HttpModule],
+  providers: [StateManager, FileLogger],
+  exports: [StateManager, HttpModule, FileLogger],
 })
 export class CoreModule {
   constructor(protected stateManager: StateManager) {
