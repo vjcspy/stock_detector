@@ -125,7 +125,7 @@ const whenFinish$ = createEffect((action$) =>
   ),
 );
 
-const handleError = createEffect((action$) =>
+const handleError$ = createEffect((action$) =>
   action$.pipe(
     ofType(saveStockPriceErrorAction),
     map(() => {
@@ -141,4 +141,5 @@ export const stockPriceEffects = [
   whenGotStockPrices$,
   handleFinishSave$,
   whenFinish$,
+  handleError$,
 ];
