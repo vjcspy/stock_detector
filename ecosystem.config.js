@@ -1,7 +1,7 @@
 module.exports = {
   apps: [
     {
-      name: 'npm',
+      name: 'stock-detector',
       script: 'npm',
       args: 'start:ts',
       instances: 'max',
