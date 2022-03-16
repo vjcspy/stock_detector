@@ -17,6 +17,7 @@ import {
 } from '@module/finan-info/store/stock-price/stock-price.actions';
 import { StockPriceValues } from '@module/finan-info/store/stock-price/stock-price.values';
 import { SyncStockPriceConsumer } from '@module/finan-info/queue/consumer/SyncStockPrice.consumer';
+import { Nack } from '@golevelup/nestjs-rabbitmq';
 
 const checkStockPriceStatus$ = createEffect((action$) =>
   action$.pipe(
@@ -119,6 +120,16 @@ const whenFinish$ = createEffect((action$) =>
     ofType(stockPricesFinishedAction),
     map(() => {
       SyncStockPriceConsumer.resolve();
+      return EMPTY;
+    }),
+  ),
+);
+
+const handleError = createEffect((action$) =>
+  action$.pipe(
+    ofType(saveStockPriceErrorAction),
+    map(() => {
+      SyncStockPriceConsumer.resolve(new Nack(true));
       return EMPTY;
     }),
   ),
