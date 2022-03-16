@@ -94,7 +94,7 @@ export class StockPriceEntity extends BaseEntity {
    * ------------------------- Thông tin khác
    */
   @SourceMapping('DealVolume')
-  @Column('int', { unsigned: true, default: 0 })
+  @Column('int', { unsigned: true, default: 0, nullable: true })
   dealVolume: number;
 
   @SourceMapping('Exchange')
@@ -102,7 +102,7 @@ export class StockPriceEntity extends BaseEntity {
   exchange: number;
 
   @SourceMapping('MarketCap')
-  @Column('int', { unsigned: true, default: 0 })
+  @Column('int', { unsigned: true, default: 0, nullable: true })
   marketCap: number;
 
   @SourceMapping('PricePreviousClose')
