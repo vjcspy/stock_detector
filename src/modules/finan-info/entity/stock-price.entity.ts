@@ -110,15 +110,15 @@ export class StockPriceEntity extends BaseEntity {
   pricePreviousClose: number;
 
   @SourceMapping('PutThroughValue')
-  @Column('bigint', { unsigned: true, default: 0 })
+  @Column('bigint', { unsigned: true, default: 0, nullable: true })
   putThroughValue: number;
 
   @SourceMapping('PutThroughVolume')
-  @Column('int', { unsigned: true, default: 0 })
+  @Column('int', { unsigned: true, default: 0, nullable: true })
   putThroughVolume: number;
 
   @SourceMapping('Shares')
-  @Column('int', { unsigned: true, default: 0 })
+  @Column('int', { unsigned: true, default: 0, nullable: true })
   shares: number;
 
   /**
