@@ -5,10 +5,14 @@ export class CorEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({
+    nullable: true,
+  })
   refId: number;
 
-  @Column()
+  @Column({
+    nullable: true,
+  })
   catId: number;
 
   @Column({ unique: true })
@@ -17,13 +21,19 @@ export class CorEntity {
   @Column()
   exchange: string;
 
-  @Column()
+  @Column({
+    nullable: true,
+  })
   industryName1: string;
 
-  @Column()
+  @Column({
+    nullable: true,
+  })
   industryName2: string;
 
-  @Column()
+  @Column({
+    nullable: true,
+  })
   industryName3: string;
 
   @Column({
