@@ -33,7 +33,7 @@ services:
         - nstock-sync-network
     environment:
       RABBITMQ_DEFAULT_USER: rabbitmq
-      RABBITMQ_DEFAULT_PASS: rabbitmq
+      RABBITMQ_DEFAULT_PASS: 123456aA@
 
 volumes:
   mysql-kstock:
