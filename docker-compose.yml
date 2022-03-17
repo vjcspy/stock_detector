@@ -35,6 +35,19 @@ services:
       RABBITMQ_DEFAULT_USER: rabbitmq
       RABBITMQ_DEFAULT_PASS: 123456aA@
 
+  mongo:
+    image: mongo:5.0.6
+    container_name: nstock-mongolog
+    restart: always
+    ports:
+      - 27018:27017
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
+      MONGO_INITDB_DATABASE: nstocklog
+    volumes:
+      - ./docker_data/mongodb/mnesia/:/data/db
+
 volumes:
   mysql-kstock:
     driver: local
