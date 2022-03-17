@@ -1,7 +1,6 @@
 import { Injectable, Scope } from '@nestjs/common';
 import { configureStore, createReducer } from '@reduxjs/toolkit';
 import { createStoreManager } from '../util/store/createStoreManager';
-import logger from 'redux-logger';
 
 @Injectable({
   scope: Scope.DEFAULT,
@@ -13,7 +12,7 @@ export class StateManager {
       empty: createReducer({}, () => {}),
     },
     [],
-    [logger],
+    [],
   );
   public static _storeInstance = configureStore({
     reducer: StateManager._storeManager.reduce,
