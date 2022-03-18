@@ -7,6 +7,8 @@ import rabbitmqCfg from '@cfg/rabbitmq.cfg';
 import databaseCfg from '@cfg/database.cfg';
 import { HttpModule } from '@nestjs/axios';
 import { FileLogger } from '@module/core/provider/file-logger';
+import { MongooseModule } from '@nestjs/mongoose';
+import { LogDb, LogDbSchema } from '@module/core/schemas/log-db.schema';
 
 @Module({
   imports: [
@@ -14,6 +16,12 @@ import { FileLogger } from '@module/core/provider/file-logger';
       isGlobal: true,
       load: [rabbitmqCfg, databaseCfg],
     }),
+    MongooseModule.forFeature([
+      {
+        name: LogDb.name,
+        schema: LogDbSchema,
+      },
+    ]),
     HttpModule,
   ],
   providers: [StateManager, FileLogger],
