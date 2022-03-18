@@ -2,6 +2,9 @@ import 'reflect-metadata';
 import { Map } from 'immutable';
 import _ from 'lodash';
 
+/*
+ * Decorator class
+ * */
 // eslint-disable-next-line @typescript-eslint/ban-types
 export function EntityWithSourceMapping<T extends { new (...args: any[]): {} }>(
   constructor: T,
@@ -56,6 +59,13 @@ export function EntityWithSourceMapping<T extends { new (...args: any[]): {} }>(
 
 const sourceMappingMetadataKey = Symbol('ENTITY_SOURCE_MAPPING');
 
+/**
+ * Decorator for entity property
+ * @param key
+ * @param convertFn
+ * @returns {(target: any, propertyName: string) => void}
+ * @constructor
+ */
 export function SourceMapping(key: string, convertFn?: (data: any) => any) {
   return function (target: any, propertyName: string) {
     let sourceMappingMetadata: Map<string, any> = Reflect.getMetadata(
