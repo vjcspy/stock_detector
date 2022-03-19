@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { appInitAction } from '@module/core/store/actions';
-import { CORE_EFFECTS, CoreEffects } from '@module/core/store/effects';
+import { CoreEffects } from '@module/core/store/effects';
 import { StateManager } from '@module/core/provider/state-manager';
 import { ConfigModule } from '@nestjs/config';
 import rabbitmqCfg from '@cfg/rabbitmq.cfg';
