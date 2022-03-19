@@ -29,8 +29,11 @@ import { LogDbService } from '@module/core/service/log-db.service';
   exports: [StateManager, HttpModule, FileLogger],
 })
 export class CoreModule {
-  constructor(protected stateManager: StateManager) {
-    this.stateManager.getStoreManager().addEpics('core', [...CORE_EFFECTS]);
+  constructor(
+    protected stateManager: StateManager,
+    protected coreEffects: CoreEffects,
+  ) {
+    this.stateManager.addFeatureEffect('core', coreEffects);
     this.stateManager.getStore().dispatch(appInitAction.ACTION());
   }
 }

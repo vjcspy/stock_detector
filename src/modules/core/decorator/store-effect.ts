@@ -1,6 +1,7 @@
 import 'reflect-metadata';
-import { Map } from 'immutable';
-import _ from 'lodash';
+import { List } from 'immutable';
+
+export const EFFECT_PROPERTY_KEY = Symbol('EFFECT_PROPERTY_KEY');
 
 /**
  *
@@ -11,6 +12,17 @@ import _ from 'lodash';
 export function Effect() {
   return function (target: any, propertyName: string) {
     // property decorator for Effect Service
-    console.log('Effect here');
+    let propertyEffectMetadata: List<string> = Reflect.getMetadata(
+      EFFECT_PROPERTY_KEY,
+      target,
+    );
+
+    if (!List.isList(propertyEffectMetadata)) {
+      propertyEffectMetadata = List();
+    }
+
+    propertyEffectMetadata = propertyEffectMetadata.push(propertyName);
+
+    Reflect.defineMetadata(EFFECT_PROPERTY_KEY, propertyEffectMetadata, target);
   };
 }
