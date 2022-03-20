@@ -26,7 +26,7 @@ import { LogService } from '@module/core/service/log.service';
     HttpModule,
   ],
   providers: [StateManager, FileLogger, LogService, CoreEffects],
-  exports: [StateManager, HttpModule, FileLogger],
+  exports: [StateManager, HttpModule, FileLogger, LogService],
 })
 export class CoreModule {
   constructor(
