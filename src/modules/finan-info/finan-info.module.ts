@@ -17,6 +17,7 @@ import { StockPriceState } from '@module/finan-info/provider/state/stock-price.s
 import { FinancialIndicatorState } from '@module/finan-info/provider/state/financial-indicator.state';
 import { FinancialIndicatorController } from '@module/finan-info/controller/financial-indicator.controller';
 import { SyncFinancialIndicatorPublisher } from '@module/finan-info/queue/publisher/SyncFinancialIndicator.publisher';
+import { StateEffects } from '@module/finan-info/store';
 
 @Module({
   imports: [
@@ -64,7 +65,7 @@ import { SyncFinancialIndicatorPublisher } from '@module/finan-info/queue/publis
     CoreModule,
   ],
   controllers: [CorController, PriceController, FinancialIndicatorController],
-  providers: [...QUEUE_PROVIDES, ...FINANCIAL_PROVIDERS],
+  providers: [...QUEUE_PROVIDES, ...FINANCIAL_PROVIDERS, ...StateEffects],
 })
 export class FinanInfoModule {
   constructor(

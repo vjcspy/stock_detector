@@ -1,12 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { syncCorReducer } from '@module/finan-info/store/corporation/sync-cor.reducer';
-import { syncCorEffects } from '@module/finan-info/store/corporation/sync-cor.effects';
+import { SyncCorEffects } from '@module/finan-info/store/corporation/sync-cor.effects';
 import { StateManager } from '@module/core/provider/state-manager';
 
 @Injectable()
 export class CorporationState {
   protected _init = false;
-  constructor(protected stateManager: StateManager) {}
+  constructor(
+    protected stateManager: StateManager,
+    protected syncCorEffects: SyncCorEffects,
+  ) {}
   public config() {
     if (this._init) {
       return;
@@ -16,7 +19,8 @@ export class CorporationState {
       syncCor: syncCorReducer,
     });
 
-    storeManager.addEpics('sync-cor', [...syncCorEffects]);
+    this.stateManager.addFeatureEffect('sync-cor', this.syncCorEffects);
+
     this._init = true;
   }
 }
