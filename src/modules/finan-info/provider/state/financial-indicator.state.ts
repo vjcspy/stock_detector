@@ -6,7 +6,10 @@ import { FinancialIndicatorEffects } from '@module/finan-info/store/financial-in
 @Injectable()
 export class FinancialIndicatorState {
   protected _init = false;
-  constructor(protected stateManager: StateManager) {}
+  constructor(
+    protected stateManager: StateManager,
+    private fiEffects: FinancialIndicatorEffects,
+  ) {}
   public config() {
     if (this._init) {
       return;
@@ -16,9 +19,10 @@ export class FinancialIndicatorState {
       financialIndicator: financialIndicatorReducer,
     });
 
-    storeManager.addEpics('sync-financial-indicator', [
-      ...FinancialIndicatorEffects,
-    ]);
+    this.stateManager.addFeatureEffect(
+      'sync-financial-indicator',
+      this.fiEffects,
+    );
     this._init = true;
   }
 }
