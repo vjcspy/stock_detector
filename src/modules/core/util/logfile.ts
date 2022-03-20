@@ -3,18 +3,19 @@ import * as winston from 'winston';
 import { format } from 'winston';
 
 import process from 'process';
+import { TransformableInfo } from 'logform';
 
 const {
   combine,
   simple,
   splat,
-  // errors,
+  errors,
   // cli,
   colorize,
   metadata,
 } = format;
 
-const addTimeStamp = format((info: any) => {
+const addTimeStamp = format((info: TransformableInfo) => {
   info.message = `${moment().format(' YYYY-MM-DD, HH:mm:ss ')} [${
     info?.metadata?.context ?? process.pid
   }] : ${info.message}`;
@@ -27,11 +28,11 @@ export const initDefaultLogger = (filePath?: string) => {
     // level: 'silly',
     // levels: winston.config.cli.levels,
     format: combine(
-      splat(),
-      simple(),
-      metadata(),
-      colorize(),
-      addTimeStamp(),
+      // splat(),
+      // simple(),
+      // metadata(),
+      // colorize(),
+      // addTimeStamp(),
       format.printf((info) => `${info.message}`),
       // errors(),
       // formatMetadata()

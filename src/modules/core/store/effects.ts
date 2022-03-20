@@ -6,8 +6,6 @@ import { Effect } from '@module/core/decorator/store-effect';
 import { Injectable } from '@nestjs/common';
 import { LogService } from '@module/core/service/log.service';
 
-export const CORE_EFFECTS = [];
-
 @Injectable()
 export class CoreEffects {
   constructor(private logDbService: LogService) {}
@@ -20,7 +18,7 @@ export class CoreEffects {
         this.logDbService.log({
           source: 'APP',
           message: 'App initialized',
-          group: 'info',
+          group: 'general',
         });
         return appInitAction.AFTER();
       }),
