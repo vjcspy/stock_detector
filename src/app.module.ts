@@ -26,7 +26,10 @@ import mongoCfg from '@cfg/mongo.cfg';
     MongooseModule.forRoot(
       `mongodb://${mongoCfg().user}:${mongoCfg().pass}@${mongoCfg().host}:${
         mongoCfg().port
-      }/nstocklog`,
+      }`,
+      {
+        dbName: 'nstocklog',
+      },
     ),
     CoreModule,
     FinanInfoModule,
