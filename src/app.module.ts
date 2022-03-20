@@ -10,10 +10,6 @@ import { ScheduleModule } from '@nestjs/schedule';
 import { MongooseModule } from '@nestjs/mongoose';
 import mongoCfg from '@cfg/mongo.cfg';
 
-// `mongodb://${mongoCfg().user}:${mongoCfg().pass}@${mongoCfg().host}:${
-//   mongoCfg().port
-// }/nstocklog`,
-
 @Module({
   imports: [
     ScheduleModule.forRoot(),
@@ -28,7 +24,9 @@ import mongoCfg from '@cfg/mongo.cfg';
       synchronize: true,
     }),
     MongooseModule.forRoot(
-      `mongodb://${mongoCfg().host}:${mongoCfg().port}/nstocklog`,
+      `mongodb://${mongoCfg().user}:${mongoCfg().pass}@${mongoCfg().host}:${
+        mongoCfg().port
+      }/nstocklog`,
     ),
     CoreModule,
     FinanInfoModule,

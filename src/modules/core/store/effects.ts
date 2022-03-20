@@ -4,13 +4,13 @@ import { appInitAction } from '@module/core/store/actions';
 import { map } from 'rxjs';
 import { Effect } from '@module/core/decorator/store-effect';
 import { Injectable } from '@nestjs/common';
-import { LogDbService } from '../service/log-db.service';
+import { LogService } from '@module/core/service/log.service';
 
 export const CORE_EFFECTS = [];
 
 @Injectable()
 export class CoreEffects {
-  constructor(private logDbService: LogDbService) {}
+  constructor(private logDbService: LogService) {}
 
   @Effect()
   init = createEffect((action$) =>

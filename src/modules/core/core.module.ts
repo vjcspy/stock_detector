@@ -9,7 +9,7 @@ import { HttpModule } from '@nestjs/axios';
 import { FileLogger } from '@module/core/provider/file-logger';
 import { MongooseModule } from '@nestjs/mongoose';
 import { LogDb, LogDbSchema } from '@module/core/schemas/log-db.schema';
-import { LogDbService } from '@module/core/service/log-db.service';
+import { LogService } from '@module/core/service/log.service';
 
 @Module({
   imports: [
@@ -25,7 +25,7 @@ import { LogDbService } from '@module/core/service/log-db.service';
     ]),
     HttpModule,
   ],
-  providers: [StateManager, FileLogger, LogDbService, CoreEffects],
+  providers: [StateManager, FileLogger, LogService, CoreEffects],
   exports: [StateManager, HttpModule, FileLogger],
 })
 export class CoreModule {
