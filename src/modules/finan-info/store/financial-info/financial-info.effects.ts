@@ -18,6 +18,7 @@ import { Effect } from '@module/core/decorator/store-effect';
 import { getFinanceInfoStatus } from '@module/finan-info/store/financial-info/fns/getFinanceInfoStatus';
 import { FinancialTermTypeEnum } from '@module/finan-info/entity/financial-info-status.entity';
 import {
+  finishGetFinanceInfoAfterAction,
   requestFinancialInfoAction,
   requestFinancialInfoAfterAction,
   requestFinancialInfoErrorAction,
@@ -157,10 +158,10 @@ export class FinancialInfoEffects {
       filter((d) => Array.isArray(d) && typeof d[1] !== 'undefined'),
       switchMap((d) => {
         const action: any = d[0];
-        const infoState: FinancialInfo = d[1];
         const code = action.payload.code;
         const type = action.payload.type;
         const termType = action.payload.termType;
+        const page = action.payload.page;
         this.log.log({
           source: 'fi',
           group: 'sync_info',
@@ -169,14 +170,7 @@ export class FinancialInfoEffects {
           group3: termType,
           message: `[${action.payload.code}|${type}|${termType}] Request Page page[${action.payload.page}] `,
         });
-        return from(
-          getFinancialInfoPage(
-            action.payload.code,
-            type,
-            termType,
-            action.payload.page,
-          ),
-        ).pipe(
+        return from(getFinancialInfoPage(code, type, termType, page)).pipe(
           map((res) => {
             if (Array.isArray(res) && res.length > 2) {
               return requestFinancialInfoAfterAction({
@@ -184,10 +178,15 @@ export class FinancialInfoEffects {
                 termType,
                 code: action.payload.code,
                 data: res,
+                page,
               });
             } else {
               return requestFinancialInfoErrorAction({
                 error: new Error('wrong data format from source'),
+                type,
+                termType,
+                code: action.payload.code,
+                page,
               });
             }
           }),
@@ -196,6 +195,10 @@ export class FinancialInfoEffects {
               of(
                 requestFinancialInfoErrorAction({
                   error: err,
+                  type,
+                  termType,
+                  code: action.payload.code,
+                  page,
                 }),
               ),
             ),
@@ -227,6 +230,7 @@ export class FinancialInfoEffects {
         const code = action.payload.code;
         const type = action.payload.type;
         const termType = action.payload.termType;
+        const page = action.payload.page;
 
         if (Array.isArray(data[0]) && data[0].length === 0) {
           // Không có dữ liệu của page này
@@ -236,7 +240,7 @@ export class FinancialInfoEffects {
             group1: code,
             group2: type,
             group3: termType,
-            message: `[${action.payload.code}|${type}|${termType}] Không có dữ liệu của page [${action.payload.page}] `,
+            message: `[${action.payload.code}|${type}|${termType}] Không có dữ liệu của page [${page}] `,
           });
 
           return from(
@@ -245,6 +249,7 @@ export class FinancialInfoEffects {
                 code,
                 termType,
                 type,
+                page,
               }),
             ),
           );
@@ -260,12 +265,13 @@ export class FinancialInfoEffects {
               group1: code,
               group2: type,
               group3: termType,
-              message: `[${action.payload.code}|${type}|${termType}] Save thành công [${action.payload.page}] `,
+              message: `[${action.payload.code}|${type}|${termType}] Save thành công [${page}] `,
             });
             return saveFinanceInfoPageAfterAction({
               code,
               termType,
               type,
+              page,
             });
           }),
           catchError((error) => {
@@ -276,7 +282,7 @@ export class FinancialInfoEffects {
               group1: code,
               group2: type,
               group3: termType,
-              message: `Error [${action.payload.code}|${type}|${termType}] Save thất bại [${action.payload.page}] `,
+              message: `Error [${action.payload.code}|${type}|${termType}] Save thất bại [${page}] `,
             });
             return from(
               of(
@@ -284,6 +290,7 @@ export class FinancialInfoEffects {
                   code,
                   termType,
                   type,
+                  page,
                   error,
                 }),
               ),
@@ -298,18 +305,54 @@ export class FinancialInfoEffects {
   repeat$ = createEffect((action$, state$) =>
     action$.pipe(
       ofType(saveFinanceInfoPageAfterAction),
-      withLatestFrom(state$, (v1, v2) => [v1, v2.financialIndicator]),
-      map((d) => {
-        const financialIndicatorState: FinancialIndicatorState = d[1];
+      withLatestFrom(state$, (v1, v2) => {
+        const action: any = v1;
+        const infoState: FinancialInfo = v2.infos.find(
+          (_if) =>
+            _if.code === action.payload.code &&
+            _if.termType === action.payload.termType &&
+            _if.type === action.payload.type,
+        );
 
-        if (financialIndicatorState.page === 1) {
-          logger.info(`[${financialIndicatorState.code}] Finish`);
-          return finishGetFinanceInfoAfterAction({});
+        return [action, infoState];
+      }),
+      map((d) => {
+        const action: any = d[0];
+        const code = action.payload.code;
+        const type = action.payload.type;
+        const termType = action.payload.termType;
+        const page = action.payload.page;
+
+        if (page === 1) {
+          this.log.log({
+            source: 'fi',
+            group: 'sync_info',
+            group1: code,
+            group2: type,
+            group3: termType,
+            message: `[${action.payload.code}|${type}|${termType}] ___________ FINISH PAGE [${page}] `,
+          });
+          return finishGetFinanceInfoAfterAction({
+            code,
+            type,
+            termType,
+          });
         } else {
-          logger.info(`[${financialIndicatorState.code}] Repeat`);
-          return requestFinancialIndicatorAction({
-            code: financialIndicatorState.code,
-            page: financialIndicatorState.page - 1,
+          this.log.log({
+            source: 'fi',
+            group: 'sync_info',
+            group1: code,
+            group2: type,
+            group3: termType,
+            message: `[${
+              action.payload.code
+            }|${type}|${termType}] ___________ REPEAT page [${page - 1}] `,
+          });
+          return requestFinancialInfoAction({
+            code,
+            type,
+            termType,
+            page: page - 1,
           });
         }
       }),
@@ -322,12 +365,10 @@ export class FinancialInfoEffects {
       ofType(finishGetFinanceInfoAfterAction),
       withLatestFrom(state$, (v1, v2) => [v1, v2.financialIndicator]),
       map((d) => {
-        const financialIndicatorState: FinancialIndicatorState = d[1];
-        if (financialIndicatorState.termType == FinancialTermTypeEnum.YEAR) {
-          SyncFinancialIndicatorYearConsumer.resolve();
-        } else {
-          SyncFinancialIndicatorQuarterConsumer.resolve();
-        }
+        const action: any = d[0];
+        const code = action.payload.code;
+        const type = action.payload.type;
+        const termType = action.payload.termType;
         return EMPTY;
       }),
     ),

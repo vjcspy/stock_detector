@@ -6,7 +6,7 @@ const prefix = '$%FINANCE_INFO$%';
 const GET_FINANCIAL_INFO = 'GET_FINANCIAL_INFO';
 const getFinancialIndicator = generateAction<
   { code: string; termType: number; type: FinancialInfoType },
-  any
+  { code: string; termType: number; type: FinancialInfoType }
 >(GET_FINANCIAL_INFO, prefix);
 
 export const startGetFinanceInfoAction = getFinancialIndicator.ACTION;
@@ -27,6 +27,14 @@ const requestFinancialInfo = generateAction<
     code: string;
     termType: number;
     type: FinancialInfoType;
+    page: number;
+  },
+  {
+    code: string;
+    termType: number;
+    type: FinancialInfoType;
+    page: number;
+    error: any;
   }
 >('REQUEST_FINANCIAL_INFO', prefix);
 export const requestFinancialInfoAction = requestFinancialInfo.ACTION;
@@ -42,11 +50,13 @@ const saveFinancialInfo = generateAction<
     type: FinancialInfoType;
     lastYear?: number;
     lastQuarter?: number;
+    page: number;
   },
   {
     code: string;
     termType: number;
     type: FinancialInfoType;
+    page: number;
     error: any;
   }
 >('SAVE_FINANCE_INFO_PAGE', prefix);
