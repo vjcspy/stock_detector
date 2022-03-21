@@ -10,8 +10,6 @@ import {
   withLatestFrom,
 } from 'rxjs';
 import moment from 'moment';
-import { SyncFinancialIndicatorYearConsumer } from '@module/finan-info/queue/consumer/SyncFinancialIndicatorYear.consumer';
-import { SyncFinancialIndicatorQuarterConsumer } from '@module/finan-info/queue/consumer/SyncFinancialIndicatorQuarter.consumer';
 import { Injectable } from '@nestjs/common';
 import { LogService } from '@module/core/service/log.service';
 import { Effect } from '@module/core/decorator/store-effect';
