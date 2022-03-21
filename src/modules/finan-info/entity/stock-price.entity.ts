@@ -62,7 +62,7 @@ export class StockPriceEntity extends BaseEntity {
    * ------------------------- Mua
    */
   @SourceMapping('BuyAvg')
-  @Column('decimal', { precision: 10, scale: 3 })
+  @Column('int', { unsigned: true })
   buyAvg: number;
 
   // Số lệnh đặt mua
@@ -152,7 +152,7 @@ export class StockPriceEntity extends BaseEntity {
    * ------------------------- Bán
    */
   @SourceMapping('SellAvg')
-  @Column('decimal', { precision: 10, scale: 3 })
+  @Column('int', { unsigned: true })
   sellAvg: number;
 
   // Số lệnh đặt mua
