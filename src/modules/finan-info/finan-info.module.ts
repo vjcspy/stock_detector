@@ -10,7 +10,6 @@ import { QUEUE_PROVIDES } from '@module/finan-info/queue';
 import { StockPriceEntity } from '@module/finan-info/entity/stock-price.entity';
 import { FinancialIndicatorsEntity } from '@module/finan-info/entity/financial-indicators.entity';
 import { StockPriceSyncStatusEntity } from '@module/finan-info/entity/stock-price-sync-status.entity';
-import { FinancialIndicatorStatusEntity } from '@module/finan-info/entity/financial-indicatorStatus.entity';
 import { FINANCIAL_PROVIDERS } from '@module/finan-info/provider/state';
 import { CorporationState } from '@module/finan-info/provider/state/corporation.state';
 import { StockPriceState } from '@module/finan-info/provider/state/stock-price.state';
@@ -18,13 +17,14 @@ import { FinancialIndicatorState } from '@module/finan-info/provider/state/finan
 import { FinancialIndicatorController } from '@module/finan-info/controller/financial-indicator.controller';
 import { SyncFinancialIndicatorPublisher } from '@module/finan-info/queue/publisher/SyncFinancialIndicator.publisher';
 import { StateEffects } from '@module/finan-info/store';
+import { FinancialInfoStatusEntity } from '@module/finan-info/entity/financial-info-status.entity';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([
       CorEntity,
       FinancialIndicatorsEntity,
-      FinancialIndicatorStatusEntity,
+      FinancialInfoStatusEntity,
       StockPriceEntity,
       StockPriceSyncStatusEntity,
     ]),

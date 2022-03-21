@@ -1,7 +1,7 @@
 import fetch from 'node-fetch';
 import { VietStockCrds } from '@module/finan-info/requests/vietstock/credentials';
 
-export const retrieveFinanceInfo = async (
+export const retrieveFinanceIndicator = async (
   code: string,
   termType: number,
   page: number,

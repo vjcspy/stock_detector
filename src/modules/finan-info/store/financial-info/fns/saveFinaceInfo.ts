@@ -2,12 +2,26 @@ import * as _ from 'lodash';
 import { parseInt } from 'lodash';
 import { getConnection } from 'typeorm';
 import { FinancialIndicatorsEntity } from '@module/finan-info/entity/financial-indicators.entity';
-import { FinancialIndicatorStatusEntity } from '@module/finan-info/entity/financial-indicatorStatus.entity';
+import {
+  FinancialInfoStatusEntity,
+  FinancialInfoType,
+  FinancialTermTypeEnum,
+} from '@module/finan-info/entity/financial-info-status.entity';
+
+const getEntityBaseOnType = (type: FinancialInfoType) => {
+  switch (type) {
+    case FinancialInfoType.INDICATOR:
+      return {
+        entity: FinancialIndicatorsEntity,
+      };
+  }
+};
 
 export const saveFinanceInfo = async (
   code: string,
   data: any,
-  termType: number,
+  type: FinancialInfoType,
+  termType: FinancialTermTypeEnum,
 ) => {
   let syncSuccess: any = 0;
 
@@ -26,15 +40,16 @@ export const saveFinanceInfo = async (
       'periodEnd',
     ]);
     await queryRunner.manager.upsert(
-      FinancialIndicatorStatusEntity,
+      FinancialInfoStatusEntity,
       {
         code,
+        type,
         termType: termType,
         year: _.last(financeInfos)['year'],
         quarter: _.last(financeInfos)['quarter'],
       },
       {
-        conflictPaths: ['code', 'termType'],
+        conflictPaths: ['code', 'termType', 'type'],
       },
     );
 
