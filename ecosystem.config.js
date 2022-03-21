@@ -3,7 +3,7 @@ module.exports = {
     {
       name: 'stock-detector',
       script: './build/main.js',
-      instances: '2',
+      instances: '1',
       instance_var: 'INSTANCE_ID',
       exec_mode: 'cluster',
       env: {
