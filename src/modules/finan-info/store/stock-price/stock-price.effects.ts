@@ -197,7 +197,7 @@ export class StockPriceEffects {
   @Effect()
   handleError$ = createEffect((action$) =>
     action$.pipe(
-      ofType(saveStockPriceErrorAction),
+      ofType(saveStockPriceErrorAction, getStockPricesErrorAction),
       map(() => {
         SyncStockPriceConsumer.resolve(new Nack(true));
         return EMPTY;
