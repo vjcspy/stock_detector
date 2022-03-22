@@ -84,6 +84,7 @@ export class FinancialBusinessReportEntity extends BaseEntity {
   auditedStatus: string;
 
   // Doanh thu bán hàng và cung cấp dịch vụ
+  @SourceMapping(null, convertSourceFn(1))
   @Column({
     type: 'int',
     nullable: true,
@@ -91,6 +92,7 @@ export class FinancialBusinessReportEntity extends BaseEntity {
   revenue: number;
 
   // Các khoản giảm trừ doanh thu
+  @SourceMapping(null, convertSourceFn(2))
   @Column({
     type: 'int',
     nullable: true,
@@ -98,6 +100,7 @@ export class FinancialBusinessReportEntity extends BaseEntity {
   deductionFromRevenue: number;
 
   // Doanh thu thuần về bán hàng và cung cấp dịch vụ
+  @SourceMapping(null, convertSourceFn(3))
   @Column({
     type: 'int',
     nullable: true,
@@ -105,6 +108,7 @@ export class FinancialBusinessReportEntity extends BaseEntity {
   netRevenue: number;
 
   // Giá vốn hàng bán
+  @SourceMapping(null, convertSourceFn(4))
   @Column({
     type: 'int',
     nullable: true,
@@ -112,6 +116,7 @@ export class FinancialBusinessReportEntity extends BaseEntity {
   costOfGoodsSold: number;
 
   // Lợi nhuận gộp về bán hàng và cung cấp dịch vụ
+  @SourceMapping(null, convertSourceFn(5))
   @Column({
     type: 'int',
     nullable: true,
@@ -119,6 +124,7 @@ export class FinancialBusinessReportEntity extends BaseEntity {
   grossProfit: number;
 
   // Doanh thu hoạt động tài chính
+  @SourceMapping(null, convertSourceFn(6))
   @Column({
     type: 'int',
     nullable: true,
@@ -126,6 +132,7 @@ export class FinancialBusinessReportEntity extends BaseEntity {
   financialIncome: number;
 
   // Chi phí tài chính
+  @SourceMapping(null, convertSourceFn(7))
   @Column({
     type: 'int',
     nullable: true,
@@ -133,6 +140,7 @@ export class FinancialBusinessReportEntity extends BaseEntity {
   financialExpenses: number;
 
   // Chi phí lãi vay
+  @SourceMapping(null, convertSourceFn(8))
   @Column({
     type: 'int',
     nullable: true,
@@ -140,6 +148,7 @@ export class FinancialBusinessReportEntity extends BaseEntity {
   interestExpenses: number;
 
   // Phần lãi/lỗ trong công ty liên doanh, liên kết
+  @SourceMapping(null, convertSourceFn(9))
   @Column({
     type: 'int',
     nullable: true,
@@ -147,6 +156,7 @@ export class FinancialBusinessReportEntity extends BaseEntity {
   shareOfAssociatesAndJointVenturesResult: number;
 
   // Chi phí bán hàng
+  @SourceMapping(null, convertSourceFn(10))
   @Column({
     type: 'int',
     nullable: true,
@@ -154,6 +164,7 @@ export class FinancialBusinessReportEntity extends BaseEntity {
   sellingExpenses: number;
 
   // Chi phí quản lý doanh nghiệp
+  @SourceMapping(null, convertSourceFn(11))
   @Column({
     type: 'int',
     nullable: true,
@@ -161,6 +172,7 @@ export class FinancialBusinessReportEntity extends BaseEntity {
   generalAndAdministrativeExpenses: number;
 
   // Lợi nhuận thuần từ hoạt động kinh doanh
+  @SourceMapping(null, convertSourceFn(12))
   @Column({
     type: 'int',
     nullable: true,
@@ -168,6 +180,7 @@ export class FinancialBusinessReportEntity extends BaseEntity {
   operatingProfit: number;
 
   // Thu nhập khác
+  @SourceMapping(null, convertSourceFn(13))
   @Column({
     type: 'int',
     nullable: true,
@@ -175,6 +188,7 @@ export class FinancialBusinessReportEntity extends BaseEntity {
   otherIncome: number;
 
   // Chi phí khác
+  @SourceMapping(null, convertSourceFn(14))
   @Column({
     type: 'int',
     nullable: true,
@@ -182,6 +196,7 @@ export class FinancialBusinessReportEntity extends BaseEntity {
   otherExpenses: number;
 
   // Lợi nhuận khác
+  @SourceMapping(null, convertSourceFn(15))
   @Column({
     type: 'int',
     nullable: true,
@@ -189,6 +204,7 @@ export class FinancialBusinessReportEntity extends BaseEntity {
   otherProfit: number;
 
   // Phần lợi nhuận/lỗ từ công ty liên kết liên doanh
+  @SourceMapping(null, convertSourceFn(16))
   @Column({
     type: 'int',
     nullable: true,
@@ -196,6 +212,7 @@ export class FinancialBusinessReportEntity extends BaseEntity {
   shareOfAssociatesAndJointVentures: number;
 
   // Tổng lợi nhuận kế toán trước thuế
+  @SourceMapping(null, convertSourceFn(17))
   @Column({
     type: 'int',
     nullable: true,
@@ -203,6 +220,7 @@ export class FinancialBusinessReportEntity extends BaseEntity {
   profitBeforeTax: number;
 
   // Chi phí thuế TNDN hiện hành
+  @SourceMapping(null, convertSourceFn(18))
   @Column({
     type: 'int',
     nullable: true,
@@ -210,6 +228,7 @@ export class FinancialBusinessReportEntity extends BaseEntity {
   currentCorporateIncomeTaxExpenses: number;
 
   // Chi phí thuế TNDN hoãn lại
+  @SourceMapping(null, convertSourceFn(19))
   @Column({
     type: 'int',
     nullable: true,
@@ -217,6 +236,7 @@ export class FinancialBusinessReportEntity extends BaseEntity {
   deferredIncomeTaxExpenses: number;
 
   // Lợi nhuận sau thuế thu nhập doanh nghiệp
+  @SourceMapping(null, convertSourceFn(20))
   @Column({
     type: 'int',
     nullable: true,
@@ -224,6 +244,7 @@ export class FinancialBusinessReportEntity extends BaseEntity {
   netProfitAfterTax: number;
 
   // Lợi ích của cổ đông thiểu số
+  @SourceMapping(null, convertSourceFn(21))
   @Column({
     type: 'int',
     nullable: true,
@@ -231,6 +252,7 @@ export class FinancialBusinessReportEntity extends BaseEntity {
   minorityInterest: number;
 
   // Lợi nhuận sau thuế của cổ đông của Công ty mẹ
+  @SourceMapping(null, convertSourceFn(22))
   @Column({
     type: 'int',
     nullable: true,
@@ -238,6 +260,7 @@ export class FinancialBusinessReportEntity extends BaseEntity {
   profitAfterTaxForShareholdersOfParentCompany: number;
 
   // Lãi cơ bản trên cổ phiếu (*) (VNÐ)
+  @SourceMapping(null, convertSourceFn(23))
   @Column({
     type: 'int',
     nullable: true,
@@ -245,6 +268,7 @@ export class FinancialBusinessReportEntity extends BaseEntity {
   earningsPerShare: number;
 
   // Lãi suy giảm trên cổ phiếu (*)
+  @SourceMapping(null, convertSourceFn(24))
   @Column({
     type: 'int',
     nullable: true,
