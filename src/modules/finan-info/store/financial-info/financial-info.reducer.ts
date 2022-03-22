@@ -43,8 +43,8 @@ export const financialInfoReducer = createReducer(
           delete info['page'];
           delete info['lastQuarter'];
           delete info['lastYear'];
-          delete info['reject'];
-          delete info['resolve'];
+          info.reject = action.payload.reject;
+          info.reject = action.payload.resolve;
         } else {
           state.infos.push({
             code: action.payload.code,

@@ -55,9 +55,6 @@ export const saveFinanceInfo = async (
 
     // commit transaction now:
     await queryRunner.commitTransaction();
-    console.log(
-      `sync success code: ${code} year: ${_.last(financeInfos)['year']}`,
-    );
     syncSuccess = {
       success: true,
       lastYear: _.last(financeInfos)['year'],
