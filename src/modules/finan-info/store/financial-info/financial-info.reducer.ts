@@ -16,7 +16,6 @@ export interface FinancialInfo {
   termType?: FinancialTermTypeEnum;
   type?: FinancialInfoType;
   resolve?: any;
-  reject?: any;
 }
 
 export interface FinancialInfosState {
@@ -43,15 +42,13 @@ export const financialInfoReducer = createReducer(
           delete info['page'];
           delete info['lastQuarter'];
           delete info['lastYear'];
-          info.reject = action.payload.reject;
-          info.reject = action.payload.resolve;
+          info.resolve = action.payload.resolve;
         } else {
           state.infos.push({
             code: action.payload.code,
             type: action.payload.type,
             termType: action.payload.termType,
             resolve: action.payload.resolve,
-            reject: action.payload.reject,
           });
         }
       })

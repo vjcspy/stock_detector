@@ -23,9 +23,6 @@ export class FinancialInfoController {
         resolve: () => {
           console.log('resolve');
         },
-        reject: () => {
-          console.log('reject');
-        },
         type: FinancialInfoType.INDICATOR,
         termType: FinancialTermTypeEnum.YEAR,
       }),

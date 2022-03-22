@@ -3,7 +3,7 @@ import { StateManager } from '@module/core/provider/state-manager';
 import { stockPricesStartAction } from '@module/finan-info/store/stock-price/stock-price.actions';
 import { SyncStockPricePublisher } from '@module/finan-info/queue/publisher/SyncStockPrice.publisher';
 
-@Controller('stock-price')
+@Controller('sp')
 export class PriceController {
   constructor(
     private stateManager: StateManager,
