@@ -5,7 +5,13 @@ const prefix = '$%FINANCE_INFO$%';
 
 const GET_FINANCIAL_INFO = 'GET_FINANCIAL_INFO';
 const getFinancialIndicator = generateAction<
-  { code: string; termType: number; type: FinancialInfoType },
+  {
+    code: string;
+    termType: number;
+    type: FinancialInfoType;
+    resolve: any;
+    reject: any;
+  },
   { code: string; termType: number; type: FinancialInfoType }
 >(GET_FINANCIAL_INFO, prefix);
 

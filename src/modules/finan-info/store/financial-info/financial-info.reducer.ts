@@ -15,6 +15,8 @@ export interface FinancialInfo {
   page?: number;
   termType?: FinancialTermTypeEnum;
   type?: FinancialInfoType;
+  resolve?: any;
+  reject?: any;
 }
 
 export interface FinancialInfosState {

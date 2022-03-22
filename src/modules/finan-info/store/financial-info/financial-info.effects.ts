@@ -361,12 +361,28 @@ export class FinancialInfoEffects {
   whenFinish$ = createEffect((action$, state$) =>
     action$.pipe(
       ofType(finishGetFinanceInfoAfterAction),
-      withLatestFrom(state$, (v1, v2) => [v1, v2.financialIndicator]),
+      withLatestFrom(state$, (v1, v2) => {
+        const action: any = v1;
+        const infoState: FinancialInfo = v2.infos.find(
+          (_if) =>
+            _if.code === action.payload.code &&
+            _if.termType === action.payload.termType &&
+            _if.type === action.payload.type,
+        );
+
+        return [action, infoState];
+      }),
+      filter((d) => Array.isArray(d) && typeof d[1] !== 'undefined'),
       map((d) => {
+        const infoState: FinancialInfo = d[1];
         const action: any = d[0];
         const code = action.payload.code;
         const type = action.payload.type;
         const termType = action.payload.termType;
+
+        if (typeof infoState?.resolve === 'function') {
+          infoState.resolve();
+        }
         return EMPTY;
       }),
     ),

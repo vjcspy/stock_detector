@@ -4,8 +4,11 @@ import { ConsumeMessage } from 'amqplib';
 import { getStateManager } from '@module/core/provider/state-manager';
 import { SyncFinancialIndicatorPublisher } from '@module/finan-info/queue/publisher/SyncFinancialIndicator.publisher';
 import { RabbitmqSubscribeConsumerAbstract } from '@module/core/queue/RabbitmqConsumerAbstract';
-import { startGetFinanceInfoAction } from '@module/finan-info/store/financial-indicator/financial-indicator.actions';
-import { FinancialTermTypeEnum } from '@module/finan-info/store/financial-indicator/financial-indicator.reducer';
+import { startGetFinanceInfoAction } from '@module/finan-info/store/financial-info/financial-info.actions';
+import {
+  FinancialInfoType,
+  FinancialTermTypeEnum,
+} from '@module/finan-info/entity/financial-info-status.entity';
 
 @Injectable()
 export class SyncFinancialIndicatorYearConsumer extends RabbitmqSubscribeConsumerAbstract {
@@ -18,16 +21,18 @@ export class SyncFinancialIndicatorYearConsumer extends RabbitmqSubscribeConsume
     },
   })
   public async pubSubHandler(msg: any, amqpMsg: ConsumeMessage) {
-    setTimeout(() => {
+    return new Promise((resolve, reject) => {
       if (typeof msg === 'string') {
         getStateManager().store.dispatch(
           startGetFinanceInfoAction({
             code: msg,
+            type: FinancialInfoType.INDICATOR,
             termType: FinancialTermTypeEnum.YEAR,
+            resolve,
+            reject,
           }),
         );
       }
-    }, 0);
-    return this.subscribe(msg, amqpMsg);
+    });
   }
 }
