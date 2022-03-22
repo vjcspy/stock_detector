@@ -2,33 +2,23 @@ import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
 import { CoreModule } from '@module/core/core.module';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { CorEntity } from './entity/cor.entity';
 import rabbitmq from '@cfg/rabbitmq.cfg';
 import { CorController } from './controller/cor.controller';
 import { PriceController } from '@module/finan-info/controller/price.controller';
 import { QUEUE_PROVIDES } from '@module/finan-info/queue';
-import { StockPriceEntity } from '@module/finan-info/entity/stock-price.entity';
-import { FinancialIndicatorsEntity } from '@module/finan-info/entity/financial-indicators.entity';
-import { StockPriceSyncStatusEntity } from '@module/finan-info/entity/stock-price-sync-status.entity';
 import { FINANCIAL_PROVIDERS } from '@module/finan-info/provider/state';
 import { CorporationState } from '@module/finan-info/provider/state/corporation.state';
 import { StockPriceState } from '@module/finan-info/provider/state/stock-price.state';
 import { FinancialIndicatorState } from '@module/finan-info/provider/state/financial-indicator.state';
 import { StateEffects } from '@module/finan-info/store';
-import { FinancialInfoStatusEntity } from '@module/finan-info/entity/financial-info-status.entity';
 import { FinancialInfoController } from '@module/finan-info/controller/financial-info.controller';
 import { FinancialInfoValues } from '@module/finan-info/store/financial-info/financial-info.values';
 import { StockPriceValues } from '@module/finan-info/store/stock-price/stock-price.values';
+import { ENTITIES } from '@module/finan-info/entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([
-      CorEntity,
-      FinancialIndicatorsEntity,
-      FinancialInfoStatusEntity,
-      StockPriceEntity,
-      StockPriceSyncStatusEntity,
-    ]),
+    TypeOrmModule.forFeature([...ENTITIES]),
     RabbitMQModule.forRoot(RabbitMQModule, {
       exchanges: [
         {

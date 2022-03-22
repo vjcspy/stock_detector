@@ -14,9 +14,9 @@ export class FinancialInfoController {
     private syncFiInfoPublisher: SyncFinancialInfoPublisher,
   ) {}
 
-  @Get('/test')
+  @Get('/cstc')
   @Header('Content-Type', 'application/json')
-  test() {
+  cstc() {
     this.stateManager.getStore().dispatch(
       startGetFinanceInfoAction({
         code: 'BFC',
@@ -24,6 +24,60 @@ export class FinancialInfoController {
           console.log('resolve');
         },
         type: FinancialInfoType.INDICATOR,
+        termType: FinancialTermTypeEnum.YEAR,
+      }),
+    );
+    // return this.priceRequest.getPrice('BFC');
+
+    return [];
+  }
+
+  @Get('/kqkd')
+  @Header('Content-Type', 'application/json')
+  kqkd() {
+    this.stateManager.getStore().dispatch(
+      startGetFinanceInfoAction({
+        code: 'BFC',
+        resolve: () => {
+          console.log('resolve');
+        },
+        type: FinancialInfoType.BUSINESS_REPORT,
+        termType: FinancialTermTypeEnum.YEAR,
+      }),
+    );
+    // return this.priceRequest.getPrice('BFC');
+
+    return [];
+  }
+
+  @Get('/cdkt')
+  @Header('Content-Type', 'application/json')
+  cdkt() {
+    this.stateManager.getStore().dispatch(
+      startGetFinanceInfoAction({
+        code: 'BFC',
+        resolve: () => {
+          console.log('resolve');
+        },
+        type: FinancialInfoType.BALANCE_SHEET,
+        termType: FinancialTermTypeEnum.YEAR,
+      }),
+    );
+    // return this.priceRequest.getPrice('BFC');
+
+    return [];
+  }
+
+  @Get('/lctt')
+  @Header('Content-Type', 'application/json')
+  lctt() {
+    this.stateManager.getStore().dispatch(
+      startGetFinanceInfoAction({
+        code: 'BFC',
+        resolve: () => {
+          console.log('resolve');
+        },
+        type: FinancialInfoType.CASH_FLOW,
         termType: FinancialTermTypeEnum.YEAR,
       }),
     );

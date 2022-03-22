@@ -1,4 +1,10 @@
-import { Column, Entity, PrimaryGeneratedColumn, Unique } from 'typeorm';
+import {
+  BaseEntity,
+  Column,
+  Entity,
+  PrimaryGeneratedColumn,
+  Unique,
+} from 'typeorm';
 import {
   EntityWithSourceMapping,
   SourceMapping,
@@ -8,7 +14,7 @@ import moment from 'moment';
 @EntityWithSourceMapping
 @Entity()
 @Unique(['code', 'date'])
-export class StockPriceEntity {
+export class StockPriceEntity extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 

@@ -1,4 +1,10 @@
-import { Column, Entity, PrimaryGeneratedColumn, Unique } from 'typeorm';
+import {
+  BaseEntity,
+  Column,
+  Entity,
+  PrimaryGeneratedColumn,
+  Unique,
+} from 'typeorm';
 import {
   EntityWithSourceMapping,
   SourceMapping,
@@ -21,7 +27,7 @@ const convertSourceFn = (sourceId: number) => {
 @EntityWithSourceMapping
 @Entity()
 @Unique(['code', 'periodBegin', 'periodEnd'])
-export class FinancialBalanceSheetEntity {
+export class FinancialBalanceSheetEntity extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 

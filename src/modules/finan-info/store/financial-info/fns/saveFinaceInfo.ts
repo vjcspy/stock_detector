@@ -7,12 +7,30 @@ import {
   FinancialInfoType,
   FinancialTermTypeEnum,
 } from '@module/finan-info/entity/financial-info-status.entity';
+import { FinancialCashFlowEntity } from '@module/finan-info/entity/financial-cash-flow.entity';
+import { FinancialBalanceSheetEntity } from '@module/finan-info/entity/financial-balance-sheet.entity';
+import { FinancialBusinessReportEntity } from '@module/finan-info/entity/financial-business-report.entity';
 
 const getEntityBaseOnType = (type: FinancialInfoType) => {
   switch (type) {
     case FinancialInfoType.INDICATOR:
       return {
         entity: FinancialIndicatorsEntity,
+      };
+
+    case FinancialInfoType.CASH_FLOW:
+      return {
+        entity: FinancialCashFlowEntity,
+      };
+
+    case FinancialInfoType.BALANCE_SHEET:
+      return {
+        entity: FinancialBalanceSheetEntity,
+      };
+
+    case FinancialInfoType.BUSINESS_REPORT:
+      return {
+        entity: FinancialBusinessReportEntity,
       };
   }
 };
@@ -65,6 +83,8 @@ export const saveFinanceInfo = async (
     console.error(e);
     // since we have errors let's rollback changes we made
     await queryRunner.rollbackTransaction();
+
+    throw e;
   } finally {
     // you need to release query runner which is manually created:
     await queryRunner.release();
