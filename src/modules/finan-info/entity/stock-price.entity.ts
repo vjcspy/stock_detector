@@ -26,7 +26,6 @@ export class StockPriceEntity {
   @Column({
     type: 'varchar',
     length: '10',
-    nullable: true,
   })
   date: Date;
 

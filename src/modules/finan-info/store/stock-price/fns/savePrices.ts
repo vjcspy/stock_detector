@@ -83,11 +83,23 @@ export const savePrices = async (code: string, priceData: { items: any[] }) => {
     // await Promise.all(jobs);
 
     await queryRunner.manager.upsert(StockPriceEntity, stockPrices, {
-      conflictPaths: ['code', 'date'],
-      skipUpdateIfNoValuesChanged: true,
+      conflictPaths: ['code', 'date', 'id'],
+      skipUpdateIfNoValuesChanged: false,
     });
 
     const last = _.last(stockPrices);
+    // await queryRunner.manager
+    //   .createQueryBuilder()
+    //   .insert()
+    //   .into(StockPriceEntity)
+    //   .values(stockPrices)
+    //   .orUpdate(Object.keys(last), ['code', 'date'])
+    //   .orUpdate({
+    //     conflict_target: ['code'],
+    //     overwrite: ['name', 'parentId', 'web', 'avatar', 'description'],
+    //   })
+    //   .execute();
+
     await queryRunner.manager.upsert(
       StockPriceSyncStatusEntity,
       {
