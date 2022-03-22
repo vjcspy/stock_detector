@@ -1,5 +1,8 @@
 import { generateAction } from '@module/core/util/store/createAction';
-import { FinancialInfoType } from '@module/finan-info/entity/financial-info-status.entity';
+import {
+  FinancialInfoType,
+  FinancialTermTypeEnum,
+} from '@module/finan-info/entity/financial-info-status.entity';
 
 const prefix = '$%FINANCE_INFO$%';
 
@@ -7,10 +10,9 @@ const GET_FINANCIAL_INFO = 'GET_FINANCIAL_INFO';
 const getFinancialIndicator = generateAction<
   {
     code: string;
-    termType: number;
+    termType: FinancialTermTypeEnum;
     type: FinancialInfoType;
     resolve: any;
-    reject: any;
   },
   { code: string; termType: number; type: FinancialInfoType }
 >(GET_FINANCIAL_INFO, prefix);
@@ -21,7 +23,7 @@ export const finishGetFinanceInfoAfterAction = getFinancialIndicator.AFTER;
 const requestFinancialInfo = generateAction<
   {
     code: string;
-    termType: number;
+    termType: FinancialTermTypeEnum;
     type: FinancialInfoType;
     page: number;
     lastYear?: number;
@@ -30,13 +32,13 @@ const requestFinancialInfo = generateAction<
   {
     data: any;
     code: string;
-    termType: number;
+    termType: FinancialTermTypeEnum;
     type: FinancialInfoType;
     page: number;
   },
   {
     code: string;
-    termType: number;
+    termType: FinancialTermTypeEnum;
     type: FinancialInfoType;
     page: number;
     error: any;
@@ -51,7 +53,7 @@ const saveFinancialInfo = generateAction<
   {},
   {
     code: string;
-    termType: number;
+    termType: FinancialTermTypeEnum;
     type: FinancialInfoType;
     lastYear?: number;
     lastQuarter?: number;
@@ -59,7 +61,7 @@ const saveFinancialInfo = generateAction<
   },
   {
     code: string;
-    termType: number;
+    termType: FinancialTermTypeEnum;
     type: FinancialInfoType;
     page: number;
     error: any;

@@ -1,10 +1,10 @@
 import { Column, Entity, PrimaryGeneratedColumn, Unique } from 'typeorm';
 
 export enum FinancialInfoType {
-  INDICATOR,
-  BALANCE_SHEET,
-  BUSINESS_REPORT,
-  CASH_FLOW,
+  INDICATOR = 'CSTC',
+  BALANCE_SHEET = 'CDKT',
+  BUSINESS_REPORT = 'KQKD',
+  CASH_FLOW = 'LCTT',
 }
 
 export enum FinancialTermTypeEnum {
@@ -27,7 +27,8 @@ export class FinancialInfoStatusEntity {
 
   @Column({
     nullable: false,
-    type: 'tinyint',
+    type: 'varchar',
+    length: '4',
   })
   type: FinancialInfoType;
 

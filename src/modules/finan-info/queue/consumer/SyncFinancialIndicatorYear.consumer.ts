@@ -21,7 +21,7 @@ export class SyncFinancialIndicatorYearConsumer extends RabbitmqSubscribeConsume
     },
   })
   public async pubSubHandler(msg: any, amqpMsg: ConsumeMessage) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       if (typeof msg === 'string') {
         getStateManager().store.dispatch(
           startGetFinanceInfoAction({
@@ -29,7 +29,6 @@ export class SyncFinancialIndicatorYearConsumer extends RabbitmqSubscribeConsume
             type: FinancialInfoType.INDICATOR,
             termType: FinancialTermTypeEnum.YEAR,
             resolve,
-            reject,
           }),
         );
       }

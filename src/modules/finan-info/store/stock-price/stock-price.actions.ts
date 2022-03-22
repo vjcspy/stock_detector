@@ -6,6 +6,7 @@ import { Moment } from 'moment';
 const STOCK_PRICES_START = 'STOCK_PRICES_START';
 export const stockPricesStartAction = createAction<{
   code: string;
+  resolve: any;
 }>(STOCK_PRICES_START);
 
 const GET_STOCK_PRICES = 'GET_STOCK_PRICES';

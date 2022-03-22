@@ -9,6 +9,7 @@ import { Model } from 'mongoose';
 import { initDefaultLogger } from '@module/core/util/logfile';
 import winston from 'winston';
 import moment from 'moment';
+import 'moment-timezone';
 import process from 'process';
 
 @Injectable()
@@ -36,11 +37,13 @@ export class LogService {
       }
 
       if (options?.console || options?.file) {
-        const msg = `${process.pid} ${moment().format(
-          'YYYY-MM-DD, HH:mm:ss ',
-        )} [${record.source}|${record.group}${this._s(record?.group1)}${this._s(
-          record?.group2,
-        )}${this._s(record?.group3)}] : ${record.message}`;
+        const msg = `${process.pid} ${moment()
+          .tz('Asia/Ho_Chi_Minh')
+          .format('YYYY-MM-DD, HH:mm:ss ')} [${record.source}|${
+          record.group
+        }${this._s(record?.group1)}${this._s(record?.group2)}${this._s(
+          record?.group3,
+        )}] : ${record.message}`;
         _logger.log(record.level, msg);
       }
 

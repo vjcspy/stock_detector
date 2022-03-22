@@ -30,6 +30,7 @@ import { filter } from 'rxjs/operators';
 import { getFinancialInfoPage } from '@module/finan-info/store/financial-info/fns/getFinancialInfoPage';
 import { saveFinanceInfo } from '@module/finan-info/store/financial-info/fns/saveFinaceInfo';
 import { Levels } from '@module/core/schemas/log-db.schema';
+import { Nack } from '@golevelup/nestjs-rabbitmq';
 
 @Injectable()
 export class FinancialInfoEffects {
@@ -51,7 +52,7 @@ export class FinancialInfoEffects {
               group1: code,
               group2: type,
               group3: termType,
-              message: `______________ [${action.payload.code}|${type}|${termType}] Start get data ______________`,
+              message: `_________ [${action.payload.code}|${type}|${termType}] START _________`,
             });
             if (syncStatus) {
               this.log.log({
@@ -263,7 +264,7 @@ export class FinancialInfoEffects {
               group1: code,
               group2: type,
               group3: termType,
-              message: `[${action.payload.code}|${type}|${termType}] Save thành công [${page}] `,
+              message: `[${action.payload.code}|${type}|${termType}] Save thành công page [${page}] `,
             });
             return saveFinanceInfoPageAfterAction({
               code,
@@ -280,7 +281,7 @@ export class FinancialInfoEffects {
               group1: code,
               group2: type,
               group3: termType,
-              message: `Error [${action.payload.code}|${type}|${termType}] Save thất bại [${page}] `,
+              message: `Error [${action.payload.code}|${type}|${termType}] Save thất bại page [${page}] `,
               metadata: {
                 error,
               },
@@ -331,7 +332,7 @@ export class FinancialInfoEffects {
             group1: code,
             group2: type,
             group3: termType,
-            message: `[${action.payload.code}|${type}|${termType}] ___________ FINISH PAGE [${page}] `,
+            message: `[${action.payload.code}|${type}|${termType}] ___________ FINISHED ___________`,
           });
           return finishGetFinanceInfoAfterAction({
             code,
@@ -347,7 +348,7 @@ export class FinancialInfoEffects {
             group3: termType,
             message: `[${
               action.payload.code
-            }|${type}|${termType}] ___________ REPEAT page [${page - 1}] `,
+            }|${type}|${termType}] REPEAT page [${page - 1}] `,
           });
           return requestFinancialInfoAction({
             code,
@@ -384,7 +385,17 @@ export class FinancialInfoEffects {
         const termType = action.payload.termType;
 
         if (typeof infoState?.resolve === 'function') {
-          infoState.resolve();
+          this.log.log({
+            source: 'fi',
+            group: 'sync_info',
+            group1: code,
+            group2: type,
+            group3: termType,
+            message: `[${action.payload.code}|${type}|${termType}] ACK queue `,
+          });
+          setTimeout(() => {
+            infoState.resolve();
+          }, 2000);
         }
         return EMPTY;
       }),
@@ -414,8 +425,18 @@ export class FinancialInfoEffects {
         const type = action.payload.type;
         const termType = action.payload.termType;
 
-        if (typeof infoState?.reject === 'function') {
-          infoState.reject();
+        if (typeof infoState?.resolve === 'function') {
+          this.log.log({
+            source: 'fi',
+            group: 'sync_info',
+            group1: code,
+            group2: type,
+            group3: termType,
+            message: `[${action.payload.code}|${type}|${termType}] NACK queue `,
+          });
+          setTimeout(() => {
+            infoState.resolve(new Nack(true));
+          }, 2000);
         }
         return EMPTY;
       }),
