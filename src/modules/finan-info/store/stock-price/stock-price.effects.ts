@@ -16,7 +16,6 @@ import {
   stockPricesStartAction,
 } from '@module/finan-info/store/stock-price/stock-price.actions';
 import { StockPriceValues } from '@module/finan-info/store/stock-price/stock-price.values';
-import { SyncStockPriceConsumer } from '@module/finan-info/queue/consumer/SyncStockPrice.consumer';
 import { Nack } from '@golevelup/nestjs-rabbitmq';
 import { Injectable } from '@nestjs/common';
 import { Effect } from '@module/core/decorator/store-effect';
@@ -40,7 +39,7 @@ export class StockPriceEffects {
               source: 'fi',
               group: 'sync_price',
               group1: action.payload.code,
-              message: `[${action.payload.code}] _________ START _________`,
+              message: `_________ START [${action.payload.code}] _________`,
             });
             if (currentStatus) {
               const lastDate = moment(currentStatus.lastDate);
@@ -139,7 +138,7 @@ export class StockPriceEffects {
   whenGotStockPrices$ = createEffect((action$, state$) =>
     action$.pipe(
       ofType(getStockPricesAfterAction),
-      withLatestFrom(state$, (v1, v2) => [v1, v2.stockPrice]),
+      withLatestFrom(state$, (v1, v2) => [v1, v2.stockPrices]),
       concatMap((d) => {
         const action = d[0];
         return from(
@@ -179,6 +178,12 @@ export class StockPriceEffects {
     action$.pipe(
       ofType(saveStockPriceAfterAction),
       map((action) => {
+        this.log.log({
+          source: 'fi',
+          group: 'sync_price',
+          group1: action.payload.code,
+          message: `________ FINISHED ________`,
+        });
         return stockPricesFinishedAction({ code: action.payload.code });
       }),
     ),
@@ -188,12 +193,19 @@ export class StockPriceEffects {
   whenFinish$ = createEffect((action$, state$) =>
     action$.pipe(
       ofType(stockPricesFinishedAction),
-      withLatestFrom(state$, (v1, v2) => [v1, v2.stockPrice]),
+      withLatestFrom(state$, (v1, v2) => [v1, v2.stockPrices]),
       map((d) => {
+        const action = d[0];
         const stockPriceState: StockPriceState = d[1];
         if (typeof stockPriceState?.resolve === 'function') {
+          this.log.log({
+            source: 'fi',
+            group: 'sync_price',
+            group1: action.payload.code,
+            message: `Next queue`,
+          });
           setTimeout(() => {
-            SyncStockPriceConsumer.resolve();
+            stockPriceState.resolve();
           }, 2000);
         }
 
@@ -206,12 +218,20 @@ export class StockPriceEffects {
   handleError$ = createEffect((action$, state$) =>
     action$.pipe(
       ofType(saveStockPriceErrorAction, getStockPricesErrorAction),
-      withLatestFrom(state$, (v1, v2) => [v1, v2.stockPrice]),
+      withLatestFrom(state$, (v1, v2) => [v1, v2.stockPrices]),
       map((d) => {
+        const action = d[0];
         const stockPriceState: StockPriceState = d[1];
         if (typeof stockPriceState?.resolve === 'function') {
+          this.log.log({
+            level: Levels.error,
+            source: 'fi',
+            group: 'sync_price',
+            group1: action.payload.code,
+            message: `NACK queue`,
+          });
           setTimeout(() => {
-            SyncStockPriceConsumer.resolve(new Nack(true));
+            stockPriceState.resolve(new Nack(true));
           }, 2000);
         }
 

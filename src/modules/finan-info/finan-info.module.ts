@@ -18,6 +18,7 @@ import { StateEffects } from '@module/finan-info/store';
 import { FinancialInfoStatusEntity } from '@module/finan-info/entity/financial-info-status.entity';
 import { FinancialInfoController } from '@module/finan-info/controller/financial-info.controller';
 import { FinancialInfoValues } from '@module/finan-info/store/financial-info/financial-info.values';
+import { StockPriceValues } from '@module/finan-info/store/stock-price/stock-price.values';
 
 @Module({
   imports: [
@@ -38,7 +39,7 @@ import { FinancialInfoValues } from '@module/finan-info/store/financial-info/fin
           },
         },
         {
-          name: 'finan.info.sync-stock-price',
+          name: StockPriceValues.EXCHANGE_KEY,
           type: 'topic',
           options: {
             durable: true,

@@ -4,12 +4,13 @@ import { RabbitmqSubscribeConsumerAbstract } from '@module/core/queue/RabbitmqCo
 import { ConsumeMessage } from 'amqplib';
 import { getStateManager } from '@module/core/provider/state-manager';
 import { stockPricesStartAction } from '@module/finan-info/store/stock-price/stock-price.actions';
+import { StockPriceValues } from '@module/finan-info/store/stock-price/stock-price.values';
 
 @Injectable()
 export class SyncStockPriceConsumer extends RabbitmqSubscribeConsumerAbstract {
   @RabbitSubscribe({
-    exchange: 'finan.info.sync-stock-price',
-    routingKey: 'finan.info.sync-stock-price.cor',
+    exchange: StockPriceValues.EXCHANGE_KEY,
+    routingKey: StockPriceValues.PUBLISHER_ROUTING_KEY,
     queue: 'finan.info.queue.sync-stock-price-queue',
     queueOptions: {
       durable: true,
