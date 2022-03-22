@@ -16,13 +16,12 @@ export class SyncStockPriceConsumer extends RabbitmqSubscribeConsumerAbstract {
     },
   })
   public async pubSubHandler(msg: any, amqpMsg: ConsumeMessage) {
-    return new Promise<any>((resolve, reject) => {
+    return new Promise<any>((resolve) => {
       if (typeof msg === 'string') {
         getStateManager().store.dispatch(
           stockPricesStartAction({
             code: msg,
             resolve,
-            reject,
           }),
         );
       }

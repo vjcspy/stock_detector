@@ -30,6 +30,7 @@ import { filter } from 'rxjs/operators';
 import { getFinancialInfoPage } from '@module/finan-info/store/financial-info/fns/getFinancialInfoPage';
 import { saveFinanceInfo } from '@module/finan-info/store/financial-info/fns/saveFinaceInfo';
 import { Levels } from '@module/core/schemas/log-db.schema';
+import { Nack } from '@golevelup/nestjs-rabbitmq';
 
 @Injectable()
 export class FinancialInfoEffects {
@@ -424,7 +425,7 @@ export class FinancialInfoEffects {
         const type = action.payload.type;
         const termType = action.payload.termType;
 
-        if (typeof infoState?.reject === 'function') {
+        if (typeof infoState?.resolve === 'function') {
           this.log.log({
             source: 'fi',
             group: 'sync_info',
@@ -434,7 +435,7 @@ export class FinancialInfoEffects {
             message: `[${action.payload.code}|${type}|${termType}] NACK queue `,
           });
           setTimeout(() => {
-            infoState.reject();
+            infoState.resolve(new Nack(true));
           }, 2000);
         }
         return EMPTY;

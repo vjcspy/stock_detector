@@ -16,6 +16,9 @@ export class PriceController {
     this.stateManager.getStore().dispatch(
       stockPricesStartAction({
         code: 'BFC',
+        resolve: () => {
+          console.log('resolve');
+        },
       }),
     );
 

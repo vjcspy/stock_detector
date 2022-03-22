@@ -13,7 +13,6 @@ const getFinancialIndicator = generateAction<
     termType: FinancialTermTypeEnum;
     type: FinancialInfoType;
     resolve: any;
-    reject: any;
   },
   { code: string; termType: number; type: FinancialInfoType }
 >(GET_FINANCIAL_INFO, prefix);
