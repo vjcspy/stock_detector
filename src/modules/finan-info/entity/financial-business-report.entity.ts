@@ -77,5 +77,173 @@ export class FinancialBusinessReportEntity {
   })
   auditedStatus: string;
 
+  // Doanh thu bán hàng và cung cấp dịch vụ
+  @Column({
+    type: 'int',
+    nullable: true,
+  })
+  revenue: number;
+
+  // Các khoản giảm trừ doanh thu
+  @Column({
+    type: 'int',
+    nullable: true,
+  })
+  deductionFromRevenue: number;
+
+  // Doanh thu thuần về bán hàng và cung cấp dịch vụ
+  @Column({
+    type: 'int',
+    nullable: true,
+  })
+  netRevenue: number;
+
+  // Giá vốn hàng bán
+  @Column({
+    type: 'int',
+    nullable: true,
+  })
+  costOfGoodsSold: number;
+
+  // Lợi nhuận gộp về bán hàng và cung cấp dịch vụ
+  @Column({
+    type: 'int',
+    nullable: true,
+  })
+  grossProfit: number;
+
+  // Doanh thu hoạt động tài chính
+  @Column({
+    type: 'int',
+    nullable: true,
+  })
+  financialIncome: number;
+
+  // Chi phí tài chính
+  @Column({
+    type: 'int',
+    nullable: true,
+  })
+  financialExpenses: number;
+
+  // Chi phí lãi vay
+  @Column({
+    type: 'int',
+    nullable: true,
+  })
+  interestExpenses: number;
+
+  // Phần lãi/lỗ trong công ty liên doanh, liên kết
+  @Column({
+    type: 'int',
+    nullable: true,
+  })
+  shareOfAssociatesAndJointVenturesResult: number;
+
+  // Chi phí bán hàng
+  @Column({
+    type: 'int',
+    nullable: true,
+  })
+  sellingExpenses: number;
+
+  // Chi phí quản lý doanh nghiệp
+  @Column({
+    type: 'int',
+    nullable: true,
+  })
+  generalAndAdministrativeExpenses: number;
+
+  // Lợi nhuận thuần từ hoạt động kinh doanh
+  @Column({
+    type: 'int',
+    nullable: true,
+  })
+  operatingProfit: number;
+
+  // Thu nhập khác
+  @Column({
+    type: 'int',
+    nullable: true,
+  })
+  otherIncome: number;
+
+  // Chi phí khác
+  @Column({
+    type: 'int',
+    nullable: true,
+  })
+  otherExpenses: number;
+
+  // Lợi nhuận khác
+  @Column({
+    type: 'int',
+    nullable: true,
+  })
+  otherProfit: number;
+
+  // Phần lợi nhuận/lỗ từ công ty liên kết liên doanh
+  @Column({
+    type: 'int',
+    nullable: true,
+  })
+  shareOfAssociatesAndJointVentures: number;
+
+  // Tổng lợi nhuận kế toán trước thuế
+  @Column({
+    type: 'int',
+    nullable: true,
+  })
+  profitBeforeTax: number;
+
+  // Chi phí thuế TNDN hiện hành
+  @Column({
+    type: 'int',
+    nullable: true,
+  })
+  currentCorporateIncomeTaxExpenses: number;
+
+  // Chi phí thuế TNDN hoãn lại
+  @Column({
+    type: 'int',
+    nullable: true,
+  })
+  deferredIncomeTaxExpenses: number;
+
+  // Lợi nhuận sau thuế thu nhập doanh nghiệp
+  @Column({
+    type: 'int',
+    nullable: true,
+  })
+  netProfitAfterTax: number;
+
+  // Lợi ích của cổ đông thiểu số
+  @Column({
+    type: 'int',
+    nullable: true,
+  })
+  minorityInterest: number;
+
+  // Lợi nhuận sau thuế của cổ đông của Công ty mẹ
+  @Column({
+    type: 'int',
+    nullable: true,
+  })
+  profitAfterTaxForShareholdersOfParentCompany: number;
+
+  // Lãi cơ bản trên cổ phiếu (*) (VNÐ)
+  @Column({
+    type: 'int',
+    nullable: true,
+  })
+  earningsPerShare: number;
+
+  // Lãi suy giảm trên cổ phiếu (*)
+  @Column({
+    type: 'int',
+    nullable: true,
+  })
+  dilutedEarningsPerShare: number;
+
   /*--------------------------------------------------------------------------*/
 }
