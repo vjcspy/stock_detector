@@ -1,19 +1,14 @@
-import {
-  BaseEntity,
-  Column,
-  Entity,
-  PrimaryGeneratedColumn,
-  Unique,
-} from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn, Unique } from 'typeorm';
 import {
   EntityWithSourceMapping,
   SourceMapping,
 } from '@module/core/decorator/entity/source-mapping/entity-with-source-mapping';
+import moment from 'moment';
 
 @EntityWithSourceMapping
 @Entity()
 @Unique(['code', 'date'])
-export class StockPriceEntity extends BaseEntity {
+export class StockPriceEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -26,11 +21,12 @@ export class StockPriceEntity extends BaseEntity {
   code: string;
 
   @SourceMapping('Date', (data: any) => {
-    return new Date(data['Date']);
+    return moment(data['Date']).format('YYYY-MM-DD');
   })
   @Column({
-    type: 'date',
-    nullable: false,
+    type: 'varchar',
+    length: '10',
+    nullable: true,
   })
   date: Date;
 
