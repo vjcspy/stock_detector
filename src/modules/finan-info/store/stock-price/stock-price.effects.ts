@@ -204,9 +204,9 @@ export class StockPriceEffects {
             group1: action.payload.code,
             message: `Next queue`,
           });
-          setTimeout(() => {
-            stockPriceState.resolve();
-          }, 2000);
+          // setTimeout(() => {
+          stockPriceState.resolve();
+          // }, 2000);
         }
 
         return EMPTY;
