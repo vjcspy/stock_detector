@@ -121,7 +121,7 @@ export class StockPriceEffects {
                 source: 'fi',
                 group: 'sync_price',
                 group1: action.payload.code,
-                message: `Lấy dữ liệu từ BSC thành công`,
+                message: `Lấy dữ liệu thành công`,
               });
               return getStockPricesAfterAction({
                 data: priceData,
@@ -182,7 +182,7 @@ export class StockPriceEffects {
           source: 'fi',
           group: 'sync_price',
           group1: action.payload.code,
-          message: `________ FINISHED ________`,
+          message: `________ FINISHED [${action.payload.code}] ________`,
         });
         return stockPricesFinishedAction({ code: action.payload.code });
       }),
