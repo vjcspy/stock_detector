@@ -2,12 +2,10 @@ import { SyncStockPricePublisher } from '@module/finan-info/queue/publisher/Sync
 import { SyncStockPriceConsumer } from '@module/finan-info/queue/consumer/SyncStockPrice.consumer';
 import { SyncFinancialIndicatorPublisher } from '@module/finan-info/queue/publisher/SyncFinancialIndicator.publisher';
 import { SyncFinancialIndicatorYearConsumer } from '@module/finan-info/queue/consumer/SyncFinancialIndicatorYear.consumer';
-import { SyncFinancialIndicatorQuarterConsumer } from '@module/finan-info/queue/consumer/SyncFinancialIndicatorQuarter.consumer';
 
 export const QUEUE_PROVIDES = [
   SyncStockPricePublisher,
   SyncStockPriceConsumer,
   SyncFinancialIndicatorPublisher,
   SyncFinancialIndicatorYearConsumer,
-  SyncFinancialIndicatorQuarterConsumer,
 ];

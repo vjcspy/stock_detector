@@ -17,7 +17,6 @@ const getFinancialIndicator = generateAction<
 
 export const startGetFinanceInfoAction = getFinancialIndicator.ACTION;
 export const finishGetFinanceInfoAfterAction = getFinancialIndicator.AFTER;
-export const getFinanceInfoErrorAction = getFinancialIndicator.ERROR;
 
 const requestFinancialInfo = generateAction<
   {

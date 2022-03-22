@@ -1,11 +1,14 @@
 import { Controller, Get, Header } from '@nestjs/common';
 import { StateManager } from '@module/core/provider/state-manager';
-import { startGetFinanceInfoAction } from '@module/finan-info/store/financial-indicator/financial-indicator.actions';
-import { FinancialTermTypeEnum } from '@module/finan-info/store/financial-indicator/financial-indicator.reducer';
 import { SyncFinancialIndicatorPublisher } from '@module/finan-info/queue/publisher/SyncFinancialIndicator.publisher';
+import { startGetFinanceInfoAction } from '@module/finan-info/store/financial-info/financial-info.actions';
+import {
+  FinancialInfoType,
+  FinancialTermTypeEnum,
+} from '@module/finan-info/entity/financial-info-status.entity';
 
-@Controller('financial-indicator')
-export class FinancialIndicatorController {
+@Controller('fi')
+export class FinancialInfoController {
   constructor(
     private stateManager: StateManager,
     private syncFinancialIndicatorPublisher: SyncFinancialIndicatorPublisher,
@@ -17,6 +20,13 @@ export class FinancialIndicatorController {
     this.stateManager.getStore().dispatch(
       startGetFinanceInfoAction({
         code: 'BFC',
+        resolve: () => {
+          console.log('resolve');
+        },
+        reject: () => {
+          console.log('reject');
+        },
+        type: FinancialInfoType.INDICATOR,
         termType: FinancialTermTypeEnum.YEAR,
       }),
     );

@@ -34,11 +34,11 @@ export const saveFinanceInfo = async (
     // lets now open a new transaction:
     await queryRunner.startTransaction();
     const financeInfos = parseFinanceInfoData(code, data[0], data[1], termType);
-    await queryRunner.manager.upsert(FinancialIndicatorsEntity, financeInfos, [
-      'code',
-      'periodBegin',
-      'periodEnd',
-    ]);
+    await queryRunner.manager.upsert(
+      getEntityBaseOnType(type).entity,
+      financeInfos,
+      ['code', 'periodBegin', 'periodEnd'],
+    );
     await queryRunner.manager.upsert(
       FinancialInfoStatusEntity,
       {

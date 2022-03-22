@@ -1,14 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { StateManager } from '@module/core/provider/state-manager';
-import { financialIndicatorReducer } from '@module/finan-info/store/financial-indicator/financial-indicator.reducer';
-import { FinancialIndicatorEffects } from '@module/finan-info/store/financial-indicator/financial-indicator.effects';
+import { FinancialInfoEffects } from '@module/finan-info/store/financial-info/financial-info.effects';
+import { financialInfoReducer } from '@module/finan-info/store/financial-info/financial-info.reducer';
 
 @Injectable()
 export class FinancialIndicatorState {
   protected _init = false;
   constructor(
     protected stateManager: StateManager,
-    private fiEffects: FinancialIndicatorEffects,
+    private fiEffects: FinancialInfoEffects,
   ) {}
   public config() {
     if (this._init) {
@@ -16,7 +16,7 @@ export class FinancialIndicatorState {
     }
     const storeManager = this.stateManager.getStoreManager();
     storeManager.mergeReducers({
-      financialIndicator: financialIndicatorReducer,
+      financialInfo: financialInfoReducer,
     });
 
     this.stateManager.addFeatureEffect(

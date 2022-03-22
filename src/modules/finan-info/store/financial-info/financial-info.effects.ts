@@ -144,7 +144,7 @@ export class FinancialInfoEffects {
       ofType(requestFinancialInfoAction),
       withLatestFrom(state$, (v1, v2) => {
         const action: any = v1;
-        const infoState: FinancialInfo = v2.infos.find(
+        const infoState: FinancialInfo = v2.financialInfo.infos.find(
           (_if) =>
             _if.code === action.payload.code &&
             _if.termType === action.payload.termType &&
@@ -212,7 +212,7 @@ export class FinancialInfoEffects {
       ofType(requestFinancialInfoAfterAction),
       withLatestFrom(state$, (v1, v2) => {
         const action: any = v1;
-        const infoState: FinancialInfo = v2.infos.find(
+        const infoState: FinancialInfo = v2.financialInfo.infos.find(
           (_if) =>
             _if.code === action.payload.code &&
             _if.termType === action.payload.termType &&
@@ -308,7 +308,7 @@ export class FinancialInfoEffects {
       ofType(saveFinanceInfoPageAfterAction),
       withLatestFrom(state$, (v1, v2) => {
         const action: any = v1;
-        const infoState: FinancialInfo = v2.infos.find(
+        const infoState: FinancialInfo = v2.financialInfo.infos.find(
           (_if) =>
             _if.code === action.payload.code &&
             _if.termType === action.payload.termType &&
@@ -366,7 +366,7 @@ export class FinancialInfoEffects {
       ofType(finishGetFinanceInfoAfterAction),
       withLatestFrom(state$, (v1, v2) => {
         const action: any = v1;
-        const infoState: FinancialInfo = v2.infos.find(
+        const infoState: FinancialInfo = v2.financialInfo.infos.find(
           (_if) =>
             _if.code === action.payload.code &&
             _if.termType === action.payload.termType &&
@@ -397,7 +397,7 @@ export class FinancialInfoEffects {
       ofType(requestFinancialInfoErrorAction, saveFinanceInfoPageErrorAction),
       withLatestFrom(state$, (v1, v2) => {
         const action: any = v1;
-        const infoState: FinancialInfo = v2.infos.find(
+        const infoState: FinancialInfo = v2.financialInfo.infos.find(
           (_if) =>
             _if.code === action.payload.code &&
             _if.termType === action.payload.termType &&

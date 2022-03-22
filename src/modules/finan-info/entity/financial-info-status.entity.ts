@@ -28,7 +28,6 @@ export class FinancialInfoStatusEntity {
   @Column({
     nullable: false,
     type: 'tinyint',
-    length: '1',
   })
   type: FinancialInfoType;
 
