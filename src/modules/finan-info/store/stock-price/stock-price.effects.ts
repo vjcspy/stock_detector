@@ -22,6 +22,7 @@ import { Injectable } from '@nestjs/common';
 import { Effect } from '@module/core/decorator/store-effect';
 import { LogService } from '@module/core/service/log.service';
 import { Levels } from '@module/core/schemas/log-db.schema';
+import { StockPriceState } from '@module/finan-info/store/stock-price/stock-price.reducer';
 
 @Injectable()
 export class StockPriceEffects {
@@ -39,7 +40,7 @@ export class StockPriceEffects {
               source: 'fi',
               group: 'sync_price',
               group1: action.payload.code,
-              message: `Start sync price ${action.payload.code}`,
+              message: `[${action.payload.code}] _________ START _________`,
             });
             if (currentStatus) {
               const lastDate = moment(currentStatus.lastDate);
@@ -66,7 +67,7 @@ export class StockPriceEffects {
                   source: 'fi',
                   group: 'sync_price',
                   group1: action.payload.code,
-                  message: `Finish. Đang là dữ liệu mới nhất`,
+                  message: `_________ UPDATED _________`,
                 });
                 return stockPricesFinishedAction({
                   code: action.payload.code,
@@ -184,22 +185,36 @@ export class StockPriceEffects {
   );
 
   @Effect()
-  whenFinish$ = createEffect((action$) =>
+  whenFinish$ = createEffect((action$, state$) =>
     action$.pipe(
       ofType(stockPricesFinishedAction),
-      map(() => {
-        SyncStockPriceConsumer.resolve();
+      withLatestFrom(state$, (v1, v2) => [v1, v2.stockPrice]),
+      map((d) => {
+        const stockPriceState: StockPriceState = d[1];
+        if (typeof stockPriceState?.resolve === 'function') {
+          setTimeout(() => {
+            SyncStockPriceConsumer.resolve();
+          }, 2000);
+        }
+
         return EMPTY;
       }),
     ),
   );
 
   @Effect()
-  handleError$ = createEffect((action$) =>
+  handleError$ = createEffect((action$, state$) =>
     action$.pipe(
       ofType(saveStockPriceErrorAction, getStockPricesErrorAction),
-      map(() => {
-        SyncStockPriceConsumer.resolve(new Nack(true));
+      withLatestFrom(state$, (v1, v2) => [v1, v2.stockPrice]),
+      map((d) => {
+        const stockPriceState: StockPriceState = d[1];
+        if (typeof stockPriceState?.resolve === 'function') {
+          setTimeout(() => {
+            SyncStockPriceConsumer.resolve(new Nack(true));
+          }, 2000);
+        }
+
         return EMPTY;
       }),
     ),
