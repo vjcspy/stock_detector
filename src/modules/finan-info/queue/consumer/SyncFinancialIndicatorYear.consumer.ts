@@ -2,19 +2,19 @@ import { Injectable } from '@nestjs/common';
 import { RabbitSubscribe } from '@golevelup/nestjs-rabbitmq';
 import { ConsumeMessage } from 'amqplib';
 import { getStateManager } from '@module/core/provider/state-manager';
-import { SyncFinancialIndicatorPublisher } from '@module/finan-info/queue/publisher/SyncFinancialIndicator.publisher';
 import { RabbitmqSubscribeConsumerAbstract } from '@module/core/queue/RabbitmqConsumerAbstract';
 import { startGetFinanceInfoAction } from '@module/finan-info/store/financial-info/financial-info.actions';
 import {
   FinancialInfoType,
   FinancialTermTypeEnum,
 } from '@module/finan-info/entity/financial-info-status.entity';
+import { FinancialInfoValues } from '@module/finan-info/store/financial-info/financial-info.values';
 
 @Injectable()
 export class SyncFinancialIndicatorYearConsumer extends RabbitmqSubscribeConsumerAbstract {
   @RabbitSubscribe({
-    exchange: SyncFinancialIndicatorPublisher.EXCHANGE,
-    routingKey: SyncFinancialIndicatorPublisher.ROUTING_KEY,
+    exchange: FinancialInfoValues.EXCHANGE_KEY,
+    routingKey: FinancialInfoValues.PUBLISHER_ROUTING_KEY,
     queue: 'finan.info.queue.sync-financial-indicator-year-queue',
     queueOptions: {
       durable: true,

@@ -14,7 +14,7 @@ import { FINANCIAL_PROVIDERS } from '@module/finan-info/provider/state';
 import { CorporationState } from '@module/finan-info/provider/state/corporation.state';
 import { StockPriceState } from '@module/finan-info/provider/state/stock-price.state';
 import { FinancialIndicatorState } from '@module/finan-info/provider/state/financial-indicator.state';
-import { SyncFinancialIndicatorPublisher } from '@module/finan-info/queue/publisher/SyncFinancialIndicator.publisher';
+import { SyncFinancialInfoPublisher } from '@module/finan-info/queue/publisher/SyncFinancialIndicator.publisher';
 import { StateEffects } from '@module/finan-info/store';
 import { FinancialInfoStatusEntity } from '@module/finan-info/entity/financial-info-status.entity';
 import { FinancialInfoController } from '@module/finan-info/controller/financial-info.controller';
@@ -45,7 +45,7 @@ import { FinancialInfoController } from '@module/finan-info/controller/financial
           },
         },
         {
-          name: SyncFinancialIndicatorPublisher.EXCHANGE,
+          name: SyncFinancialInfoPublisher.EXCHANGE,
           type: 'topic',
           options: {
             durable: true,

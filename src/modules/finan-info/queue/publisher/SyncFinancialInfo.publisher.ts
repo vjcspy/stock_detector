@@ -4,12 +4,10 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { CorEntity } from '@module/finan-info/entity/cor.entity';
 import { Repository } from 'typeorm';
 import _ from 'lodash';
+import { FinancialInfoValues } from '@module/finan-info/store/financial-info/financial-info.values';
 
 @Injectable()
-export class SyncFinancialIndicatorPublisher {
-  static EXCHANGE = 'finan.info.sync-financial-indicator';
-  static ROUTING_KEY = 'finan.info.sync-financial-indicator.cor';
-
+export class SyncFinancialInfoPublisher {
   constructor(
     private readonly amqpConnection: AmqpConnection,
     @InjectRepository(CorEntity)
@@ -20,8 +18,8 @@ export class SyncFinancialIndicatorPublisher {
     const cors = await this.corRepository.find();
     _.forEach(cors, (cor) => {
       this.amqpConnection.publish(
-        SyncFinancialIndicatorPublisher.EXCHANGE,
-        SyncFinancialIndicatorPublisher.ROUTING_KEY,
+        FinancialInfoValues.EXCHANGE_KEY,
+        FinancialInfoValues.PUBLISHER_ROUTING_KEY,
         cor.code,
         {},
       );
