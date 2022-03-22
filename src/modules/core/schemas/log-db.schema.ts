@@ -1,5 +1,7 @@
 import mongoose, { Document } from 'mongoose';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import moment from 'moment';
+import 'moment-timezone';
 
 export type LogDbDocument = LogDb & Document;
 
@@ -17,6 +19,7 @@ export enum Levels {
   timestamps: {
     createdAt: true,
     updatedAt: false,
+    currentTime: () => moment().tz('Asia/Ho_Chi_Minh').toDate(),
   },
 })
 export class LogDb {
