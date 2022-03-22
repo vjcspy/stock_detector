@@ -1,17 +1,17 @@
 import { Controller, Get, Header } from '@nestjs/common';
 import { StateManager } from '@module/core/provider/state-manager';
-import { SyncFinancialInfoPublisher } from '@module/finan-info/queue/publisher/SyncFinancialIndicator.publisher';
 import { startGetFinanceInfoAction } from '@module/finan-info/store/financial-info/financial-info.actions';
 import {
   FinancialInfoType,
   FinancialTermTypeEnum,
 } from '@module/finan-info/entity/financial-info-status.entity';
+import { SyncFinancialInfoPublisher } from '@module/finan-info/queue/publisher/SyncFinancialInfo.publisher';
 
 @Controller('fi')
 export class FinancialInfoController {
   constructor(
     private stateManager: StateManager,
-    private syncFinancialIndicatorPublisher: SyncFinancialInfoPublisher,
+    private syncFiInfoPublisher: SyncFinancialInfoPublisher,
   ) {}
 
   @Get('/test')
@@ -37,7 +37,7 @@ export class FinancialInfoController {
 
   @Get('/publish')
   async publish() {
-    this.syncFinancialIndicatorPublisher.publish();
+    this.syncFiInfoPublisher.publish();
 
     return 'ok';
   }
