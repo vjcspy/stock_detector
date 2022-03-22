@@ -26,7 +26,7 @@ export class AppController {
         Referer: 'https://finance.vietstock.vn/BFC/tai-chinh.htm?tab=CSTC',
         'Referrer-Policy': 'strict-origin-when-cross-origin',
       },
-      body: 'Code=BFC&ReportType=KQKD&ReportTermType=1&Unit=1000000000&Page=2&PageSize=4&__RequestVerificationToken=xDCPawNqxeiYnYsx5bFkurVak8dfP8VbBu9EnyPQ8FdDbi_-OTfrfbiO5Ux5vhSPJrXG_CZq4oSGAdYi65iCtXihTh_qMMvt9jQMgntoO9moZCg5A91mJf747JS8Ua4A0',
+      body: 'Code=BFC&ReportType=LC&ReportTermType=1&Unit=1000000000&Page=2&PageSize=4&__RequestVerificationToken=xDCPawNqxeiYnYsx5bFkurVak8dfP8VbBu9EnyPQ8FdDbi_-OTfrfbiO5Ux5vhSPJrXG_CZq4oSGAdYi65iCtXihTh_qMMvt9jQMgntoO9moZCg5A91mJf747JS8Ua4A0',
       method: 'POST',
     });
 
