@@ -15,12 +15,7 @@ const convertSourceFn = (sourceId: number) => {
   return (sourceData: any) => {
     const data = _.find(sourceData, (value) => value?.ID == sourceId);
 
-    return data &&
-      typeof data['value'] !== 'undefined' &&
-      parseFloat(data['value']) < 1000000 &&
-      parseFloat(data['value']) > -1000000
-      ? data['value']
-      : null;
+    return data?.value ?? null;
   };
 };
 

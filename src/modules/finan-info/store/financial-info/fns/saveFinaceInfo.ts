@@ -112,7 +112,7 @@ const parseFinanceInfoData = (
     _.forEach(financeInfoData, (groupInfo: any) => {
       if (Array.isArray(groupInfo)) {
         _.forEach(groupInfo, (info: any) => {
-          sourceData.push({ ...info, value: info[`Value${index + 1}`] });
+          sourceData.push({ ...info, value: info[`Value${time.ID}`] });
         });
       }
     });
