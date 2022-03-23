@@ -8,6 +8,7 @@ import { ConfigService } from '@nestjs/config';
 import databaseCfg from '@cfg/database.cfg';
 import { ScheduleModule } from '@nestjs/schedule';
 import { MongooseModule } from '@nestjs/mongoose';
+import { FinanAnalysisModule } from './modules/finan-analysis/finan-analysis.module';
 import mongoCfg from '@cfg/mongo.cfg';
 
 @Module({
@@ -33,6 +34,7 @@ import mongoCfg from '@cfg/mongo.cfg';
     ),
     CoreModule,
     FinanInfoModule,
+    FinanAnalysisModule,
   ],
   controllers: [AppController],
   providers: [AppService],
