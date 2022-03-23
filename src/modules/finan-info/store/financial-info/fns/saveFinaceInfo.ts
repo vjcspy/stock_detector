@@ -51,7 +51,13 @@ export const saveFinanceInfo = async (
 
     // lets now open a new transaction:
     await queryRunner.startTransaction();
-    const financeInfos = parseFinanceInfoData(code, data[0], data[1], termType);
+    const financeInfos = parseFinanceInfoData(
+      code,
+      data[0],
+      data[1],
+      termType,
+      type,
+    );
     await queryRunner.manager.upsert(
       getEntityBaseOnType(type).entity,
       financeInfos,
@@ -97,7 +103,8 @@ const parseFinanceInfoData = (
   code: string,
   timeData: any[],
   financeInfoData: any[],
-  termType: number,
+  termType: FinancialTermTypeEnum,
+  type: FinancialInfoType,
 ) => {
   const data: any[] = [];
   timeData.forEach((time: any, index: number) => {
@@ -110,9 +117,11 @@ const parseFinanceInfoData = (
       }
     });
 
+    const classEntity = getEntityBaseOnType(type).entity;
+
     const sourceDataConverted =
       // @ts-ignore
-      new FinancialIndicatorsEntity().convertSourceData(sourceData);
+      new classEntity().convertSourceData(sourceData);
 
     const financeInfoObject = {
       code,

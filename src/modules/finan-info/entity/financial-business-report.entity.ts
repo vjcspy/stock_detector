@@ -15,12 +15,7 @@ const convertSourceFn = (sourceId: number) => {
   return (sourceData: any) => {
     const data = _.find(sourceData, (value) => value?.ID == sourceId);
 
-    return data &&
-      typeof data['value'] !== 'undefined' &&
-      parseFloat(data['value']) < 1000000 &&
-      parseFloat(data['value']) > -1000000
-      ? data['value']
-      : null;
+    return data?.value ?? null;
   };
 };
 
@@ -82,6 +77,8 @@ export class FinancialBusinessReportEntity extends BaseEntity {
     length: '3',
   })
   auditedStatus: string;
+
+  /*--------------------------------------------------------------------------*/
 
   // Doanh thu bán hàng và cung cấp dịch vụ
   @SourceMapping(null, convertSourceFn(1))
@@ -274,6 +271,4 @@ export class FinancialBusinessReportEntity extends BaseEntity {
     nullable: true,
   })
   dilutedEarningsPerShare: number;
-
-  /*--------------------------------------------------------------------------*/
 }
