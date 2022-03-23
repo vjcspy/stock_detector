@@ -15,12 +15,7 @@ const convertSourceFn = (sourceId: number) => {
   return (sourceData: any) => {
     const data = _.find(sourceData, (value) => value?.ID == sourceId);
 
-    return data &&
-      typeof data['value'] !== 'undefined' &&
-      parseFloat(data['value']) < 1000000 &&
-      parseFloat(data['value']) > -1000000
-      ? data['value']
-      : null;
+    return data?.value ?? null;
   };
 };
 
@@ -83,13 +78,15 @@ export class FinancialBalanceSheetEntity extends BaseEntity {
   })
   auditedStatus: string;
 
+  /*--------------------------------------------------------------------------*/
+
   // TÀI SẢN
   @SourceMapping(null, convertSourceFn(1))
   @Column({
     type: 'int',
     nullable: true,
   })
-  assets: number
+  assets: number;
 
   // TÀI SẢN NGẮN HẠN
   @SourceMapping(null, convertSourceFn(2))
@@ -97,7 +94,7 @@ export class FinancialBalanceSheetEntity extends BaseEntity {
     type: 'int',
     nullable: true,
   })
-  shortTermAssets: number
+  shortTermAssets: number;
 
   // Tiền và các khoản tương đương tiền
   @SourceMapping(null, convertSourceFn(3))
@@ -105,7 +102,7 @@ export class FinancialBalanceSheetEntity extends BaseEntity {
     type: 'int',
     nullable: true,
   })
-  cashAndCashEquivalents: number
+  cashAndCashEquivalents: number;
 
   // Tiền
   @SourceMapping(null, convertSourceFn(4))
@@ -113,7 +110,7 @@ export class FinancialBalanceSheetEntity extends BaseEntity {
     type: 'int',
     nullable: true,
   })
-  cash: number
+  cash: number;
 
   // Các khoản tương đương tiền
   @SourceMapping(null, convertSourceFn(5))
@@ -121,7 +118,7 @@ export class FinancialBalanceSheetEntity extends BaseEntity {
     type: 'int',
     nullable: true,
   })
-  cashEquivalents: number
+  cashEquivalents: number;
 
   // Đầu tư tài chính ngắn hạn
   @SourceMapping(null, convertSourceFn(6))
@@ -129,7 +126,7 @@ export class FinancialBalanceSheetEntity extends BaseEntity {
     type: 'int',
     nullable: true,
   })
-  shortTermFinancialInvestments: number
+  shortTermFinancialInvestments: number;
 
   // Chứng khoán kinh doanh
   @SourceMapping(null, convertSourceFn(7))
@@ -137,7 +134,7 @@ export class FinancialBalanceSheetEntity extends BaseEntity {
     type: 'int',
     nullable: true,
   })
-  availableForSaleSecurities: number
+  availableForSaleSecurities: number;
 
   // Dự phòng giảm giá chứng khoán kinh doanh (*)
   @SourceMapping(null, convertSourceFn(8))
@@ -145,7 +142,7 @@ export class FinancialBalanceSheetEntity extends BaseEntity {
     type: 'int',
     nullable: true,
   })
-  availableForSaleSecurity: number
+  availableForSaleSecurity: number;
 
   // Đầu tư nắm giữ đến ngày đáo hạn
   @SourceMapping(null, convertSourceFn(9))
@@ -153,7 +150,7 @@ export class FinancialBalanceSheetEntity extends BaseEntity {
     type: 'int',
     nullable: true,
   })
-  heldToMaturityInvestments: number
+  heldToMaturityInvestments: number;
 
   // Các khoản phải thu ngắn hạn
   @SourceMapping(null, convertSourceFn(10))
@@ -161,7 +158,7 @@ export class FinancialBalanceSheetEntity extends BaseEntity {
     type: 'int',
     nullable: true,
   })
-  shortTermReceivables: number
+  shortTermReceivables: number;
 
   // Phải thu ngắn hạn của khách hàng
   @SourceMapping(null, convertSourceFn(11))
@@ -169,7 +166,7 @@ export class FinancialBalanceSheetEntity extends BaseEntity {
     type: 'int',
     nullable: true,
   })
-  shortTermTradeAccountsReceivable: number
+  shortTermTradeAccountsReceivable: number;
 
   // Trả trước cho người bán ngắn hạn
   @SourceMapping(null, convertSourceFn(12))
@@ -177,7 +174,7 @@ export class FinancialBalanceSheetEntity extends BaseEntity {
     type: 'int',
     nullable: true,
   })
-  shortTermPrepaymentsToSuppliers: number
+  shortTermPrepaymentsToSuppliers: number;
 
   // Trả trước cho người bán ngắn hạn
   @SourceMapping(null, convertSourceFn(13))
@@ -185,7 +182,7 @@ export class FinancialBalanceSheetEntity extends BaseEntity {
     type: 'int',
     nullable: true,
   })
-  shortTermInterCompanyReceivables: number
+  shortTermInterCompanyReceivables: number;
 
   // Phải thu theo tiến độ kế hoạch hợp đồng xây dựng
   @SourceMapping(null, convertSourceFn(14))
@@ -193,7 +190,7 @@ export class FinancialBalanceSheetEntity extends BaseEntity {
     type: 'int',
     nullable: true,
   })
-  progressBillingDefined: number
+  progressBillingDefined: number;
 
   // Phải thu về cho vay ngắn hạn
   @SourceMapping(null, convertSourceFn(15))
@@ -201,7 +198,7 @@ export class FinancialBalanceSheetEntity extends BaseEntity {
     type: 'int',
     nullable: true,
   })
-  shortTermLoanReceivables: number
+  shortTermLoanReceivables: number;
 
   // Phải thu ngắn hạn khác
   @SourceMapping(null, convertSourceFn(16))
@@ -209,7 +206,7 @@ export class FinancialBalanceSheetEntity extends BaseEntity {
     type: 'int',
     nullable: true,
   })
-  otherShortTermReceivables: number
+  otherShortTermReceivables: number;
 
   // Dự phòng phải thu ngắn hạn khó đòi (*)
   @SourceMapping(null, convertSourceFn(17))
@@ -217,7 +214,7 @@ export class FinancialBalanceSheetEntity extends BaseEntity {
     type: 'int',
     nullable: true,
   })
-  provisionForShortTermDoubtfulDebts: number
+  provisionForShortTermDoubtfulDebts: number;
 
   // Tài sản thiếu chờ xử lý
   @SourceMapping(null, convertSourceFn(18))
@@ -225,7 +222,7 @@ export class FinancialBalanceSheetEntity extends BaseEntity {
     type: 'int',
     nullable: true,
   })
-  assetsAwaitingResolution: number
+  assetsAwaitingResolution: number;
 
   // Hàng tồn kho Group
   @SourceMapping(null, convertSourceFn(19))
@@ -233,7 +230,7 @@ export class FinancialBalanceSheetEntity extends BaseEntity {
     type: 'int',
     nullable: true,
   })
-  inventoriesGroup: number
+  inventoriesGroup: number;
 
   // Hàng tồn kho
   @SourceMapping(null, convertSourceFn(20))
@@ -241,7 +238,7 @@ export class FinancialBalanceSheetEntity extends BaseEntity {
     type: 'int',
     nullable: true,
   })
-  inventories: number
+  inventories: number;
 
   // Dự phòng giảm giá hàng tồn kho (*)
   @SourceMapping(null, convertSourceFn(21))
@@ -249,7 +246,7 @@ export class FinancialBalanceSheetEntity extends BaseEntity {
     type: 'int',
     nullable: true,
   })
-  provisionForDeclineInValueOfInventories: number
+  provisionForDeclineInValueOfInventories: number;
 
   // Tài sản ngắn hạn khác Group
   @SourceMapping(null, convertSourceFn(22))
@@ -257,7 +254,7 @@ export class FinancialBalanceSheetEntity extends BaseEntity {
     type: 'int',
     nullable: true,
   })
-  otherShortTermAssetsGroup: number
+  otherShortTermAssetsGroup: number;
 
   // Chi phí trả trước ngắn hạn
   @SourceMapping(null, convertSourceFn(23))
@@ -265,7 +262,7 @@ export class FinancialBalanceSheetEntity extends BaseEntity {
     type: 'int',
     nullable: true,
   })
-  shortTermPrepayments: number
+  shortTermPrepayments: number;
 
   // Thuế GTGT được khấu trừ
   @SourceMapping(null, convertSourceFn(24))
@@ -273,7 +270,7 @@ export class FinancialBalanceSheetEntity extends BaseEntity {
     type: 'int',
     nullable: true,
   })
-  valueAddedTaxToBeReclaimed: number
+  valueAddedTaxToBeReclaimed: number;
 
   // Thuế và các khoản khác phải thu của nhà nước
   @SourceMapping(null, convertSourceFn(25))
@@ -281,7 +278,7 @@ export class FinancialBalanceSheetEntity extends BaseEntity {
     type: 'int',
     nullable: true,
   })
-  taxesAndOtherReceivables: number
+  taxesAndOtherReceivables: number;
 
   // Giao dịch mua bán lại trái phiếu chính phủ
   @SourceMapping(null, convertSourceFn(26))
@@ -289,7 +286,7 @@ export class FinancialBalanceSheetEntity extends BaseEntity {
     type: 'int',
     nullable: true,
   })
-  governmentBonds: number
+  governmentBonds: number;
 
   // Tài sản ngắn hạn khác
   @SourceMapping(null, convertSourceFn(27))
@@ -297,7 +294,7 @@ export class FinancialBalanceSheetEntity extends BaseEntity {
     type: 'int',
     nullable: true,
   })
-  otherShortTermAssets: number
+  otherShortTermAssets: number;
 
   // TÀI SẢN DÀI HẠN
   @SourceMapping(null, convertSourceFn(28))
@@ -305,7 +302,7 @@ export class FinancialBalanceSheetEntity extends BaseEntity {
     type: 'int',
     nullable: true,
   })
-  longTermAssets: number
+  longTermAssets: number;
 
   // Các khoản phải thu dài hạn
   @SourceMapping(null, convertSourceFn(29))
@@ -313,7 +310,7 @@ export class FinancialBalanceSheetEntity extends BaseEntity {
     type: 'int',
     nullable: true,
   })
-  longTermReceivables: number
+  longTermReceivables: number;
 
   // Các khoản phải thu dài hạn
   @SourceMapping(null, convertSourceFn(30))
@@ -321,7 +318,7 @@ export class FinancialBalanceSheetEntity extends BaseEntity {
     type: 'int',
     nullable: true,
   })
-  longTermTradeReceivables: number
+  longTermTradeReceivables: number;
 
   // Trả trước cho người bán dài hạn
   @SourceMapping(null, convertSourceFn(31))
@@ -329,7 +326,7 @@ export class FinancialBalanceSheetEntity extends BaseEntity {
     type: 'int',
     nullable: true,
   })
-  longTermPrepaymentsToSuppliers: number
+  longTermPrepaymentsToSuppliers: number;
 
   // Vốn kinh doanh ở các đơn vị trực thuộc
   @SourceMapping(null, convertSourceFn(32))
@@ -337,7 +334,7 @@ export class FinancialBalanceSheetEntity extends BaseEntity {
     type: 'int',
     nullable: true,
   })
-  capitalAtInterCompany: number
+  capitalAtInterCompany: number;
 
   // Phải thu nội bộ dài hạn
   @SourceMapping(null, convertSourceFn(33))
@@ -345,7 +342,7 @@ export class FinancialBalanceSheetEntity extends BaseEntity {
     type: 'int',
     nullable: true,
   })
-  longTermInterCompanyReceivables: number
+  longTermInterCompanyReceivables: number;
 
   // Phải thu về cho vay dài hạn
   @SourceMapping(null, convertSourceFn(34))
@@ -353,7 +350,7 @@ export class FinancialBalanceSheetEntity extends BaseEntity {
     type: 'int',
     nullable: true,
   })
-  longTermLoanReceivables: number
+  longTermLoanReceivables: number;
 
   // Phải thu dài hạn khác
   @SourceMapping(null, convertSourceFn(35))
@@ -361,7 +358,7 @@ export class FinancialBalanceSheetEntity extends BaseEntity {
     type: 'int',
     nullable: true,
   })
-  otherLongTermReceivables: number
+  otherLongTermReceivables: number;
 
   // Dự phòng phải thu dài hạn khó đòi (*)
   @SourceMapping(null, convertSourceFn(36))
@@ -369,7 +366,7 @@ export class FinancialBalanceSheetEntity extends BaseEntity {
     type: 'int',
     nullable: true,
   })
-  provisionForLongTermDoubtfulDebts: number
+  provisionForLongTermDoubtfulDebts: number;
 
   // Tài sản cố định
   @SourceMapping(null, convertSourceFn(37))
@@ -377,7 +374,7 @@ export class FinancialBalanceSheetEntity extends BaseEntity {
     type: 'int',
     nullable: true,
   })
-  fixedAssets: number
+  fixedAssets: number;
 
   // Tài sản cố định hữu hình
   @SourceMapping(null, convertSourceFn(38))
@@ -385,7 +382,7 @@ export class FinancialBalanceSheetEntity extends BaseEntity {
     type: 'int',
     nullable: true,
   })
-  tangibleFixedAssets: number
+  tangibleFixedAssets: number;
 
   // Tài sản cố định hữu hình
   @SourceMapping(null, convertSourceFn(39))
@@ -393,7 +390,7 @@ export class FinancialBalanceSheetEntity extends BaseEntity {
     type: 'int',
     nullable: true,
   })
-  costMaterial: number
+  costMaterial: number;
 
   // Giá trị hao mòn lũy kế (*)
   @SourceMapping(null, convertSourceFn(40))
@@ -401,7 +398,7 @@ export class FinancialBalanceSheetEntity extends BaseEntity {
     type: 'int',
     nullable: true,
   })
-  accumulatedDepreciation: number
+  accumulatedDepreciation: number;
 
   // Tài sản cố định thuê tài chính
   @SourceMapping(null, convertSourceFn(41))
@@ -409,7 +406,7 @@ export class FinancialBalanceSheetEntity extends BaseEntity {
     type: 'int',
     nullable: true,
   })
-  financialLeasedFixedAssets: number
+  financialLeasedFixedAssets: number;
 
   // Tài sản cố định thuê tài chính
   @SourceMapping(null, convertSourceFn(42))
@@ -417,7 +414,7 @@ export class FinancialBalanceSheetEntity extends BaseEntity {
     type: 'int',
     nullable: true,
   })
-  costFinancialLeaseFixedAssets: number
+  costFinancialLeaseFixedAssets: number;
 
   // Giá trị hao mòn lũy kế của tài sản cố định thuê tài chính (*)
   @SourceMapping(null, convertSourceFn(43))
@@ -425,7 +422,7 @@ export class FinancialBalanceSheetEntity extends BaseEntity {
     type: 'int',
     nullable: true,
   })
-  accumulatedDepreciationFinancialLease: number
+  accumulatedDepreciationFinancialLease: number;
 
   // Tài sản cố định vô hình
   @SourceMapping(null, convertSourceFn(44))
@@ -433,7 +430,7 @@ export class FinancialBalanceSheetEntity extends BaseEntity {
     type: 'int',
     nullable: true,
   })
-  intangibleFixedAssets: number
+  intangibleFixedAssets: number;
 
   // Nguyên giá tài sản cố định vô hình
   @SourceMapping(null, convertSourceFn(45))
@@ -441,7 +438,7 @@ export class FinancialBalanceSheetEntity extends BaseEntity {
     type: 'int',
     nullable: true,
   })
-  costIntangible: number
+  costIntangible: number;
 
   // Giá trị hao mòn lũy kế tài sản cố định vô hình
   @SourceMapping(null, convertSourceFn(46))
@@ -449,7 +446,7 @@ export class FinancialBalanceSheetEntity extends BaseEntity {
     type: 'int',
     nullable: true,
   })
-  accumulatedDepreciationIntangible: number
+  accumulatedDepreciationIntangible: number;
 
   // Bất động sản đầu tư
   @SourceMapping(null, convertSourceFn(47))
@@ -457,7 +454,7 @@ export class FinancialBalanceSheetEntity extends BaseEntity {
     type: 'int',
     nullable: true,
   })
-  investmentProperties: number
+  investmentProperties: number;
 
   // Nguyên giá Bất động sản đầu tư
   @SourceMapping(null, convertSourceFn(48))
@@ -465,7 +462,7 @@ export class FinancialBalanceSheetEntity extends BaseEntity {
     type: 'int',
     nullable: true,
   })
-  costInvestmentProperties: number
+  costInvestmentProperties: number;
 
   // Giá trị hao mòn lũy kế bất động sản đầu tư
   @SourceMapping(null, convertSourceFn(49))
@@ -473,7 +470,7 @@ export class FinancialBalanceSheetEntity extends BaseEntity {
     type: 'int',
     nullable: true,
   })
-  accumulatedDepreciationInvestmentProperties: number
+  accumulatedDepreciationInvestmentProperties: number;
 
   // Tài sản dở dang dài hạn
   @SourceMapping(null, convertSourceFn(50))
@@ -481,7 +478,7 @@ export class FinancialBalanceSheetEntity extends BaseEntity {
     type: 'int',
     nullable: true,
   })
-  longTermAssetsInProgress: number
+  longTermAssetsInProgress: number;
 
   // Chi phí sản xuất, kinh doanh dở dang dài hạn
   @SourceMapping(null, convertSourceFn(51))
@@ -489,7 +486,7 @@ export class FinancialBalanceSheetEntity extends BaseEntity {
     type: 'int',
     nullable: true,
   })
-  longTermProductionInProgress: number
+  longTermProductionInProgress: number;
 
   // Chi phí xây dựng cơ bản dở dang
   @SourceMapping(null, convertSourceFn(52))
@@ -497,7 +494,7 @@ export class FinancialBalanceSheetEntity extends BaseEntity {
     type: 'int',
     nullable: true,
   })
-  constructionInProgress: number
+  constructionInProgress: number;
 
   // Đầu tư tài chính dài hạn
   @SourceMapping(null, convertSourceFn(53))
@@ -505,7 +502,7 @@ export class FinancialBalanceSheetEntity extends BaseEntity {
     type: 'int',
     nullable: true,
   })
-  longTermFinancialInvestments: number
+  longTermFinancialInvestments: number;
 
   // Đầu tư vào công ty con
   @SourceMapping(null, convertSourceFn(54))
@@ -513,7 +510,7 @@ export class FinancialBalanceSheetEntity extends BaseEntity {
     type: 'int',
     nullable: true,
   })
-  investmentsInSubsidiaries: number
+  investmentsInSubsidiaries: number;
 
   // Đầu tư vào công ty liên kết. liên doanh
   @SourceMapping(null, convertSourceFn(55))
@@ -521,7 +518,7 @@ export class FinancialBalanceSheetEntity extends BaseEntity {
     type: 'int',
     nullable: true,
   })
-  investmentsInAssociates: number
+  investmentsInAssociates: number;
 
   // Đầu tư vào công ty liên kết. liên doanh
   @SourceMapping(null, convertSourceFn(56))
@@ -529,7 +526,7 @@ export class FinancialBalanceSheetEntity extends BaseEntity {
     type: 'int',
     nullable: true,
   })
-  investmentsInOtherEntities: number
+  investmentsInOtherEntities: number;
 
   // Dự phòng đầu tư tài chính dài hạn (*)
   @SourceMapping(null, convertSourceFn(57))
@@ -537,7 +534,7 @@ export class FinancialBalanceSheetEntity extends BaseEntity {
     type: 'int',
     nullable: true,
   })
-  provisionForDiminution: number
+  provisionForDiminution: number;
 
   // Đầu tư nắm giữ đến ngày đáo hạn
   @SourceMapping(null, convertSourceFn(58))
@@ -545,7 +542,7 @@ export class FinancialBalanceSheetEntity extends BaseEntity {
     type: 'int',
     nullable: true,
   })
-  heldToMaturityFinancialInvestments: number
+  heldToMaturityFinancialInvestments: number;
 
   // Đầu tư dài hạn khác
   @SourceMapping(null, convertSourceFn(59))
@@ -553,7 +550,7 @@ export class FinancialBalanceSheetEntity extends BaseEntity {
     type: 'int',
     nullable: true,
   })
-  otherLongTermInvestments: number
+  otherLongTermInvestments: number;
 
   // Tài sản dài hạn khác
   @SourceMapping(null, convertSourceFn(60))
@@ -561,7 +558,7 @@ export class FinancialBalanceSheetEntity extends BaseEntity {
     type: 'int',
     nullable: true,
   })
-  otherLongTermAssets: number
+  otherLongTermAssets: number;
 
   // Chi phí trả trước dài hạn
   @SourceMapping(null, convertSourceFn(61))
@@ -569,7 +566,7 @@ export class FinancialBalanceSheetEntity extends BaseEntity {
     type: 'int',
     nullable: true,
   })
-  longTermPrepayments: number
+  longTermPrepayments: number;
 
   // Tài sản thuế thu nhập hoãn lại
   @SourceMapping(null, convertSourceFn(62))
@@ -577,7 +574,7 @@ export class FinancialBalanceSheetEntity extends BaseEntity {
     type: 'int',
     nullable: true,
   })
-  deferredIncomeTaxAssets: number
+  deferredIncomeTaxAssets: number;
 
   // Thiết bị, vật tư, phụ tùng thay thế dài hạn
   @SourceMapping(null, convertSourceFn(63))
@@ -585,7 +582,7 @@ export class FinancialBalanceSheetEntity extends BaseEntity {
     type: 'int',
     nullable: true,
   })
-  longTermEquipmentSuppliesSpareParts: number
+  longTermEquipmentSuppliesSpareParts: number;
 
   // Tài sản dài hạn khác của bất động sản
   @SourceMapping(null, convertSourceFn(64))
@@ -593,7 +590,7 @@ export class FinancialBalanceSheetEntity extends BaseEntity {
     type: 'int',
     nullable: true,
   })
-  otherLongTermAssetsRealEstate: number
+  otherLongTermAssetsRealEstate: number;
 
   // Lợi thế thương mại
   @SourceMapping(null, convertSourceFn(65))
@@ -601,7 +598,7 @@ export class FinancialBalanceSheetEntity extends BaseEntity {
     type: 'int',
     nullable: true,
   })
-  goodwill: number
+  goodwill: number;
 
   // Lợi thế thương mại
   @SourceMapping(null, convertSourceFn(66))
@@ -609,7 +606,7 @@ export class FinancialBalanceSheetEntity extends BaseEntity {
     type: 'int',
     nullable: true,
   })
-  totalAssets: number
+  totalAssets: number;
 
   // NGUỒN VỐN
   @SourceMapping(null, convertSourceFn(67))
@@ -617,7 +614,7 @@ export class FinancialBalanceSheetEntity extends BaseEntity {
     type: 'int',
     nullable: true,
   })
-  ownerEquityCapital: number
+  ownerEquityCapital: number;
 
   // NỢ PHẢI TRẢ
   @SourceMapping(null, convertSourceFn(68))
@@ -625,7 +622,7 @@ export class FinancialBalanceSheetEntity extends BaseEntity {
     type: 'int',
     nullable: true,
   })
-  liabilities: number
+  liabilities: number;
 
   // Nợ ngắn hạn
   @SourceMapping(null, convertSourceFn(69))
@@ -633,7 +630,7 @@ export class FinancialBalanceSheetEntity extends BaseEntity {
     type: 'int',
     nullable: true,
   })
-  shortTermLiabilities: number
+  shortTermLiabilities: number;
 
   // Phải trả người bán ngắn hạn
   @SourceMapping(null, convertSourceFn(70))
@@ -641,7 +638,7 @@ export class FinancialBalanceSheetEntity extends BaseEntity {
     type: 'int',
     nullable: true,
   })
-  shortTermTradeAccountsPayable: number
+  shortTermTradeAccountsPayable: number;
 
   // Người mua trả tiền trước ngắn hạn
   @SourceMapping(null, convertSourceFn(71))
@@ -649,7 +646,7 @@ export class FinancialBalanceSheetEntity extends BaseEntity {
     type: 'int',
     nullable: true,
   })
-  shortTermAdvancesFromCustomers: number
+  shortTermAdvancesFromCustomers: number;
 
   // Thuế và các khoản phải nộp Nhà nước
   @SourceMapping(null, convertSourceFn(72))
@@ -657,7 +654,7 @@ export class FinancialBalanceSheetEntity extends BaseEntity {
     type: 'int',
     nullable: true,
   })
-  taxesAndOtherPayables: number
+  taxesAndOtherPayables: number;
 
   // Phải trả người lao động
   @SourceMapping(null, convertSourceFn(73))
@@ -665,7 +662,7 @@ export class FinancialBalanceSheetEntity extends BaseEntity {
     type: 'int',
     nullable: true,
   })
-  payableToEmployees: number
+  payableToEmployees: number;
 
   // Chi phí phải trả ngắn hạn
   @SourceMapping(null, convertSourceFn(74))
@@ -673,7 +670,7 @@ export class FinancialBalanceSheetEntity extends BaseEntity {
     type: 'int',
     nullable: true,
   })
-  shortTermAcrruedExpenses: number
+  shortTermAcrruedExpenses: number;
 
   // Phải trả nội bộ ngắn hạn
   @SourceMapping(null, convertSourceFn(75))
@@ -681,7 +678,7 @@ export class FinancialBalanceSheetEntity extends BaseEntity {
     type: 'int',
     nullable: true,
   })
-  shortTermInterCompanyPayables: number
+  shortTermInterCompanyPayables: number;
 
   // Phải trả theo tiến độ kế hoạch hợp đồng xây dựng
   @SourceMapping(null, convertSourceFn(76))
@@ -689,7 +686,7 @@ export class FinancialBalanceSheetEntity extends BaseEntity {
     type: 'int',
     nullable: true,
   })
-  constructionContractProgressPayments: number
+  constructionContractProgressPayments: number;
 
   // Doanh thu chưa thực hiện ngắn hạn
   @SourceMapping(null, convertSourceFn(77))
@@ -697,7 +694,7 @@ export class FinancialBalanceSheetEntity extends BaseEntity {
     type: 'int',
     nullable: true,
   })
-  shortTermUnearnedRevenue: number
+  shortTermUnearnedRevenue: number;
 
   // Phải trả ngắn hạn khác
   @SourceMapping(null, convertSourceFn(78))
@@ -705,7 +702,7 @@ export class FinancialBalanceSheetEntity extends BaseEntity {
     type: 'int',
     nullable: true,
   })
-  otherShortTermPayables: number
+  otherShortTermPayables: number;
 
   // Vay và nợ thuê tài chính ngắn hạn
   @SourceMapping(null, convertSourceFn(79))
@@ -713,7 +710,7 @@ export class FinancialBalanceSheetEntity extends BaseEntity {
     type: 'int',
     nullable: true,
   })
-  shortTermBorrowingsAndFinancialLeases: number
+  shortTermBorrowingsAndFinancialLeases: number;
 
   // Dự phòng phải trả ngắn hạn
   @SourceMapping(null, convertSourceFn(80))
@@ -721,7 +718,7 @@ export class FinancialBalanceSheetEntity extends BaseEntity {
     type: 'int',
     nullable: true,
   })
-  provisionForShortTermLiabilities: number
+  provisionForShortTermLiabilities: number;
 
   // Quỹ khen thưởng, phúc lợi
   @SourceMapping(null, convertSourceFn(81))
@@ -729,7 +726,7 @@ export class FinancialBalanceSheetEntity extends BaseEntity {
     type: 'int',
     nullable: true,
   })
-  bonusAndWelfareFund: number
+  bonusAndWelfareFund: number;
 
   // Quỹ bình ổn giá
   @SourceMapping(null, convertSourceFn(82))
@@ -737,7 +734,7 @@ export class FinancialBalanceSheetEntity extends BaseEntity {
     type: 'int',
     nullable: true,
   })
-  priceStabilizationFund: number
+  priceStabilizationFund: number;
 
   // Giao dịch mua bán lại trái phiếu Chính phủ Nguồn vốn
   @SourceMapping(null, convertSourceFn(83))
@@ -745,7 +742,7 @@ export class FinancialBalanceSheetEntity extends BaseEntity {
     type: 'int',
     nullable: true,
   })
-  governmentBondsCapital: number
+  governmentBondsCapital: number;
 
   // Nợ dài hạn
   @SourceMapping(null, convertSourceFn(84))
@@ -753,7 +750,7 @@ export class FinancialBalanceSheetEntity extends BaseEntity {
     type: 'int',
     nullable: true,
   })
-  longTermLiabilities: number
+  longTermLiabilities: number;
 
   // Phải trả người bán dài hạn
   @SourceMapping(null, convertSourceFn(85))
@@ -761,7 +758,7 @@ export class FinancialBalanceSheetEntity extends BaseEntity {
     type: 'int',
     nullable: true,
   })
-  longTermTradePayables: number
+  longTermTradePayables: number;
 
   // Người mua trả tiền trước dài hạn
   @SourceMapping(null, convertSourceFn(86))
@@ -769,7 +766,7 @@ export class FinancialBalanceSheetEntity extends BaseEntity {
     type: 'int',
     nullable: true,
   })
-  longTermAdvancesFromCustomers: number
+  longTermAdvancesFromCustomers: number;
 
   // Chi phí phải trả dài hạn
   @SourceMapping(null, convertSourceFn(87))
@@ -777,7 +774,7 @@ export class FinancialBalanceSheetEntity extends BaseEntity {
     type: 'int',
     nullable: true,
   })
-  longTermAcrruedExpenses: number
+  longTermAcrruedExpenses: number;
 
   // Phải trả nội bộ về vốn kinh doanh
   @SourceMapping(null, convertSourceFn(88))
@@ -785,7 +782,7 @@ export class FinancialBalanceSheetEntity extends BaseEntity {
     type: 'int',
     nullable: true,
   })
-  interCompanyPayablesOnBusinessCapital: number
+  interCompanyPayablesOnBusinessCapital: number;
 
   // Phải trả nội bộ dài hạn
   @SourceMapping(null, convertSourceFn(89))
@@ -793,7 +790,7 @@ export class FinancialBalanceSheetEntity extends BaseEntity {
     type: 'int',
     nullable: true,
   })
-  longTermInterCompanyPayables: number
+  longTermInterCompanyPayables: number;
 
   // Doanh thu chưa thực hiện dài hạn
   @SourceMapping(null, convertSourceFn(90))
@@ -801,7 +798,7 @@ export class FinancialBalanceSheetEntity extends BaseEntity {
     type: 'int',
     nullable: true,
   })
-  longTermUnearnedRevenue: number
+  longTermUnearnedRevenue: number;
 
   // Phải trả dài hạn khác
   @SourceMapping(null, convertSourceFn(91))
@@ -809,7 +806,7 @@ export class FinancialBalanceSheetEntity extends BaseEntity {
     type: 'int',
     nullable: true,
   })
-  otherLongTermLiabilities: number
+  otherLongTermLiabilities: number;
 
   // Vay và nợ thuê tài chính dài hạn
   @SourceMapping(null, convertSourceFn(92))
@@ -817,7 +814,7 @@ export class FinancialBalanceSheetEntity extends BaseEntity {
     type: 'int',
     nullable: true,
   })
-  longTermBorrowingsAndFinancialLeases: number
+  longTermBorrowingsAndFinancialLeases: number;
 
   // Trái phiếu chuyển đổi
   @SourceMapping(null, convertSourceFn(93))
@@ -825,7 +822,7 @@ export class FinancialBalanceSheetEntity extends BaseEntity {
     type: 'int',
     nullable: true,
   })
-  convertibleBonds: number
+  convertibleBonds: number;
 
   // Cổ phiếu ưu đãi (Nợ)
   @SourceMapping(null, convertSourceFn(94))
@@ -833,7 +830,7 @@ export class FinancialBalanceSheetEntity extends BaseEntity {
     type: 'int',
     nullable: true,
   })
-  preferredStockDebt: number
+  preferredStockDebt: number;
 
   // Thuế thu nhập hoãn lại phải trả
   @SourceMapping(null, convertSourceFn(95))
@@ -841,7 +838,7 @@ export class FinancialBalanceSheetEntity extends BaseEntity {
     type: 'int',
     nullable: true,
   })
-  deferredIncomeTaxLiabilities: number
+  deferredIncomeTaxLiabilities: number;
 
   // Dự phòng phải trả dài hạn
   @SourceMapping(null, convertSourceFn(96))
@@ -849,7 +846,7 @@ export class FinancialBalanceSheetEntity extends BaseEntity {
     type: 'int',
     nullable: true,
   })
-  provisionForLongTermLiabilities: number
+  provisionForLongTermLiabilities: number;
 
   // Quỹ phát triển khoa học và công nghệ
   @SourceMapping(null, convertSourceFn(97))
@@ -857,7 +854,7 @@ export class FinancialBalanceSheetEntity extends BaseEntity {
     type: 'int',
     nullable: true,
   })
-  fundForTechnologyDevelopment: number
+  fundForTechnologyDevelopment: number;
 
   // Dự phòng trợ cấp mất việc làm
   @SourceMapping(null, convertSourceFn(98))
@@ -865,7 +862,7 @@ export class FinancialBalanceSheetEntity extends BaseEntity {
     type: 'int',
     nullable: true,
   })
-  provisionForSeveranceAllowances: number
+  provisionForSeveranceAllowances: number;
 
   // VỐN CHỦ SỞ HỮU Group
   @SourceMapping(null, convertSourceFn(99))
@@ -873,7 +870,7 @@ export class FinancialBalanceSheetEntity extends BaseEntity {
     type: 'int',
     nullable: true,
   })
-  ownerEquityGroup: number
+  ownerEquityGroup: number;
 
   // VỐN CHỦ SỞ HỮU Group
   @SourceMapping(null, convertSourceFn(100))
@@ -881,7 +878,7 @@ export class FinancialBalanceSheetEntity extends BaseEntity {
     type: 'int',
     nullable: true,
   })
-  ownerEquity: number
+  ownerEquity: number;
 
   // Vốn góp của chủ sở hữu
   @SourceMapping(null, convertSourceFn(101))
@@ -889,7 +886,7 @@ export class FinancialBalanceSheetEntity extends BaseEntity {
     type: 'int',
     nullable: true,
   })
-  ownerCapital: number
+  ownerCapital: number;
 
   // Cổ phiếu phổ thông có quyền biểu quyết
   @SourceMapping(null, convertSourceFn(102))
@@ -897,7 +894,7 @@ export class FinancialBalanceSheetEntity extends BaseEntity {
     type: 'int',
     nullable: true,
   })
-  commonStockWithVotingRight: number
+  commonStockWithVotingRight: number;
 
   // Cổ phiếu ưu đãi
   @SourceMapping(null, convertSourceFn(103))
@@ -905,7 +902,7 @@ export class FinancialBalanceSheetEntity extends BaseEntity {
     type: 'int',
     nullable: true,
   })
-  preferredStock: number
+  preferredStock: number;
 
   // Thặng dư vốn cổ phần
   @SourceMapping(null, convertSourceFn(104))
@@ -913,7 +910,7 @@ export class FinancialBalanceSheetEntity extends BaseEntity {
     type: 'int',
     nullable: true,
   })
-  sharePremium: number
+  sharePremium: number;
 
   // Quyền chọn chuyển đổi trái phiếu
   @SourceMapping(null, convertSourceFn(105))
@@ -921,7 +918,7 @@ export class FinancialBalanceSheetEntity extends BaseEntity {
     type: 'int',
     nullable: true,
   })
-  convertibleBondOption: number
+  convertibleBondOption: number;
 
   // Vốn khác của chủ sở hữu
   @SourceMapping(null, convertSourceFn(106))
@@ -929,7 +926,7 @@ export class FinancialBalanceSheetEntity extends BaseEntity {
     type: 'int',
     nullable: true,
   })
-  otherCapitalOfOwners: number
+  otherCapitalOfOwners: number;
 
   // Cổ phiếu quỹ (*)
   @SourceMapping(null, convertSourceFn(107))
@@ -937,7 +934,7 @@ export class FinancialBalanceSheetEntity extends BaseEntity {
     type: 'int',
     nullable: true,
   })
-  treasuryShares: number
+  treasuryShares: number;
 
   // Chênh lệch đánh giá lại tài sản
   @SourceMapping(null, convertSourceFn(108))
@@ -945,7 +942,7 @@ export class FinancialBalanceSheetEntity extends BaseEntity {
     type: 'int',
     nullable: true,
   })
-  assetsRevaluationDifferences: number
+  assetsRevaluationDifferences: number;
 
   // Chênh lệch tỷ giá hối đoái
   @SourceMapping(null, convertSourceFn(109))
@@ -953,7 +950,7 @@ export class FinancialBalanceSheetEntity extends BaseEntity {
     type: 'int',
     nullable: true,
   })
-  foreignExchangeDifferences: number
+  foreignExchangeDifferences: number;
 
   // Quỹ đầu tư phát triển
   @SourceMapping(null, convertSourceFn(110))
@@ -961,7 +958,7 @@ export class FinancialBalanceSheetEntity extends BaseEntity {
     type: 'int',
     nullable: true,
   })
-  investmentAndDevelopmentFund: number
+  investmentAndDevelopmentFund: number;
 
   // Quỹ hỗ trợ sắp xếp doanh nghiệp
   @SourceMapping(null, convertSourceFn(111))
@@ -969,7 +966,7 @@ export class FinancialBalanceSheetEntity extends BaseEntity {
     type: 'int',
     nullable: true,
   })
-  fundToSupportCorporateRestructuring: number
+  fundToSupportCorporateRestructuring: number;
 
   // Quỹ khác thuộc vốn chủ sở hữu
   @SourceMapping(null, convertSourceFn(112))
@@ -977,7 +974,7 @@ export class FinancialBalanceSheetEntity extends BaseEntity {
     type: 'int',
     nullable: true,
   })
-  otherFundsFromOwnerEquity: number
+  otherFundsFromOwnerEquity: number;
 
   // Lợi nhuận sau thuế chưa phân phối
   @SourceMapping(null, convertSourceFn(113))
@@ -985,7 +982,7 @@ export class FinancialBalanceSheetEntity extends BaseEntity {
     type: 'int',
     nullable: true,
   })
-  undistributedEarningsAfterTax: number
+  undistributedEarningsAfterTax: number;
 
   // LNST chưa phân phối lũy kế đến cuối kỳ trước
   @SourceMapping(null, convertSourceFn(114))
@@ -993,7 +990,7 @@ export class FinancialBalanceSheetEntity extends BaseEntity {
     type: 'int',
     nullable: true,
   })
-  accumulatedRetainedEarning: number
+  accumulatedRetainedEarning: number;
 
   // LNST chưa phân phối kỳ này
   @SourceMapping(null, convertSourceFn(115))
@@ -1001,7 +998,7 @@ export class FinancialBalanceSheetEntity extends BaseEntity {
     type: 'int',
     nullable: true,
   })
-  undistributedEarningsInThisPeriod: number
+  undistributedEarningsInThisPeriod: number;
 
   // Nguồn vốn đầu tư XDCB
   @SourceMapping(null, convertSourceFn(116))
@@ -1009,7 +1006,7 @@ export class FinancialBalanceSheetEntity extends BaseEntity {
     type: 'int',
     nullable: true,
   })
-  reservesForInvestmentInConstruction: number
+  reservesForInvestmentInConstruction: number;
 
   // Lợi ích cổ đông không kiểm soát
   @SourceMapping(null, convertSourceFn(117))
@@ -1017,7 +1014,7 @@ export class FinancialBalanceSheetEntity extends BaseEntity {
     type: 'int',
     nullable: true,
   })
-  minorityInterest: number
+  minorityInterest: number;
 
   // Quỹ dự phòng tài chính
   @SourceMapping(null, convertSourceFn(118))
@@ -1025,7 +1022,7 @@ export class FinancialBalanceSheetEntity extends BaseEntity {
     type: 'int',
     nullable: true,
   })
-  financialReserves: number
+  financialReserves: number;
 
   // Nguồn kinh phí và quỹ khác
   @SourceMapping(null, convertSourceFn(119))
@@ -1033,7 +1030,7 @@ export class FinancialBalanceSheetEntity extends BaseEntity {
     type: 'int',
     nullable: true,
   })
-  otherResourcesAndFunds: number
+  otherResourcesAndFunds: number;
 
   // Nguồn kinh phí
   @SourceMapping(null, convertSourceFn(120))
@@ -1041,7 +1038,7 @@ export class FinancialBalanceSheetEntity extends BaseEntity {
     type: 'int',
     nullable: true,
   })
-  subsidizedNotForProfitFunds: number
+  subsidizedNotForProfitFunds: number;
 
   // Nguồn kinh phí đã hình thành TSCĐ
   @SourceMapping(null, convertSourceFn(121))
@@ -1049,7 +1046,7 @@ export class FinancialBalanceSheetEntity extends BaseEntity {
     type: 'int',
     nullable: true,
   })
-  fundsInvestedInFixedAssets: number
+  fundsInvestedInFixedAssets: number;
 
   // C. LỢI ÍCH CỔ ĐÔNG THIỂU SỐ
   @SourceMapping(null, convertSourceFn(122))
@@ -1057,7 +1054,7 @@ export class FinancialBalanceSheetEntity extends BaseEntity {
     type: 'int',
     nullable: true,
   })
-  cMinorityInterest: number
+  cMinorityInterest: number;
 
   // TỔNG CỘNG NGUỒN VỐN
   @SourceMapping(null, convertSourceFn(123))
@@ -1065,7 +1062,5 @@ export class FinancialBalanceSheetEntity extends BaseEntity {
     type: 'int',
     nullable: true,
   })
-  totalOwnerEquityAndLiabilities: number
-
-  /*--------------------------------------------------------------------------*/
+  totalOwnerEquityAndLiabilities: number;
 }
