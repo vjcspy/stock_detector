@@ -32,6 +32,24 @@ export class FinancialInfoController {
     return [];
   }
 
+  @Get('/cstcq')
+  @Header('Content-Type', 'application/json')
+  cstcq() {
+    this.stateManager.getStore().dispatch(
+      startGetFinanceInfoAction({
+        code: 'BFC',
+        resolve: () => {
+          console.log('resolve');
+        },
+        type: FinancialInfoType.INDICATOR,
+        termType: FinancialTermTypeEnum.QUARTER,
+      }),
+    );
+    // return this.priceRequest.getPrice('BFC');
+
+    return [];
+  }
+
   @Get('/kqkd')
   @Header('Content-Type', 'application/json')
   kqkd() {
@@ -43,6 +61,24 @@ export class FinancialInfoController {
         },
         type: FinancialInfoType.BUSINESS_REPORT,
         termType: FinancialTermTypeEnum.YEAR,
+      }),
+    );
+    // return this.priceRequest.getPrice('BFC');
+
+    return [];
+  }
+
+  @Get('/kqkdq')
+  @Header('Content-Type', 'application/json')
+  kqkdq() {
+    this.stateManager.getStore().dispatch(
+      startGetFinanceInfoAction({
+        code: 'BFC',
+        resolve: () => {
+          console.log('resolve');
+        },
+        type: FinancialInfoType.BUSINESS_REPORT,
+        termType: FinancialTermTypeEnum.QUARTER,
       }),
     );
     // return this.priceRequest.getPrice('BFC');
@@ -68,6 +104,24 @@ export class FinancialInfoController {
     return [];
   }
 
+  @Get('/cdktq')
+  @Header('Content-Type', 'application/json')
+  cdktq() {
+    this.stateManager.getStore().dispatch(
+      startGetFinanceInfoAction({
+        code: 'BFC',
+        resolve: () => {
+          console.log('resolve');
+        },
+        type: FinancialInfoType.BALANCE_SHEET,
+        termType: FinancialTermTypeEnum.QUARTER,
+      }),
+    );
+    // return this.priceRequest.getPrice('BFC');
+
+    return [];
+  }
+
   @Get('/lctt')
   @Header('Content-Type', 'application/json')
   lctt() {
@@ -79,6 +133,24 @@ export class FinancialInfoController {
         },
         type: FinancialInfoType.CASH_FLOW,
         termType: FinancialTermTypeEnum.YEAR,
+      }),
+    );
+    // return this.priceRequest.getPrice('BFC');
+
+    return [];
+  }
+
+  @Get('/lcttq')
+  @Header('Content-Type', 'application/json')
+  lcttq() {
+    this.stateManager.getStore().dispatch(
+      startGetFinanceInfoAction({
+        code: 'BFC',
+        resolve: () => {
+          console.log('resolve');
+        },
+        type: FinancialInfoType.CASH_FLOW,
+        termType: FinancialTermTypeEnum.QUARTER,
       }),
     );
     // return this.priceRequest.getPrice('BFC');

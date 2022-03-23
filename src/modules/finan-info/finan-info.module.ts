@@ -15,6 +15,7 @@ import { FinancialInfoController } from '@module/finan-info/controller/financial
 import { FinancialInfoValues } from '@module/finan-info/store/financial-info/financial-info.values';
 import { StockPriceValues } from '@module/finan-info/store/stock-price/stock-price.values';
 import { ENTITIES } from '@module/finan-info/entity';
+import { FI_JOBS } from '@module/finan-info/job';
 
 @Module({
   imports: [
@@ -56,7 +57,12 @@ import { ENTITIES } from '@module/finan-info/entity';
     CoreModule,
   ],
   controllers: [CorController, PriceController, FinancialInfoController],
-  providers: [...QUEUE_PROVIDES, ...FINANCIAL_PROVIDERS, ...StateEffects],
+  providers: [
+    ...QUEUE_PROVIDES,
+    ...FINANCIAL_PROVIDERS,
+    ...StateEffects,
+    ...FI_JOBS,
+  ],
 })
 export class FinanInfoModule {
   constructor(
