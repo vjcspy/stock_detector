@@ -2,13 +2,32 @@ import { SyncStockPricePublisher } from '@module/finan-info/queue/publisher/Sync
 import { SyncStockPriceConsumer } from '@module/finan-info/queue/consumer/SyncStockPrice.consumer';
 import { SyncFinancialIndicatorYearConsumer } from '@module/finan-info/queue/consumer/SyncFinancialIndicatorYear.consumer';
 import { SyncFinancialInfoPublisher } from '@module/finan-info/queue/publisher/SyncFinancialInfo.publisher';
+import { SyncFinancialBRQuarterConsumer } from '@module/finan-info/queue/consumer/SyncFinancialBRQuarter.consumer';
+import { SyncFinancialBRYearConsumer } from '@module/finan-info/queue/consumer/SyncFinancialBRYear.consumer';
+import { SyncFinancialBSQuarterConsumer } from '@module/finan-info/queue/consumer/SyncFinancialBSQuarter.consumer';
+import { SyncFinancialBSYearConsumer } from '@module/finan-info/queue/consumer/SyncFinancialBSYear.consumer';
+import { SyncFinancialCFQuarterConsumer } from '@module/finan-info/queue/consumer/SyncFinancialCFQuarter.consumer';
+import { SyncFinancialCFYearConsumer } from '@module/finan-info/queue/consumer/SyncFinancialCFYear.consumer';
+import { SyncFinancialIndicatorQuarterConsumer } from '@module/finan-info/queue/consumer/SyncFinancialIndicatorQuarter.consumer';
 
 export const QUEUE_PROVIDES = [
   /* Sync price*/
   SyncStockPricePublisher,
   SyncStockPriceConsumer,
 
-  /* Sync financial info*/
+  /**/
   SyncFinancialInfoPublisher,
+
+  /* Sync Financial Info*/
+  SyncFinancialBRQuarterConsumer,
+  SyncFinancialBRYearConsumer,
+
+  SyncFinancialBSQuarterConsumer,
+  SyncFinancialBSYearConsumer,
+
+  SyncFinancialCFQuarterConsumer,
+  SyncFinancialCFYearConsumer,
+
+  SyncFinancialIndicatorQuarterConsumer,
   SyncFinancialIndicatorYearConsumer,
 ];

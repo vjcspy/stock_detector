@@ -14,7 +14,7 @@ export class SyncPriceJob {
    * 16h hằng ngày sẽ lấy thêm giá
    * */
   @Cron('0 0 16 * * *', {
-    name: 'notifications',
+    name: 'fi_sync_price',
     timeZone: 'Asia/Ho_Chi_Minh',
   })
   publishSyncPrice() {

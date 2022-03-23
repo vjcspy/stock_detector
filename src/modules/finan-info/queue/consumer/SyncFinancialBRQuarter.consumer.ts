@@ -11,11 +11,11 @@ import {
 import { FinancialInfoValues } from '@module/finan-info/store/financial-info/financial-info.values';
 
 @Injectable()
-export class SyncFinancialIndicatorYearConsumer extends RabbitmqSubscribeConsumerAbstract {
+export class SyncFinancialBRQuarterConsumer extends RabbitmqSubscribeConsumerAbstract {
   @RabbitSubscribe({
     exchange: FinancialInfoValues.EXCHANGE_KEY,
-    routingKey: `${FinancialInfoValues.PUBLISHER_ROUTING_KEY_INDICATOR_YEAR}`,
-    queue: `${FinancialInfoValues.PUBLISHER_ROUTING_KEY_INDICATOR_YEAR}`,
+    routingKey: FinancialInfoValues.PUBLISHER_ROUTING_KEY_BR_QUARTER,
+    queue: FinancialInfoValues.PUBLISHER_ROUTING_KEY_BR_QUARTER,
     queueOptions: {
       durable: true,
     },
@@ -26,8 +26,8 @@ export class SyncFinancialIndicatorYearConsumer extends RabbitmqSubscribeConsume
         getStateManager().store.dispatch(
           startGetFinanceInfoAction({
             code: msg,
-            type: FinancialInfoType.INDICATOR,
-            termType: FinancialTermTypeEnum.YEAR,
+            type: FinancialInfoType.BUSINESS_REPORT,
+            termType: FinancialTermTypeEnum.QUARTER,
             resolve,
           }),
         );
