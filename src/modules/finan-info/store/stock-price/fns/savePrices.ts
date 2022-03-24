@@ -2,6 +2,7 @@ import { getConnection } from 'typeorm';
 import * as _ from 'lodash';
 import { StockPriceEntity } from '@module/finan-info/entity/stock-price.entity';
 import { StockPriceSyncStatusEntity } from '@module/finan-info/entity/stock-price-sync-status.entity';
+import moment from 'moment';
 
 export const savePrices = async (code: string, priceData: { items: any[] }) => {
   let syncSuccess: any = false;
@@ -105,6 +106,9 @@ export const savePrices = async (code: string, priceData: { items: any[] }) => {
       {
         code,
         lastDate: last['date'],
+        lastUpdateDate: new Date(),
+        try: 0,
+        lastError: null,
       },
       ['code'],
     );
@@ -115,7 +119,7 @@ export const savePrices = async (code: string, priceData: { items: any[] }) => {
   } catch (e) {
     syncSuccess = false;
     error = e;
-    console.error(e);
+    console.error(e?.toString ? e.toString() : e);
     // since we have errors let's rollback changes we made
     await queryRunner.rollbackTransaction();
   } finally {

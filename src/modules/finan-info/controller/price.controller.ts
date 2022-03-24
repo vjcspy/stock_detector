@@ -30,4 +30,10 @@ export class PriceController {
     this.syncStockPricePublisher.publish();
     return {};
   }
+
+  @Get('/vnindex')
+  publishVNIndex() {
+    this.syncStockPricePublisher.publishVnIndex();
+    return {};
+  }
 }

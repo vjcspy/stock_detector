@@ -1,7 +1,15 @@
 import moment from 'moment';
-import { concatMap, EMPTY, from, map, withLatestFrom } from 'rxjs';
+import {
+  concatMap,
+  EMPTY,
+  from,
+  map,
+  retry,
+  switchMap,
+  withLatestFrom,
+} from 'rxjs';
 
-import { getCurrentStatus } from './fns/getCurrentStatus';
+import { getCurrentStatus, saveErrorStatus } from './fns/getCurrentStatus';
 import { savePrices } from './fns/savePrices';
 import { createEffect } from '@module/core/util/store/createEffect';
 import { ofType } from '@module/core/util/store/ofType';
@@ -41,7 +49,7 @@ export class StockPriceEffects {
               group1: action.payload.code,
               message: `_________ START [${action.payload.code}] _________`,
             });
-            if (currentStatus) {
+            if (currentStatus && currentStatus?.lastDate) {
               const lastDate = moment(currentStatus.lastDate);
               if (lastDate.isSameOrBefore(curDate)) {
                 this.log.log({
@@ -66,7 +74,7 @@ export class StockPriceEffects {
                   source: 'fi',
                   group: 'sync_price',
                   group1: action.payload.code,
-                  message: `_________ UPDATED _________`,
+                  message: `_________ DATA UPDATED _________`,
                 });
                 return stockPricesFinishedAction({
                   code: action.payload.code,
@@ -219,24 +227,63 @@ export class StockPriceEffects {
     action$.pipe(
       ofType(saveStockPriceErrorAction, getStockPricesErrorAction),
       withLatestFrom(state$, (v1, v2) => [v1, v2.stockPrices]),
-      map((d) => {
+      switchMap((d) => {
         const action = d[0];
         const stockPriceState: StockPriceState = d[1];
-        if (typeof stockPriceState?.resolve === 'function') {
-          this.log.log({
-            level: Levels.error,
-            source: 'fi',
-            group: 'sync_price',
-            group1: action.payload.code,
-            message: `NACK queue`,
-          });
-          setTimeout(() => {
-            stockPriceState.resolve(new Nack(true));
-          }, 2000);
-        }
 
-        return EMPTY;
+        return from(
+          saveErrorStatus(stockPriceState.code, action?.payload?.error),
+        ).pipe(
+          map((currentStatus) => {
+            if (currentStatus) {
+              const lastUpdateDate = moment(currentStatus.lastUpdateDate);
+              if (lastUpdateDate.isSame(moment(), 'day')) {
+                if (currentStatus.try > 3) {
+                  this.log.log({
+                    level: Levels.error,
+                    source: 'fi',
+                    group: 'sync_price',
+                    group1: action.payload.code,
+                    message: `ERROR: MAX 3 Retry. Run next stock`,
+                  });
+                  setTimeout(() => {
+                    stockPriceState.resolve(new Nack(false));
+                  }, 2000);
+                } else {
+                  this.log.log({
+                    level: Levels.error,
+                    source: 'fi',
+                    group: 'sync_price',
+                    group1: action.payload.code,
+                    message: `Retry time ${currentStatus.try}`,
+                  });
+                  setTimeout(() => {
+                    stockPriceState.resolve(new Nack(true));
+                  }, 2000);
+                }
+              }
+            } else {
+              if (typeof stockPriceState?.resolve === 'function') {
+                this.log.log({
+                  level: Levels.error,
+                  source: 'fi',
+                  group: 'sync_price',
+                  group1: action.payload.code,
+                  message: `Retry`,
+                });
+                setTimeout(() => {
+                  stockPriceState.resolve(new Nack(true));
+                }, 2000);
+              }
+
+              return EMPTY;
+            }
+
+            return EMPTY;
+          }),
+        );
       }),
+      // }),
     ),
   );
 }

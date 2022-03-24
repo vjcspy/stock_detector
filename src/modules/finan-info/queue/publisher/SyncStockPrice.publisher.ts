@@ -23,5 +23,17 @@ export class SyncStockPricePublisher {
         {},
       );
     });
+
+    this.publishVnIndex();
+  }
+
+  public async publishVnIndex() {
+    // Lưu ý mã VNINDEX này chỉ valid trên BSC
+    this.amqpConnection.publish(
+      'finan.info.sync-stock-price',
+      'finan.info.sync-stock-price.cor',
+      'HOSTC',
+      {},
+    );
   }
 }
