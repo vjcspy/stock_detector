@@ -244,7 +244,7 @@ export class StockPriceEffects {
                     source: 'fi',
                     group: 'sync_price',
                     group1: action.payload.code,
-                    message: `ERROR: MAX 3 Retry. Run next stock`,
+                    message: `ERROR: Reached the maximum pull attempts`,
                   });
                   setTimeout(() => {
                     stockPriceState.resolve(new Nack(false));
