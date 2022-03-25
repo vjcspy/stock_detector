@@ -11,4 +11,5 @@
 pyvenv.cfg
 .venv
 pip-selfcheck.json
+stock_computed/__pycache__/*
 
