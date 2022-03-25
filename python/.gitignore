@@ -13,3 +13,4 @@ pyvenv.cfg
 pip-selfcheck.json
 stock_computed/__pycache__/*
 
+db.sqlite3
