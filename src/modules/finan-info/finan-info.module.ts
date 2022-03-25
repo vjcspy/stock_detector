@@ -1,8 +1,6 @@
-import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
 import { CoreModule } from '@module/core/core.module';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import rabbitmq from '@cfg/rabbitmq.cfg';
 import { CorController } from './controller/cor.controller';
 import { PriceController } from '@module/finan-info/controller/price.controller';
 import { QUEUE_PROVIDES } from '@module/finan-info/queue';
@@ -12,50 +10,11 @@ import { StockPriceState } from '@module/finan-info/provider/state/stock-price.s
 import { FinancialIndicatorState } from '@module/finan-info/provider/state/financial-indicator.state';
 import { StateEffects } from '@module/finan-info/store';
 import { FinancialInfoController } from '@module/finan-info/controller/financial-info.controller';
-import { FinancialInfoValues } from '@module/finan-info/store/financial-info/financial-info.values';
-import { StockPriceValues } from '@module/finan-info/store/stock-price/stock-price.values';
 import { ENTITIES } from '@module/finan-info/entity';
 import { FI_JOBS } from '@module/finan-info/job';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([...ENTITIES]),
-    RabbitMQModule.forRoot(RabbitMQModule, {
-      exchanges: [
-        {
-          name: 'finan.info.cor',
-          type: 'topic',
-          options: {
-            durable: true,
-          },
-        },
-        {
-          name: StockPriceValues.EXCHANGE_KEY,
-          type: 'topic',
-          options: {
-            durable: true,
-          },
-        },
-        {
-          name: FinancialInfoValues.EXCHANGE_KEY,
-          type: 'topic',
-          options: {
-            durable: true,
-          },
-        },
-      ],
-      uri: `amqp://${rabbitmq().user}:${rabbitmq().pass}@${rabbitmq().host}:${
-        rabbitmq().port
-      }`,
-      channels: {
-        'finan.info.channel-1': {
-          prefetchCount: 1,
-          default: true,
-        },
-      },
-    }),
-    CoreModule,
-  ],
+  imports: [TypeOrmModule.forFeature([...ENTITIES]), CoreModule],
   controllers: [CorController, PriceController, FinancialInfoController],
   providers: [
     ...QUEUE_PROVIDES,
