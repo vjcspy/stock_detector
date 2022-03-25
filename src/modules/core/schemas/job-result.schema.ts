@@ -1,4 +1,4 @@
-import { Prop, Schema } from '@nestjs/mongoose';
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import moment from 'moment';
 import mongoose from 'mongoose';
 
@@ -9,10 +9,12 @@ import mongoose from 'mongoose';
     currentTime: () => moment().tz('Asia/Ho_Chi_Minh').toDate(),
   },
 })
-export class JobResultSchema {
+export class JobResult {
   @Prop({ isRequired: false })
   jobKey: string;
 
   @Prop({ type: mongoose.Schema.Types.Mixed })
   result?: Record<string, any>;
 }
+
+export const JobResultSchema = SchemaFactory.createForClass(JobResult);

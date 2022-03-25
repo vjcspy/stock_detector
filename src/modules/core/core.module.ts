@@ -10,6 +10,10 @@ import { FileLogger } from '@module/core/provider/file-logger';
 import { MongooseModule } from '@nestjs/mongoose';
 import { LogDb, LogDbSchema } from '@module/core/schemas/log-db.schema';
 import { LogService } from '@module/core/service/log.service';
+import {
+  JobResult,
+  JobResultSchema,
+} from '@module/core/schemas/job-result.schema';
 
 @Module({
   imports: [
@@ -21,6 +25,10 @@ import { LogService } from '@module/core/service/log.service';
       {
         name: LogDb.name,
         schema: LogDbSchema,
+      },
+      {
+        name: JobResult.name,
+        schema: JobResultSchema,
       },
     ]),
     HttpModule,
