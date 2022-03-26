@@ -1,10 +1,10 @@
 #  Trong python gọi là list, nó giống như array. They can contain any type of variable
-myList = []
-myList.append(1)
-myList.append(12)
-myList.append(13)
+my_list = []
+my_list.append(1)
+my_list.append(12)
+my_list.append(13)
 
-for x in myList:
+for x in my_list:
     print(x)
     
     

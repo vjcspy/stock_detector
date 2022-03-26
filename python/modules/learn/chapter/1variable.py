@@ -2,8 +2,8 @@
 # Every variable in python is an object
 
 # Number. Support 2 types of numbers: integer and floating point
-myInt = 7
-myFloat = 7.0
+my_int = 7
+my_float = 7.0
 
 # simultaneousely declare
 a, b = 3, 4
