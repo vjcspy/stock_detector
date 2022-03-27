@@ -2,7 +2,6 @@ import { getConnection } from 'typeorm';
 import * as _ from 'lodash';
 import { StockPriceEntity } from '@module/finan-info/entity/stock-price.entity';
 import { StockPriceSyncStatusEntity } from '@module/finan-info/entity/stock-price-sync-status.entity';
-import moment from 'moment';
 
 export const savePrices = async (code: string, priceData: { items: any[] }) => {
   let syncSuccess: any = false;
