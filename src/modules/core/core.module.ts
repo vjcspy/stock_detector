@@ -19,6 +19,7 @@ import { CorValue } from '@module/finan-info/store/corporation/cor.value';
 import { StockPriceValues } from '@module/finan-info/store/stock-price/stock-price.values';
 import { FinancialInfoValues } from '@module/finan-info/store/financial-info/financial-info.values';
 import rabbitmq from '@cfg/rabbitmq.cfg';
+import { FinanAnalysisQueueValue } from '@module/finan-analysis/values/finan-analysis-queue.value';
 
 @Module({
   imports: [
@@ -55,6 +56,13 @@ import rabbitmq from '@cfg/rabbitmq.cfg';
         },
         {
           name: FinancialInfoValues.EXCHANGE_KEY,
+          type: 'topic',
+          options: {
+            durable: true,
+          },
+        },
+        {
+          name: FinanAnalysisQueueValue.EXCHANGE_KEY_CALCULATE_BETA,
           type: 'topic',
           options: {
             durable: true,

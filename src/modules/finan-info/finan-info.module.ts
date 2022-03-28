@@ -22,6 +22,7 @@ import { FI_JOBS } from '@module/finan-info/job';
     ...StateEffects,
     ...FI_JOBS,
   ],
+  exports: [TypeOrmModule],
 })
 export class FinanInfoModule {
   constructor(

@@ -6,7 +6,7 @@ import { startSyncCor } from '../store/corporation/sync-cor.actions';
 export class CorController {
   constructor(protected stateManager: StateManager) {}
 
-  @Get('/publish-sync')
+  @Get('/sync')
   sync(): string {
     this.stateManager.getStore().dispatch(startSyncCor());
     return 'ok';

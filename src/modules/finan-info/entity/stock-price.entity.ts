@@ -73,14 +73,14 @@ export class StockPriceEntity extends BaseEntity {
 
   // KL đặt mua
   @SourceMapping('BuyQuantity')
-  @Column('int', { unsigned: true })
+  @Column('bigint', { unsigned: true })
   buyQuantity: number;
 
   /**
    * Nước ngoài mua
    */
   @SourceMapping('BuyForeignQuantity')
-  @Column('int', { unsigned: true })
+  @Column('bigint', { unsigned: true })
   buyForeignQuantity: number;
 
   @SourceMapping('BuyForeignValue')
@@ -163,14 +163,14 @@ export class StockPriceEntity extends BaseEntity {
 
   // KL đặt mua
   @SourceMapping('SellQuantity')
-  @Column('int', { unsigned: true })
+  @Column('bigint', { unsigned: true })
   sellQuantity: number;
 
   /**
    * Nước ngoài bán
    */
   @SourceMapping('SellForeignQuantity')
-  @Column('int', { unsigned: true })
+  @Column('bigint', { unsigned: true })
   sellForeignQuantity: number;
 
   @SourceMapping('SellForeignValue')
