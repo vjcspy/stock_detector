@@ -53,6 +53,7 @@ PyQt5==5.15.6
 PyQt5-Qt5==5.15.2
 PyQt5-sip==12.9.1
 python-dateutil==2.8.2
+python-dotenv==0.20.0
 pytz==2022.1
 pyusb==1.1.0
 qt-range-slider==0.2.7

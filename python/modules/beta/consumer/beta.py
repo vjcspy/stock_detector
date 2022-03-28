@@ -1,8 +1,3 @@
-import os
-import sys
-
-sys.path.insert(1, os.getcwd())
-
 from modules.core.mongo.connection import connect_db
 from modules.job_sync.document.JobResult import JobResult
 
