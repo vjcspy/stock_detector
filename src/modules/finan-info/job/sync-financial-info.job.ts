@@ -18,7 +18,7 @@ export class SyncFinancialInfoJob {
   ) {}
 
   /* INDICATOR */
-  @Cron('0 10 22 * * *', {
+  @Cron('0 10 22 1 * *', {
     name: 'fi_sync_in_year',
     timeZone: 'Asia/Ho_Chi_Minh',
   })
@@ -40,7 +40,7 @@ export class SyncFinancialInfoJob {
     });
   }
 
-  @Cron('0 10 23 * * *', {
+  @Cron('0 10 23 1 * *', {
     name: 'fi_sync_in_quarter',
     timeZone: 'Asia/Ho_Chi_Minh',
   })
@@ -63,7 +63,7 @@ export class SyncFinancialInfoJob {
   }
 
   /* BALANCE SHEET */
-  @Cron('0 10 0 * * *', {
+  @Cron('0 10 0 1 * *', {
     name: 'fi_sync_bs_year',
     timeZone: 'Asia/Ho_Chi_Minh',
   })
@@ -86,7 +86,7 @@ export class SyncFinancialInfoJob {
     });
   }
 
-  @Cron('0 10 1 * * *', {
+  @Cron('0 10 1 1 * *', {
     name: 'fi_sync_bs_quarter',
     timeZone: 'Asia/Ho_Chi_Minh',
   })
@@ -109,7 +109,7 @@ export class SyncFinancialInfoJob {
   }
 
   /* BUSINESS REPORT */
-  @Cron('0 10 2 * * *', {
+  @Cron('0 10 2 1 * *', {
     name: 'fi_sync_br_year',
     timeZone: 'Asia/Ho_Chi_Minh',
   })
@@ -132,7 +132,7 @@ export class SyncFinancialInfoJob {
     });
   }
 
-  @Cron('0 0 3 * * *', {
+  @Cron('0 0 3 1 * *', {
     name: 'fi_sync_br_quarter',
     timeZone: 'Asia/Ho_Chi_Minh',
   })
@@ -156,7 +156,7 @@ export class SyncFinancialInfoJob {
   }
 
   /* CASH FLOW */
-  @Cron('0 10 4 * * *', {
+  @Cron('0 10 4 1 * *', {
     name: 'fi_sync_cf_year',
     timeZone: 'Asia/Ho_Chi_Minh',
   })
@@ -179,7 +179,7 @@ export class SyncFinancialInfoJob {
     });
   }
 
-  @Cron('0 10 5 * * *', {
+  @Cron('0 10 5 1 * *', {
     name: 'fi_sync_cf_quarter',
     timeZone: 'Asia/Ho_Chi_Minh',
   })
