@@ -1,12 +1,34 @@
 import { Controller, Get } from '@nestjs/common';
 import { AppService } from './app.service';
 import { fetch } from '@module/core/util/fetch';
+import { InjectModel } from '@nestjs/mongoose';
+import {
+  JobResult,
+  JobResultDocument,
+} from '@module/core/schemas/job-result.schema';
+import { Model } from 'mongoose';
 
 @Controller()
 export class AppController {
-  constructor(private readonly appService: AppService) {}
+  constructor(
+    private readonly appService: AppService,
+    @InjectModel(JobResult.name)
+    private jobResultModel: Model<JobResultDocument>,
+  ) {}
 
   @Get()
+  async index() {
+    console.log('here');
+    const jobResult = new this.jobResultModel({
+      jobKey: 'from_nest',
+      result: {
+        is_ok: true,
+      },
+    });
+    jobResult.save();
+  }
+
+  @Get('/bctc')
   async getHello() {
     const res = await fetch('https://finance.vietstock.vn/data/financeinfo', {
       headers: {

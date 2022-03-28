@@ -1,6 +1,8 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import moment from 'moment';
-import mongoose from 'mongoose';
+import mongoose, { Document } from 'mongoose';
+
+export type JobResultDocument = JobResult & Document;
 
 @Schema({
   timestamps: {

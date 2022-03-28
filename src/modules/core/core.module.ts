@@ -14,6 +14,11 @@ import {
   JobResult,
   JobResultSchema,
 } from '@module/core/schemas/job-result.schema';
+import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
+import { CorValue } from '@module/finan-info/store/corporation/cor.value';
+import { StockPriceValues } from '@module/finan-info/store/stock-price/stock-price.values';
+import { FinancialInfoValues } from '@module/finan-info/store/financial-info/financial-info.values';
+import rabbitmq from '@cfg/rabbitmq.cfg';
 
 @Module({
   imports: [
@@ -32,9 +37,50 @@ import {
       },
     ]),
     HttpModule,
+    RabbitMQModule.forRoot(RabbitMQModule, {
+      exchanges: [
+        {
+          name: CorValue.EXCHANGE_KEY,
+          type: 'topic',
+          options: {
+            durable: true,
+          },
+        },
+        {
+          name: StockPriceValues.EXCHANGE_KEY,
+          type: 'topic',
+          options: {
+            durable: true,
+          },
+        },
+        {
+          name: FinancialInfoValues.EXCHANGE_KEY,
+          type: 'topic',
+          options: {
+            durable: true,
+          },
+        },
+      ],
+      uri: `amqp://${rabbitmq().user}:${rabbitmq().pass}@${rabbitmq().host}:${
+        rabbitmq().port
+      }`,
+      channels: {
+        'nstock.channel-1': {
+          prefetchCount: 1,
+          default: true,
+        },
+      },
+    }),
   ],
   providers: [StateManager, FileLogger, LogService, CoreEffects],
-  exports: [StateManager, HttpModule, FileLogger, LogService],
+  exports: [
+    StateManager,
+    HttpModule,
+    FileLogger,
+    LogService,
+    RabbitMQModule,
+    MongooseModule,
+  ],
 })
 export class CoreModule {
   constructor(

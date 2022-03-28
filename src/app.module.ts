@@ -10,11 +10,6 @@ import { ScheduleModule } from '@nestjs/schedule';
 import { MongooseModule } from '@nestjs/mongoose';
 import { FinanAnalysisModule } from './modules/finan-analysis/finan-analysis.module';
 import mongoCfg from '@cfg/mongo.cfg';
-import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
-import { StockPriceValues } from '@module/finan-info/store/stock-price/stock-price.values';
-import { FinancialInfoValues } from '@module/finan-info/store/financial-info/financial-info.values';
-import rabbitmq from '@cfg/rabbitmq.cfg';
-import { CorValue } from '@module/finan-info/store/corporation/cor.value';
 
 @Module({
   imports: [
@@ -34,47 +29,12 @@ import { CorValue } from '@module/finan-info/store/corporation/cor.value';
         mongoCfg().port
       }`,
       {
-        dbName: 'nstocklog',
+        dbName: 'nstock',
       },
     ),
     CoreModule,
     FinanInfoModule,
     FinanAnalysisModule,
-
-    RabbitMQModule.forRoot(RabbitMQModule, {
-      exchanges: [
-        {
-          name: CorValue.EXCHANGE_KEY,
-          type: 'topic',
-          options: {
-            durable: true,
-          },
-        },
-        {
-          name: StockPriceValues.EXCHANGE_KEY,
-          type: 'topic',
-          options: {
-            durable: true,
-          },
-        },
-        {
-          name: FinancialInfoValues.EXCHANGE_KEY,
-          type: 'topic',
-          options: {
-            durable: true,
-          },
-        },
-      ],
-      uri: `amqp://${rabbitmq().user}:${rabbitmq().pass}@${rabbitmq().host}:${
-        rabbitmq().port
-      }`,
-      channels: {
-        'nstock.channel-1': {
-          prefetchCount: 1,
-          default: true,
-        },
-      },
-    }),
   ],
   controllers: [AppController],
   providers: [AppService],
