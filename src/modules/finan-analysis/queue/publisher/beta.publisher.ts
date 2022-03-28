@@ -6,6 +6,8 @@ import { CorEntity } from '@module/finan-info/entity/cor.entity';
 import { Between, Repository } from 'typeorm';
 import { StockPriceEntity } from '@module/finan-info/entity/stock-price.entity';
 import { FinanAnalysisQueueValue } from '@module/finan-analysis/values/finan-analysis-queue.value';
+import _ from 'lodash';
+import { FaBetaValue } from '@module/finan-analysis/values/fa-beta.value';
 
 @Injectable()
 export class BetaPublisher {
@@ -17,34 +19,41 @@ export class BetaPublisher {
     private stockPriceRepo: Repository<StockPriceEntity>,
   ) {}
 
-  public async publish(
-    statTime = moment().subtract(3, 'months'),
-    endTime = moment(),
-  ) {
-    const stock_prices = await this.getPriceData(
-      'BFC',
-      moment().subtract(12, 'months'),
-      moment(),
-    );
-    const index_prices = await this.getPriceData(
-      'HOSTC',
-      moment().subtract(12, 'months'),
-      moment(),
-    );
+  public async publish() {
+    const cors = await this.corRepo.find();
 
-    await this.amqpConnection.publish(
-      FinanAnalysisQueueValue.EXCHANGE_KEY_CALCULATE_BETA,
-      FinanAnalysisQueueValue.ROUTING_KEY_CALCULATE_BETA,
-      {
-        code: 'BFC',
-        period: '12',
-        prices: {
-          stock_prices,
-          index_prices,
-        },
-      },
-      {},
-    );
+    _.forEach(FaBetaValue.PERIODS, async (period) => {
+      const index_prices = await this.getPriceData(
+        'HOSTC',
+        moment().subtract(period, 'months'),
+        moment(),
+      );
+
+      _.forEach(cors, async (cor) => {
+        const code = cor.code;
+        const stock_prices = await this.getPriceData(
+          code,
+          moment().subtract(period, 'months'),
+          moment(),
+        );
+
+        if (stock_prices.length === index_prices.length) {
+          await this.amqpConnection.publish(
+            FinanAnalysisQueueValue.EXCHANGE_KEY_CALCULATE_BETA,
+            FinanAnalysisQueueValue.ROUTING_KEY_CALCULATE_BETA,
+            {
+              code,
+              period: String(period),
+              prices: {
+                stock_prices,
+                index_prices,
+              },
+            },
+            {},
+          );
+        }
+      });
+    });
   }
 
   protected async getPriceData(

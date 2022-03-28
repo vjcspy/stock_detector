@@ -1,9 +1,13 @@
 import pika
 
+from modules.core.util.cfg import cfg
+
+config = cfg()
+
 
 def get_rabbit_connection():
-	credentials = pika.PlainCredentials('rabbitmq', '123456aA@')
-	connection = pika.BlockingConnection(pika.ConnectionParameters(
-		host="vm", port=5672, credentials=credentials))
+    credentials = pika.PlainCredentials(config.get('RABBITMQ_DEFAULT_USER'), config.get('RABBITMQ_DEFAULT_PASS'))
+    connection = pika.BlockingConnection(pika.ConnectionParameters(
+        host=config.get('RABBITMQ_HOST'), port=config.get('RABBITMQ_PORT'), credentials=credentials))
 
-	return connection
+    return connection

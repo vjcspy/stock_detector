@@ -23,25 +23,32 @@ print(' [*] Waiting for calculate beta. To exit press CTRL+C')
 
 
 def callback(ch, method, properties, body):
-	# print(" [x] %r:%r" % (method.routing_key, body.decode("utf-8")))
-	data: dict = json.loads(body.decode("utf-8"))
+    # print(" [x] %r:%r" % (method.routing_key, body.decode("utf-8")))
+    beta = None
+    data: dict = json.loads(body.decode("utf-8"))
 
-	if isinstance(data, dict):
-		code = data.get('code')
-		period = data.get('code')
-		prices: dict = data.get('prices')
+    if isinstance(data, dict):
+        code = data.get('code')
+        period = data.get('period')
+        prices: dict = data.get('prices')
 
-		if isinstance(prices, dict):
-			index_prices = prices.get('index_prices')
-			stock_prices = prices.get('stock_prices')
-			beta = cal_beta(stock_prices, index_prices)
-			print(f"{code}|{period}|{beta}")
-			job_result = JobResult(jobKey=f"calculate_beta_{code}_{period}")
-			job_result.result = {"beta": beta}
-			job_result.save()
+        if isinstance(prices, dict):
+            error = False
+            try:
+                index_prices = prices.get('index_prices')
+                stock_prices = prices.get('stock_prices')
+                beta = cal_beta(stock_prices, index_prices)
+                print(f"{code}|{period}|{beta}")
+            except:
+                error = True
+                print("Error")
+
+            job_result = JobResult(jobKey=f"calculate|beta|{code}|{period}")
+            job_result.result = {"beta": beta, "is_error": error, "period": period, "code": code}
+            job_result.save()
 
 
 channel.basic_consume(
-	queue=queue_name, on_message_callback=callback, auto_ack=True)
+    queue=queue_name, on_message_callback=callback, auto_ack=True)
 channel.basic_qos(prefetch_count=1)
 channel.start_consuming()
