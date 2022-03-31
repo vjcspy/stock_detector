@@ -39,14 +39,17 @@ export class BetaPublisher {
 
         if (stock_prices.length === index_prices.length) {
           await this.amqpConnection.publish(
-            FinanAnalysisQueueValue.EXCHANGE_KEY_CALCULATE_BETA,
-            FinanAnalysisQueueValue.ROUTING_KEY_CALCULATE_BETA,
+            FinanAnalysisQueueValue.EXCHANGE_COMPUTE,
+            `${FinanAnalysisQueueValue.ROUTING_KEY_COMPUTE}.ge.beta`,
             {
-              code,
-              period: String(period),
-              prices: {
-                stock_prices,
-                index_prices,
+              job_id: 'compute.ge.beta',
+              payload: {
+                code,
+                period: String(period),
+                prices: {
+                  stock_prices,
+                  index_prices,
+                },
               },
             },
             {},

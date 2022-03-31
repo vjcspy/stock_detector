@@ -62,7 +62,7 @@ import { FinanAnalysisQueueValue } from '@module/finan-analysis/values/finan-ana
           },
         },
         {
-          name: FinanAnalysisQueueValue.EXCHANGE_KEY_CALCULATE_BETA,
+          name: FinanAnalysisQueueValue.EXCHANGE_COMPUTE,
           type: 'topic',
           options: {
             durable: true,
