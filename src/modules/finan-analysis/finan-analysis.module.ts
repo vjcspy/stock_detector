@@ -1,5 +1,4 @@
 import { Module } from '@nestjs/common';
-import { ANALYZE_PROVIDERS } from '@module/finan-analysis/analyze';
 import { FinanInfoModule } from '@module/finan-info/finan-info.module';
 import { FinanAnalysisController } from '@module/finan-analysis/controller/finan-analysis.controller';
 import { ANALYSIS_QUEUE } from '@module/finan-analysis/queue';
@@ -15,6 +14,6 @@ import { FA_SERVICES } from '@module/finan-analysis/service';
     TypeOrmModule.forFeature([...FinanAnalysisEntities]),
   ],
   controllers: [FinanAnalysisController],
-  providers: [...FA_SERVICES, ...ANALYZE_PROVIDERS, ...ANALYSIS_QUEUE],
+  providers: [...FA_SERVICES, ...ANALYSIS_QUEUE],
 })
 export class FinanAnalysisModule {}

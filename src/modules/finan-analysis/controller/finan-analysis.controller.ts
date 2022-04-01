@@ -16,6 +16,11 @@ export class FinanAnalysisController {
     return this.testPublisher.publish();
   }
 
+  @Get('/cal-beta')
+  async calBeta() {
+    return this.betaPublisher.publish();
+  }
+
   @Get('/update-beta')
   async updateBeta() {
     this.faBetaService.updateBeta();
