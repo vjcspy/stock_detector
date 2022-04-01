@@ -3,10 +3,6 @@ import numpy as np
 
 
 def cal_beta(stock_prices: list, index_price: list) -> float:
-	"""
-
-	@rtype: object
-	"""
 	if len(stock_prices) != len(index_price) or len(stock_prices) == 0:
 		raise Exception("Date stock and index provided must be same length")
 

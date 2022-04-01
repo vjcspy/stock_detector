@@ -1,9 +1,10 @@
 import json
-from abc import abstractmethod, ABC
+from abc import ABC
 from termcolor import colored
 
 from modules.core.mongo.connection import connect_mongo_db
 from modules.core.rabbitmq.connection import get_rabbit_connection
+from modules.job_sync.model.job_logger import consumer_logger
 from modules.job_sync.model.job_worker import JobWorker
 
 
@@ -18,7 +19,7 @@ class JobConsumer(ABC):
 
 		if isinstance(data, dict):
 			job_id = data.get('job_id')
-			print(f'receive job: {colored(job_id, "blue")}')
+			consumer_logger.info(f'receive job: {colored(job_id, "blue")}')
 			if isinstance(job_id, str) and job_id != '':
 				worker: JobWorker = next(filter(lambda w: w.job_id == job_id, self.workers), None)
 				if worker:
@@ -43,10 +44,9 @@ class JobConsumer(ABC):
 		# bind queue to exchange
 		channel.queue_bind(exchange=EXCHANGE, queue=queue_name, routing_key=ROUTING_KEY)
 
-		print(
+		consumer_logger.info(
 			f' [*] Waiting for queue {colored(QUEUE, "blue")} routing key {colored(ROUTING_KEY, "blue")}. To exit press CTRL+C')
 
-		channel.basic_consume(
-			queue=queue_name, on_message_callback=self._handle_message, auto_ack=True)
+		channel.basic_consume(queue=queue_name, on_message_callback=self._handle_message, auto_ack=True)
 		channel.basic_qos(prefetch_count=1)
 		channel.start_consuming()

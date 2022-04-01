@@ -21,7 +21,7 @@ export class TestPublisher {
       FinanAnalysisQueueValue.EXCHANGE_COMPUTE,
       `${FinanAnalysisQueueValue.ROUTING_KEY_COMPUTE}.ge.-`,
       {
-        job_id: 'compute.ge.beta',
+        job_id: 'compute.ge.test',
         payload: {},
       },
       {},
