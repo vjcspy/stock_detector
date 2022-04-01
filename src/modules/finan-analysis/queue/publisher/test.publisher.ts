@@ -19,7 +19,7 @@ export class TestPublisher {
   publish() {
     this.amqpConnection.publish(
       FinanAnalysisQueueValue.EXCHANGE_COMPUTE,
-      `${FinanAnalysisQueueValue.ROUTING_KEY_COMPUTE}.ge.beta`,
+      `${FinanAnalysisQueueValue.ROUTING_KEY_COMPUTE}.ge.-`,
       {
         job_id: 'compute.ge.beta',
         payload: {},
