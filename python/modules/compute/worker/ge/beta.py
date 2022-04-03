@@ -1,7 +1,6 @@
 import json
-import logging
 
-from modules.compute.calculate.beta import cal_beta
+from modules.compute.calculate.ge.beta import cal_beta
 from modules.job_sync.document.job_result import JobResultDocument
 from modules.job_sync.model.job_logger import consumer_logger
 from modules.job_sync.model.job_worker import JobWorker
@@ -36,7 +35,7 @@ class BetaWorker(JobWorker):
 						error = True
 						print("Error")
 
-					job_result = JobResultDocument(jobKey=f"calculate|beta|{code}|{period}")
+					job_result = JobResultDocument(jobKey=f"calculate|beta|{code}|{period}", jobId=self.job_id)
 					job_result.result = {"beta": beta, "is_error": error, "period": period, "code": code}
 					job_result.save()
 

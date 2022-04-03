@@ -1,5 +1,5 @@
 from modules.compute.worker.ge.beta import BetaWorker
-from modules.compute.worker.ge.test import TestWorker
+from modules.compute.worker.test import TestWorker
 from modules.job_sync.model.job_consumer import JobConsumer
 
 EXCHANGE = 'fi.analysis.compute'
