@@ -10,9 +10,12 @@ import _ from 'lodash';
 import { FaBetaValue } from '@module/finan-analysis/values/fa-beta.value';
 import { LogService } from '@module/core/service/log.service';
 import { Levels } from '@module/core/schemas/log-db.schema';
+import { JobResultService } from '@module/finan-analysis/service/job-result.service';
 
 @Injectable()
 export class BetaPublisher {
+  static JOB_ID = 'compute.ge.beta';
+
   constructor(
     private readonly amqpConnection: AmqpConnection,
     @InjectRepository(CorEntity)
@@ -20,9 +23,13 @@ export class BetaPublisher {
     @InjectRepository(StockPriceEntity)
     private stockPriceRepo: Repository<StockPriceEntity>,
     private log: LogService,
+    private jobResultService: JobResultService,
   ) {}
 
   public async publish() {
+    // clear last result
+    await this.jobResultService.clearResults(BetaPublisher.JOB_ID);
+
     const cors = await this.corRepo.find();
 
     _.forEach(FaBetaValue.PERIODS, async (period) => {

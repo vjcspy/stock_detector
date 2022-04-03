@@ -13,6 +13,9 @@ export type JobResultDocument = JobResult & Document;
 })
 export class JobResult {
   @Prop({ isRequired: false })
+  jobId: string;
+
+  @Prop({ isRequired: false })
   jobKey: string;
 
   @Prop({ type: mongoose.Schema.Types.Mixed })
