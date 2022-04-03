@@ -12,7 +12,7 @@ export type JobResultDocument = JobResult & Document;
   },
 })
 export class JobResult {
-  @Prop({ isRequired: false })
+  @Prop({ isRequired: false, index: true })
   jobId: string;
 
   @Prop({ isRequired: false })

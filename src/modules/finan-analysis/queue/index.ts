@@ -1,4 +1,9 @@
-import { BetaPublisher } from '@module/finan-analysis/queue/publisher/beta.publisher';
 import { TestPublisher } from '@module/finan-analysis/queue/publisher/test.publisher';
+import { COMPUTE_GE_PUBLISHER } from '@module/finan-analysis/queue/publisher/compute/ge';
+import { FUNDAMENTAL_ANALYSIS_PUBLISHERS } from '@module/finan-analysis/queue/publisher/compute/fundamental-analysis';
 
-export const ANALYSIS_QUEUE = [BetaPublisher, TestPublisher];
+export const ANALYSIS_QUEUE = [
+  ...COMPUTE_GE_PUBLISHER,
+  ...FUNDAMENTAL_ANALYSIS_PUBLISHERS,
+  TestPublisher,
+];

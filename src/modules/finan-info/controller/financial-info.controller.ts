@@ -6,12 +6,14 @@ import {
   FinancialTermTypeEnum,
 } from '@module/finan-info/entity/financial-info-status.entity';
 import { SyncFinancialInfoPublisher } from '@module/finan-info/queue/publisher/SyncFinancialInfo.publisher';
+import { SyncFinancialInfoJob } from '@module/finan-info/job/sync-financial-info.job';
 
 @Controller('fi')
 export class FinancialInfoController {
   constructor(
     private stateManager: StateManager,
     private syncFiInfoPublisher: SyncFinancialInfoPublisher,
+    private syncFinancialInfoJob: SyncFinancialInfoJob,
   ) {}
 
   @Get('/cstc')
@@ -19,7 +21,7 @@ export class FinancialInfoController {
   cstc() {
     this.stateManager.getStore().dispatch(
       startGetFinanceInfoAction({
-        code: 'BFC',
+        code: 'APG',
         resolve: () => {
           console.log('resolve');
         },
@@ -27,7 +29,7 @@ export class FinancialInfoController {
         termType: FinancialTermTypeEnum.YEAR,
       }),
     );
-    // return this.priceRequest.getPrice('BFC');
+    // this.syncFinancialInfoJob.indicatorYear();
 
     return [];
   }

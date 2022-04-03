@@ -432,7 +432,7 @@ export class FinancialIndicatorsEntity extends BaseEntity {
 
   // Giá trị sổ sách của cổ phiếu (BVPS)
   @SourceMapping(null, convertSourceFn(2))
-  @Column('mediumint', { unsigned: true, nullable: true })
+  @Column('int', { unsigned: false, nullable: true })
   bookValuePerShareBVPS: number;
 
   // Chỉ số giá thị trường trên thu nhập (P/E)
