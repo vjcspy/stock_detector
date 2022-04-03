@@ -2,7 +2,7 @@ import { Controller, Get } from '@nestjs/common';
 import { TestPublisher } from '@module/finan-analysis/queue/publisher/test.publisher';
 import { BetaPublisher } from '@module/finan-analysis/queue/publisher/compute/ge/beta.publisher';
 import { BetaService } from '@module/finan-analysis/service/compute/ge/beta.service';
-import { GrossProfitPublisher } from '@module/finan-analysis/queue/publisher/fundamental-analysis/gross-profit.publisher';
+import { GrossProfitPublisher } from '@module/finan-analysis/queue/publisher/compute/fundamental-analysis/gross-profit.publisher';
 
 @Controller('fa')
 export class FinanAnalysisController {
