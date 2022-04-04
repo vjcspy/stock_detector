@@ -10,6 +10,10 @@ export class SectorService {
     private corRepo: Repository<CorEntity>,
   ) {}
 
+  async initTableSectorData() {
+    // TODO: Cần phải tổ chức lại dữ liệu sector để có thể get được theo id
+  }
+
   async getStocksBySector(name: any) {
     let id3: string;
     if (typeof name === 'string') {
