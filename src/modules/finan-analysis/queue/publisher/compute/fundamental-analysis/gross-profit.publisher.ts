@@ -7,8 +7,6 @@ import { LogService } from '@module/core/service/log.service';
 import { JobResultService } from '@module/finan-analysis/service/job-result.service';
 import { FinancialIndicatorsEntity } from '@module/finan-info/entity/financial-indicators.entity';
 import { Analyst } from '@module/finan-analysis/service/analyst';
-import { FinanAnalysisQueueValue } from '@module/finan-analysis/values/finan-analysis-queue.value';
-import { GrossProfitService } from '@module/finan-analysis/service/fundamental-analysis/gross-profit.service';
 import _ from 'lodash';
 
 @Injectable()
@@ -25,13 +23,12 @@ export class GrossProfitPublisher {
   ) {}
 
   public async publishCalculateSector() {
-    const sectors = await this.analyst.finanInfoService.getSectors();
+    const sectors = await this.analyst.sector.getSectors();
 
     for (const sector of sectors) {
-      const fiSector =
-        await this.analyst.finanInfoService.getFinancialIndicatorBySector(
-          sector,
-        );
+      const fiSector = await this.analyst.info.getFinancialIndicatorBySector(
+        sector,
+      );
 
       this.log.log({
         source: 'fa',
@@ -42,18 +39,18 @@ export class GrossProfitPublisher {
           sector['industryName3']
         } ${_.size(fiSector)} stock`,
       });
-      await this.amqpConnection.publish(
-        FinanAnalysisQueueValue.EXCHANGE_COMPUTE,
-        `${FinanAnalysisQueueValue.ROUTING_KEY_COMPUTE}.fundamental-analysis.gp`,
-        {
-          job_id: `${GrossProfitService.JOB_ID}`,
-          payload: {
-            sector,
-            fiSector,
-          },
-        },
-        {},
-      );
+      // await this.amqpConnection.publish(
+      //   FinanAnalysisQueueValue.EXCHANGE_COMPUTE,
+      //   `${FinanAnalysisQueueValue.ROUTING_KEY_COMPUTE}.fundamental-analysis.gp`,
+      //   {
+      //     job_id: `${GrossProfitService.JOB_ID}`,
+      //     payload: {
+      //       sector,
+      //       fiSector,
+      //     },
+      //   },
+      //   {},
+      // );
     }
   }
 }

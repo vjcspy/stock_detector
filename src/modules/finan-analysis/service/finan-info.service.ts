@@ -4,6 +4,7 @@ import { CorEntity } from '@module/finan-info/entity/cor.entity';
 import { Repository } from 'typeorm';
 import { FinancialIndicatorsEntity } from '@module/finan-info/entity/financial-indicators.entity';
 import { FinancialTermTypeEnum } from '@module/finan-info/entity/financial-info-status.entity';
+import { SectorService } from '@module/finan-analysis/service/sector.service';
 
 @Injectable()
 export class FinanInfoService {
@@ -21,36 +22,14 @@ export class FinanInfoService {
     private corRepo: Repository<CorEntity>,
     @InjectRepository(FinancialIndicatorsEntity)
     private fiRepo: Repository<FinancialIndicatorsEntity>,
+    private sectorService: SectorService,
   ) {}
-
-  async getStocksBySector(name: any) {
-    let id3: string;
-    if (typeof name === 'string') {
-      id3 = name;
-    } else if (typeof name === 'object') {
-      id3 = name['industryName3'];
-    }
-    return this.corRepo.find({
-      industryName3: id3,
-    });
-  }
-
-  async getSectors(): Promise<
-    {
-      count: number;
-      industryName3: string;
-    }[]
-  > {
-    return this.corRepo.query(
-      `SELECT count(*) as count, industryName3 from cor_entity GROUP BY industryName3`,
-    );
-  }
 
   async getFinancialIndicatorBySector(
     sector: any,
     termTypeEnum: FinancialTermTypeEnum = FinancialTermTypeEnum.YEAR,
   ) {
-    const cors = await this.getStocksBySector(sector);
+    const cors = await this.sectorService.getStocksBySector(sector);
 
     const data = {};
     for (const cor of cors) {
