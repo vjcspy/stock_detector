@@ -22,6 +22,7 @@ class GrossProfitWorker(JobWorker):
 		if not isinstance(payload, dict):
 			return
 
+		# KHÔNG CHỈ LÀM VỚI GP, MÀ PHẢI LÀM VỚI TOÀN BỘ CÁC CHỈ SỐ KHÁC CẦN TÍNH THEO KIỂU NÀY
 		# Với mỗi một cổ phiếu trong sector, tính ra tỷ suất lợi nhuận gộp biên
 		# 1. đi từng năm và tính bình quân của cả sector trong năm đó
 		# 2. tính độ lệch chuẩn của tỷ suất này qua các năm
