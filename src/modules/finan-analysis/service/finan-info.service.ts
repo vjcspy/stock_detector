@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { CorEntity } from '@module/finan-info/entity/cor.entity';
 import { Repository } from 'typeorm';
 import { FinancialIndicatorsEntity } from '@module/finan-info/entity/financial-indicators.entity';
+import { FinancialTermTypeEnum } from '@module/finan-info/entity/financial-info-status.entity';
 
 @Injectable()
 export class FinanInfoService {
@@ -45,7 +46,10 @@ export class FinanInfoService {
     );
   }
 
-  async getFinancialIndicatorBySector(sector: any) {
+  async getFinancialIndicatorBySector(
+    sector: any,
+    termTypeEnum: FinancialTermTypeEnum = FinancialTermTypeEnum.YEAR,
+  ) {
     const cors = await this.getStocksBySector(sector);
 
     const data = {};
@@ -53,6 +57,7 @@ export class FinanInfoService {
       const corFI = await this.fiRepo
         .createQueryBuilder('fi')
         .where('fi.code = :code', { code: cor.code })
+        .andWhere('fi.termType = :termType', { termType: termTypeEnum })
         .getMany();
 
       data[cor.code] = corFI;

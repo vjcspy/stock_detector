@@ -9,6 +9,7 @@ import { FinancialIndicatorsEntity } from '@module/finan-info/entity/financial-i
 import { Analyst } from '@module/finan-analysis/service/analyst';
 import { FinanAnalysisQueueValue } from '@module/finan-analysis/values/finan-analysis-queue.value';
 import { GrossProfitService } from '@module/finan-analysis/service/fundamental-analysis/gross-profit.service';
+import _ from 'lodash';
 
 @Injectable()
 export class GrossProfitPublisher {
@@ -37,11 +38,13 @@ export class GrossProfitPublisher {
         group: 'job_publisher',
         group1: 'fundamental_analysis',
         group2: 'gp',
-        message: `calculate gross profit sector ${sector['industryName3']}`,
+        message: `publish calculate gross profit sector ${
+          sector['industryName3']
+        } ${_.size(fiSector)} stock`,
       });
       await this.amqpConnection.publish(
         FinanAnalysisQueueValue.EXCHANGE_COMPUTE,
-        `${FinanAnalysisQueueValue.ROUTING_KEY_COMPUTE}.fundamental_analysis.gp`,
+        `${FinanAnalysisQueueValue.ROUTING_KEY_COMPUTE}.fundamental-analysis.gp`,
         {
           job_id: `${GrossProfitService.JOB_ID}`,
           payload: {
