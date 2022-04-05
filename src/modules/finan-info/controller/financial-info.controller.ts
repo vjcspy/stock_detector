@@ -160,9 +160,12 @@ export class FinancialInfoController {
     return [];
   }
 
-  @Get('/publish')
+  @Get('/publish-all')
   async publish() {
-    this.syncFiInfoPublisher.publish();
+    await this.syncFinancialInfoJob.balanceSheetYear();
+    await this.syncFinancialInfoJob.businessReportYear();
+    await this.syncFinancialInfoJob.cashFlowYear();
+    // await this.syncFinancialInfoJob.indicatorYear();
 
     return 'ok';
   }

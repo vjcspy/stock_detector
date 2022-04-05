@@ -6,6 +6,7 @@ import { StockPriceSyncStatusEntity } from '@module/finan-info/entity/stock-pric
 import { FinancialBalanceSheetEntity } from '@module/finan-info/entity/financial-balance-sheet.entity';
 import { FinancialCashFlowEntity } from '@module/finan-info/entity/financial-cash-flow.entity';
 import { FinancialBusinessReportEntity } from '@module/finan-info/entity/financial-business-report.entity';
+import { SectorEntity } from '@module/finan-info/entity/sector.entity';
 
 export const ENTITIES = [
   CorEntity,
@@ -18,4 +19,5 @@ export const ENTITIES = [
 
   StockPriceEntity,
   StockPriceSyncStatusEntity,
+  SectorEntity,
 ];

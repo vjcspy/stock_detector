@@ -5,8 +5,8 @@ import {
   EMPTY,
   from,
   map,
+  mergeMap,
   of,
-  switchMap,
   withLatestFrom,
 } from 'rxjs';
 import moment from 'moment';
@@ -40,7 +40,7 @@ export class FinancialInfoEffects {
   whenStartSync$ = createEffect((action$) => {
     return action$.pipe(
       ofType(startGetFinanceInfoAction),
-      switchMap((action) => {
+      mergeMap((action) => {
         const code = action.payload.code;
         const termType = action.payload.termType;
         const type = action.payload.type;
@@ -155,7 +155,7 @@ export class FinancialInfoEffects {
         return [action, infoState];
       }),
       filter((d) => Array.isArray(d) && typeof d[1] !== 'undefined'),
-      switchMap((d) => {
+      mergeMap((d) => {
         const action: any = d[0];
         const code = action.payload.code;
         const type = action.payload.type;
@@ -189,8 +189,17 @@ export class FinancialInfoEffects {
               });
             }
           }),
-          catchError((err: any) =>
-            from(
+          catchError((err: any) => {
+            this.log.log({
+              level: Levels.error,
+              source: 'fi',
+              group: 'sync_info',
+              group1: code,
+              group2: type,
+              group3: termType,
+              message: `[${action.payload.code}|${type}|${termType}] Error Request Page page[${action.payload.page}] `,
+            });
+            return from(
               of(
                 requestFinancialInfoErrorAction({
                   error: err,
@@ -200,8 +209,8 @@ export class FinancialInfoEffects {
                   page,
                 }),
               ),
-            ),
-          ),
+            );
+          }),
         );
       }),
     );
@@ -223,7 +232,7 @@ export class FinancialInfoEffects {
         return [action, infoState];
       }),
       filter((d) => Array.isArray(d) && typeof d[1] !== 'undefined'),
-      switchMap((d) => {
+      mergeMap((d) => {
         const action: any = d[0];
         const data = action.payload.data;
         const code = action.payload.code;
@@ -395,7 +404,7 @@ export class FinancialInfoEffects {
           });
           setTimeout(() => {
             infoState.resolve();
-          }, 2000);
+          }, 250);
         }
         return EMPTY;
       }),
@@ -427,12 +436,16 @@ export class FinancialInfoEffects {
 
         if (typeof infoState?.resolve === 'function') {
           this.log.log({
+            level: Levels.error,
             source: 'fi',
             group: 'sync_info',
             group1: code,
             group2: type,
             group3: termType,
-            message: `[${action.payload.code}|${type}|${termType}] NACK queue `,
+            message: `[${action.payload.code}|${type}|${termType}] Lỗi, Try NACK queue `,
+            metadata: {
+              error: action?.payload?.error,
+            },
           });
           setTimeout(() => {
             infoState.resolve(new Nack(true));

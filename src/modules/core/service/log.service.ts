@@ -46,7 +46,7 @@ export class LogService {
         )}] : ${record.message}`;
         _logger.log(record.level, msg);
       }
-
+      record.timestamp = Number(process.hrtime.bigint());
       const createdCat = new this.logDbModel(record);
       await createdCat.save();
     } catch (e) {}

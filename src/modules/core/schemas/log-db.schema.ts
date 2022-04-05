@@ -46,6 +46,9 @@ export class LogDb {
 
   @Prop({ type: mongoose.Schema.Types.Mixed })
   metadata?: Record<string, any>;
+
+  @Prop({ type: mongoose.Schema.Types.Number, default: () => +new Date() })
+  timestamp?: number;
 }
 
 export const LogDbSchema = SchemaFactory.createForClass(LogDb);

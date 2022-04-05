@@ -25,17 +25,18 @@ const addTimeStamp = format((info: TransformableInfo) => {
 
 export const initDefaultLogger = (filePath?: string) => {
   const _logger = winston.createLogger({
-    // level: 'silly',
+    level: 'silly',
     // levels: winston.config.cli.levels,
     format: combine(
       // splat(),
       // simple(),
       // metadata(),
-      // colorize(),
       // addTimeStamp(),
-      format.printf((info) => `${info.message}`),
+      // format.printf((info) => `${info.message}`),
       // errors(),
       // formatMetadata()
+      winston.format.colorize(),
+      winston.format.simple(),
     ),
     transports: [],
   });
