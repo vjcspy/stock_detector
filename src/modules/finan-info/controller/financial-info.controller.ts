@@ -165,7 +165,7 @@ export class FinancialInfoController {
     await this.syncFinancialInfoJob.balanceSheetYear();
     await this.syncFinancialInfoJob.businessReportYear();
     await this.syncFinancialInfoJob.cashFlowYear();
-    // await this.syncFinancialInfoJob.indicatorYear();
+    await this.syncFinancialInfoJob.indicatorYear();
 
     return 'ok';
   }
