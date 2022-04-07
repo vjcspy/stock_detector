@@ -78,8 +78,8 @@ export class FinanInfoService {
     const { code, termType } = this._getDefaultDataFromOption(options);
     return this.inRepo
       .createQueryBuilder('e')
-      .where('fi.code = :code', { code })
-      .andWhere('fi.termType = :termType', { termType })
+      .where('e.code = :code', { code })
+      .andWhere('e.termType = :termType', { termType })
       .orderBy('e.id', 'DESC')
       .getMany();
   }
@@ -89,7 +89,13 @@ export class FinanInfoService {
       code?: string;
     } = {},
   ) {
-    const code = this._getDefaultDataFromOption(options);
+    const { code, termType } = this._getDefaultDataFromOption(options);
+    return this.bsRepo
+      .createQueryBuilder('e')
+      .where('e.code = :code', { code })
+      .andWhere('e.termType = :termType', { termType })
+      .orderBy('e.id', 'DESC')
+      .getMany();
   }
 
   public async stockGetBusinessReports(
@@ -97,7 +103,13 @@ export class FinanInfoService {
       code?: string;
     } = {},
   ) {
-    const code = this._getDefaultDataFromOption(options);
+    const { code, termType } = this._getDefaultDataFromOption(options);
+    return this.brRepo
+      .createQueryBuilder('e')
+      .where('e.code = :code', { code })
+      .andWhere('e.termType = :termType', { termType })
+      .orderBy('e.id', 'DESC')
+      .getMany();
   }
 
   public async stockGetCashFlows(
@@ -105,6 +117,12 @@ export class FinanInfoService {
       code?: string;
     } = {},
   ) {
-    const code = this._getDefaultDataFromOption(options);
+    const { code, termType } = this._getDefaultDataFromOption(options);
+    return this.cfRepo
+      .createQueryBuilder('e')
+      .where('e.code = :code', { code })
+      .andWhere('e.termType = :termType', { termType })
+      .orderBy('e.id', 'DESC')
+      .getMany();
   }
 }

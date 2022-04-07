@@ -2,7 +2,7 @@ import { Controller, Get } from '@nestjs/common';
 import { TestPublisher } from '@module/finan-analysis/queue/publisher/test.publisher';
 import { BetaPublisher } from '@module/finan-analysis/queue/publisher/compute/ge/beta.publisher';
 import { BetaService } from '@module/finan-analysis/service/compute/ge/beta.service';
-import { GrossProfitPublisher } from '@module/finan-analysis/queue/publisher/compute/fundamental-analysis/gross-profit.publisher';
+import { AnalysisSectorPublisher } from '@module/finan-analysis/queue/publisher/compute/fundamental-analysis/analysis-sector.publisher';
 
 @Controller('fa')
 export class FinanAnalysisController {
@@ -10,12 +10,12 @@ export class FinanAnalysisController {
     private betaPublisher: BetaPublisher,
     private faBetaService: BetaService,
     private testPublisher: TestPublisher,
-    private grossProfitPublisher: GrossProfitPublisher,
+    private analysisSectorPublisher: AnalysisSectorPublisher,
   ) {}
 
   @Get('/test')
   async test() {
-    return this.grossProfitPublisher.publishCalculateSector();
+    await this.analysisSectorPublisher.publishSector();
   }
 
   @Get('/cal-beta')

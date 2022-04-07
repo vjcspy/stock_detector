@@ -1,3 +1,3 @@
-import { GrossProfitPublisher } from '@module/finan-analysis/queue/publisher/compute/fundamental-analysis/gross-profit.publisher';
+import { AnalysisSectorPublisher } from '@module/finan-analysis/queue/publisher/compute/fundamental-analysis/analysis-sector.publisher';
 
-export const FUNDAMENTAL_ANALYSIS_PUBLISHERS = [GrossProfitPublisher];
+export const FUNDAMENTAL_ANALYSIS_PUBLISHERS = [AnalysisSectorPublisher];
