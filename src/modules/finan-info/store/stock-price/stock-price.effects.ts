@@ -1,13 +1,5 @@
 import moment from 'moment';
-import {
-  concatMap,
-  EMPTY,
-  from,
-  map,
-  retry,
-  switchMap,
-  withLatestFrom,
-} from 'rxjs';
+import { concatMap, EMPTY, from, map, switchMap, withLatestFrom } from 'rxjs';
 
 import { getCurrentStatus, saveErrorStatus } from './fns/getCurrentStatus';
 import { savePrices } from './fns/savePrices';
@@ -283,7 +275,6 @@ export class StockPriceEffects {
           }),
         );
       }),
-      // }),
     ),
   );
 }
