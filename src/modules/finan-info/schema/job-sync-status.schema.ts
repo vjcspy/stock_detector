@@ -1,8 +1,16 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose, { Document } from 'mongoose';
+import moment from 'moment';
 
 export type JobSyncStatusDocument = JobSyncStatus & Document;
 
+@Schema({
+  timestamps: {
+    createdAt: true,
+    updatedAt: true,
+    currentTime: () => moment().tz('Asia/Ho_Chi_Minh').toDate(),
+  },
+})
 export class JobSyncStatus {
   // key
   @Prop({ isRequired: true, index: true })

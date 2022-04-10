@@ -13,7 +13,10 @@ export class OrderMatchingController {
     this.stateManager.getStore().dispatch(
       syncOrderMatching.ACTION({
         code: 'HSG',
-        type: OrderMatchingType.INVESTOR,
+        type: OrderMatchingType.HISTORY,
+        resolve: () => {
+          console.log('resolve!');
+        },
       }),
     );
     return [];

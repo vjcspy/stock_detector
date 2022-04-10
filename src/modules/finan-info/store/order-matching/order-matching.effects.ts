@@ -26,6 +26,9 @@ import { Nack } from '@golevelup/nestjs-rabbitmq';
 
 @Injectable()
 export class SyncOrderMatchingEffects {
+  // TODO: Hiện tại không hỗ trợ paging mà lấy luôn full
+  static PAGE_SIZE = 50000;
+
   constructor(
     @InjectModel(OrderMatching.name)
     private orderMatchingModel: Model<OrderMatchingDocument>,
@@ -40,13 +43,12 @@ export class SyncOrderMatchingEffects {
       ofType(syncOrderMatching.ACTION),
       mergeMap((action) => {
         const { code, type, resolve } = action.payload;
+        const syncStatusKey = this.getJobIdInfo(code, type);
 
-        this.jobSyncStatusService.saveInfo(this.getJobIdInfo(code, type), {
+        this.jobSyncStatusService.saveInfo(syncStatusKey, {
           resolve,
         });
-        return from(
-          this.jobSyncStatusService.getStatus(this.getJobIdInfo(code, type)),
-        ).pipe(
+        return from(this.jobSyncStatusService.getStatus(syncStatusKey)).pipe(
           map((syncStatus) => {
             if (syncStatus) {
               this.log.log({
@@ -100,105 +102,102 @@ export class SyncOrderMatchingEffects {
   );
 
   @Effect()
-  pageTypeInvestor = createEffect((action$) =>
+  request$ = createEffect((action$) =>
     action$.pipe(
       ofType(requestOrderMatchingPage.ACTION),
-      filter((action) => action.payload.type === OrderMatchingType.INVESTOR),
       mergeMap((action) => {
         const code = action.payload.code;
         const page = action.payload.page ?? 0;
         const type = action.payload.type;
 
-        /*
-         * Hiện tại có 1 quy tắc là chỉ pull 1 page, không hỗ trợ repeat page do sợ bị trùng lặp dữ liệu khi save lỗi
-         * */
-        return this.httpService
-          .get(
-            `https://apipubaws.tcbs.com.vn/stock-insight/v1/intraday/${code}/investor/his/paging?page=${page}&size=10000`,
-          )
-          .pipe(
-            map((res) => {
-              if (res?.data?.size !== 10000) {
+        const url =
+          type === OrderMatchingType.INVESTOR
+            ? `https://apipubaws.tcbs.com.vn/stock-insight/v1/intraday/${code}/investor/his/paging?page=0&size=${SyncOrderMatchingEffects.PAGE_SIZE}`
+            : `https://apipubaws.tcbs.com.vn/stock-insight/v1/intraday/${code}/his/paging?page=0&size=${SyncOrderMatchingEffects.PAGE_SIZE}`;
+
+        return this.httpService.get(url).pipe(
+          map((res) => {
+            if (res?.data?.size !== SyncOrderMatchingEffects.PAGE_SIZE) {
+              this.log.log({
+                level: Levels.error,
+                source: 'fi',
+                group: 'sync_om',
+                group1: code,
+                group2: type,
+                message: `[${action.payload.code}|${type}] API nguồn đã có sự thay đổi, không support lấy full`,
+              });
+              return syncOrderMatching.ERROR({
+                code,
+                type,
+                error: new Error(
+                  'API nguồn đã có sự thay đổi, không support lấy full',
+                ),
+              });
+            }
+
+            if (Array.isArray(res.data.data)) {
+              const total = res?.data?.total;
+              if (res.data.data.length === 0 || total === 0) {
                 this.log.log({
-                  level: Levels.error,
                   source: 'fi',
                   group: 'sync_om',
                   group1: code,
                   group2: type,
-                  message: `[${action.payload.code}|${type}] API nguồn đã có sự thay đổi, không support lấy full`,
+                  message: `[${action.payload.code}|${type}] Không có dữ liệu giao dịch ${page}`,
                 });
-                return syncOrderMatching.ERROR({
+                return syncOrderMatching.AFTER({
                   code,
                   type,
-                  error: new Error(
-                    'API nguồn đã có sự thay đổi, không support lấy full',
-                  ),
                 });
               }
 
-              if (Array.isArray(res.data.data)) {
-                const total = res?.data?.total;
-                if (res.data.data.length === 0 || total === 0) {
-                  this.log.log({
-                    source: 'fi',
-                    group: 'sync_om',
-                    group1: code,
-                    group2: type,
-                    message: `[${action.payload.code}|${type}] Không có dữ liệu giao dịch ${page}`,
-                  });
-                  return syncOrderMatching.AFTER({
-                    code,
-                    type,
-                  });
-                }
-
-                if (total > 0 && total < res?.data?.size) {
-                  this.log.log({
-                    source: 'fi',
-                    group: 'sync_om',
-                    group1: code,
-                    group2: type,
-                    message: `[${action.payload.code}|${type}] Lấy dữ liệu page ${page} successful`,
-                  });
-                  return requestOrderMatchingPage.AFTER({
-                    code,
-                    page,
-                    type,
-                    data: res.data,
-                  });
-                }
-
+              if (total > 0 && total < res?.data?.size) {
                 this.log.log({
-                  level: Levels.error,
                   source: 'fi',
                   group: 'sync_om',
                   group1: code,
                   group2: type,
-                  message: `[${action.payload.code}|${type}] Unknown Error`,
+                  message: `[${action.payload.code}|${type}] Lấy dữ liệu page ${page} successful`,
                 });
-                return syncOrderMatching.ERROR({
-                  code,
-                  type,
-                  error: new Error('Unknown Error'),
-                });
-              } else {
-                this.log.log({
-                  level: Levels.error,
-                  source: 'fi',
-                  group: 'sync_om',
-                  group1: code,
-                  group2: type,
-                  message: `[${action.payload.code}|${type}] Response data wrong format`,
-                });
-                return requestOrderMatchingPage.ERROR({
+                return requestOrderMatchingPage.AFTER({
                   code,
                   page,
                   type,
-                  error: new Error('Response data wrong format'),
+                  data: res.data,
                 });
               }
-            }),
-          );
+
+              this.log.log({
+                level: Levels.error,
+                source: 'fi',
+                group: 'sync_om',
+                group1: code,
+                group2: type,
+                message: `[${action.payload.code}|${type}] Unknown Error`,
+              });
+              return syncOrderMatching.ERROR({
+                code,
+                type,
+                error: new Error('Unknown Error'),
+              });
+            } else {
+              this.log.log({
+                level: Levels.error,
+                source: 'fi',
+                group: 'sync_om',
+                group1: code,
+                group2: type,
+                message: `[${action.payload.code}|${type}] Response data wrong format`,
+              });
+              return requestOrderMatchingPage.ERROR({
+                code,
+                page,
+                type,
+                error: new Error('Response data wrong format'),
+              });
+            }
+          }),
+        );
       }),
     ),
   );
@@ -349,7 +348,7 @@ export class SyncOrderMatchingEffects {
     return `sync_om_${code}_${type}`;
   }
 
-  private async saveOrderMatching(code: string, type: string, data: any) {
+  private async saveOrderMatching(code: string, type: number, data: any) {
     if (!(data?.data?.length > 0)) {
       throw new Error('Không có dữ liệu để save');
     }

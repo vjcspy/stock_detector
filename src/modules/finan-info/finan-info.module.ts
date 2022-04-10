@@ -53,7 +53,7 @@ import {
     ...FI_JOBS,
     ...FINAN_INFO_SERVICES,
   ],
-  exports: [TypeOrmModule],
+  exports: [TypeOrmModule, MongooseModule],
 })
 export class FinanInfoModule {
   constructor(

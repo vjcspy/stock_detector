@@ -16,24 +16,30 @@ export class JobSyncStatusService {
   ) {}
 
   async getStatus(k: string) {
-    return this.jobSyncStatusModel
-      .findOne({
+    const doc = await this.jobSyncStatusModel.findOne(
+      {
         k,
-      })
-      .lean();
+      },
+      undefined,
+      { strictQuery: 'throw' },
+    );
+
+    return doc;
   }
 
   async saveSuccessStatus(k: string, status: any) {
-    return this.jobSyncStatusModel.updateOne(
-      {
-        k,
-      },
-      status,
-      {
-        upsert: true,
-        strict: false,
-      },
-    );
+    return this.jobSyncStatusModel
+      .updateOne(
+        {
+          k,
+        },
+        status,
+        {
+          upsert: true,
+          strict: false,
+        },
+      )
+      .exec();
   }
 
   async saveErrorStatus(k: string, error: any) {
@@ -49,24 +55,26 @@ export class JobSyncStatusService {
         date: moment().toDate(),
       });
     } else {
-      return this.jobSyncStatusModel.updateOne(
-        {
-          k,
-        },
-        {
-          n: !isNaN(status?.n) ? ++status.n : 1,
-          e: error?.toString(),
-          s: false,
-          meta: {
-            error,
+      return this.jobSyncStatusModel
+        .updateOne(
+          {
+            k,
           },
-          date: moment().toDate(),
-        },
-        {
-          upsert: true,
-          strict: false,
-        },
-      );
+          {
+            n: !isNaN(status?.n) ? ++status.n : 1,
+            e: error?.toString(),
+            s: false,
+            meta: {
+              error,
+            },
+            date: moment().toDate(),
+          },
+          {
+            upsert: true,
+            strict: false,
+          },
+        )
+        .exec();
     }
   }
 
