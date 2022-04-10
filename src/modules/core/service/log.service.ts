@@ -53,6 +53,6 @@ export class LogService {
   }
 
   protected _s(text: string) {
-    return text ? '|' + text : '';
+    return typeof text !== 'undefined' ? '|' + text : '';
   }
 }

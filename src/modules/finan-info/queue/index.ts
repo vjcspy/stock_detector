@@ -9,6 +9,9 @@ import { SyncFinancialBSYearConsumer } from '@module/finan-info/queue/consumer/S
 import { SyncFinancialCFQuarterConsumer } from '@module/finan-info/queue/consumer/SyncFinancialCFQuarter.consumer';
 import { SyncFinancialCFYearConsumer } from '@module/finan-info/queue/consumer/SyncFinancialCFYear.consumer';
 import { SyncFinancialIndicatorQuarterConsumer } from '@module/finan-info/queue/consumer/SyncFinancialIndicatorQuarter.consumer';
+import { OrderMatchingHistoryConsumer } from '@module/finan-info/queue/order-matching/order-matching-history.consumer';
+import { OrderMatchingInvestorConsumer } from '@module/finan-info/queue/order-matching/order-matching-investor.consumer';
+import { OrderMatchingPublisher } from '@module/finan-info/queue/order-matching/order-matching.publisher';
 
 export const QUEUE_PROVIDES = [
   /* Sync price*/
@@ -30,4 +33,9 @@ export const QUEUE_PROVIDES = [
 
   SyncFinancialIndicatorQuarterConsumer,
   SyncFinancialIndicatorYearConsumer,
+
+  // ORDER MATCHING
+  OrderMatchingHistoryConsumer,
+  OrderMatchingInvestorConsumer,
+  OrderMatchingPublisher,
 ];

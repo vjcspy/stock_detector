@@ -24,4 +24,7 @@ export class FinancialInfoValues {
     'finan.info.sync-financial-info.cor.cash-flow.year';
   static PUBLISHER_ROUTING_KEY_CF_QUARTER =
     'finan.info.sync-financial-info.cor.cash-flow.quarter';
+
+  // Order matching
+  static ORDER_MATCHING_KEY = 'finan.info.sync-financial-info.order-matching';
 }

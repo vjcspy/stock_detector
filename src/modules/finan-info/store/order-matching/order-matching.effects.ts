@@ -372,6 +372,8 @@ export class SyncOrderMatchingEffects {
       date: {
         $gte: syncDate.toDate(),
       },
+      code,
+      type,
     });
 
     // save docs
