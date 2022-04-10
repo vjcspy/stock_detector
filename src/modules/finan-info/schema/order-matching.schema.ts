@@ -24,7 +24,6 @@ export class OrderMatching {
   @Prop({
     isRequired: true,
     type: mongoose.Schema.Types.Date,
-    default: Date.now,
     index: true,
   })
   date: Date;

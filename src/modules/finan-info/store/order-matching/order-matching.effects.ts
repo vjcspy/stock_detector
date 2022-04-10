@@ -14,7 +14,7 @@ import {
   OrderMatchingDocument,
   OrderMatchingType,
 } from '@module/finan-info/schema/order-matching.schema';
-import { catchError, EMPTY, from, map, mergeMap, of, switchMap } from 'rxjs';
+import { catchError, EMPTY, from, map, mergeMap, of } from 'rxjs';
 import { JobSyncStatusService } from '@module/finan-info/service/job-sync-status.service';
 import moment from 'moment';
 import { LogService } from '@module/core/service/log.service';
@@ -41,12 +41,11 @@ export class SyncOrderMatchingEffects {
       mergeMap((action) => {
         const { code, type, resolve } = action.payload;
 
-        const jobType = `om_${action.payload.type}`;
         this.jobSyncStatusService.saveInfo(this.getJobIdInfo(code, type), {
           resolve,
         });
         return from(
-          this.jobSyncStatusService.getStatus(action.payload.code, jobType),
+          this.jobSyncStatusService.getStatus(this.getJobIdInfo(code, type)),
         ).pipe(
           map((syncStatus) => {
             if (syncStatus) {
@@ -175,12 +174,12 @@ export class SyncOrderMatchingEffects {
                   group: 'sync_om',
                   group1: code,
                   group2: type,
-                  message: `[${action.payload.code}|${type}] Unknow Error`,
+                  message: `[${action.payload.code}|${type}] Unknown Error`,
                 });
                 return syncOrderMatching.ERROR({
                   code,
                   type,
-                  error: new Error('Unknow Error'),
+                  error: new Error('Unknown Error'),
                 });
               } else {
                 this.log.log({
@@ -205,66 +204,37 @@ export class SyncOrderMatchingEffects {
   );
 
   @Effect()
-  saveData = createEffect((action$) =>
+  saveData$ = createEffect((action$) =>
     action$.pipe(
       ofType(requestOrderMatchingPage.AFTER),
       mergeMap((action) => {
         const { code, type, page, data } = action.payload;
-        const documents = _.map(data.data, (meta) => {
-          return new this.orderMatchingModel({
-            code,
-            type,
-            meta,
-          });
-        });
 
-        return from(
-          this.orderMatchingModel.deleteMany({
-            date: {
-              $gt: moment().subtract(1, 'days').toDate(),
-            },
+        return from(this.saveOrderMatching(code, type, data)).pipe(
+          map(() => {
+            this.log.log({
+              source: 'fi',
+              group: 'sync_om',
+              group1: code,
+              group2: type,
+              message: `[${action.payload.code}|${type}] Save data OK`,
+            });
+            return saveOrderMatchingPage.AFTER({
+              code,
+              page,
+              type,
+            });
           }),
-        ).pipe(
-          switchMap((_dRes) => {
-            return from(this.orderMatchingModel.bulkSave(documents)).pipe(
-              map((res) => {
-                if (
-                  res?.result?.ok == 1 &&
-                  res?.result?.writeErrors?.length === 0
-                ) {
-                  this.log.log({
-                    source: 'fi',
-                    group: 'sync_om',
-                    group1: code,
-                    group2: type,
-                    message: `[${action.payload.code}|${type}] Save data OK`,
-                  });
-                  return saveOrderMatchingPage.AFTER({
-                    code,
-                    page,
-                    type,
-                  });
-                } else {
-                  this.log.log({
-                    level: Levels.error,
-                    source: 'fi',
-                    group: 'sync_om',
-                    group1: code,
-                    group2: type,
-                    message: `[${action.payload.code}|${type}] Save data error`,
-                    metadata: res,
-                  });
-                  return saveOrderMatchingPage.ERROR({
-                    code,
-                    page,
-                    type,
-                  });
-                }
-              }),
-            );
-          }),
-          catchError((error) =>
-            from(
+          catchError((error: any) => {
+            this.log.log({
+              level: Levels.error,
+              source: 'fi',
+              group: 'sync_om',
+              group1: code,
+              group2: type,
+              message: `[${action.payload.code}|${type}] ${error?.toString()}`,
+            });
+            return from(
               of(
                 syncOrderMatching.ERROR({
                   code,
@@ -272,8 +242,8 @@ export class SyncOrderMatchingEffects {
                   error,
                 }),
               ),
-            ),
-          ),
+            );
+          }),
         );
       }),
     ),
@@ -291,6 +261,13 @@ export class SyncOrderMatchingEffects {
 
         if (info && typeof info?.meta?.resolve === 'function') {
           info.meta.resolve();
+          this.log.log({
+            source: 'fi',
+            group: 'sync_om',
+            group1: code,
+            group2: type,
+            message: `_________ [${action.payload.code}|${type}] DONE _________`,
+          });
         } else {
           this.log.log({
             level: Levels.error,
@@ -315,38 +292,108 @@ export class SyncOrderMatchingEffects {
         saveOrderMatchingPage.ERROR,
         requestOrderMatchingPage.ERROR,
       ),
-      map((action) => {
-        const { code, type } = action.payload;
+      mergeMap((action) => {
+        const { code, type, error } = action.payload;
         const info = this.jobSyncStatusService.getInfo(
           this.getJobIdInfo(code, type),
         );
 
-        if (info && typeof info?.meta?.resolve === 'function') {
-          this.log.log({
-            source: 'fi',
-            group: 'sync_om',
-            group1: code,
-            group2: type,
-            message: `[${action.payload.code}|${type}] RETRY`,
-          });
-          info.meta.resolve(new Nack(true));
-        } else {
-          this.log.log({
-            level: Levels.error,
-            source: 'fi',
-            group: 'sync_om',
-            group1: code,
-            group2: type,
-            message: `[${action.payload.code}|${type}] COULD NOT NACK QUEUE, NOT FOUND INFO`,
-          });
-        }
+        return from(
+          this.jobSyncStatusService.saveErrorStatus(
+            this.getJobIdInfo(code, type),
+            error,
+          ),
+        ).pipe(
+          map(() => {
+            if (info && typeof info?.meta?.resolve === 'function') {
+              this.log.log({
+                source: 'fi',
+                group: 'sync_om',
+                group1: code,
+                group2: type,
+                message: `[${action.payload.code}|${type}] RETRY`,
+              });
+              info.meta.resolve(new Nack(true));
+            } else {
+              this.log.log({
+                level: Levels.error,
+                source: 'fi',
+                group: 'sync_om',
+                group1: code,
+                group2: type,
+                message: `[${action.payload.code}|${type}] COULD NOT NACK QUEUE, NOT FOUND INFO`,
+              });
+            }
 
-        return EMPTY;
+            return EMPTY;
+          }),
+          catchError((e) => {
+            this.log.log({
+              level: Levels.error,
+              source: 'fi',
+              group: 'sync_om',
+              group1: code,
+              group2: type,
+              message: `[${
+                action.payload.code
+              }|${type}] Không thể xử lý lỗi ${e?.toString()}`,
+            });
+            return from(of(EMPTY));
+          }),
+        );
       }),
     ),
   );
 
   private getJobIdInfo(code, type) {
     return `sync_om_${code}_${type}`;
+  }
+
+  private async saveOrderMatching(code: string, type: string, data: any) {
+    if (!(data?.data?.length > 0)) {
+      throw new Error('Không có dữ liệu để save');
+    }
+    const _day = data.d;
+
+    if (typeof _day !== 'string') {
+      throw new Error('Dữ liệu trả về bị lỗi');
+    }
+    const syncDate = moment(`${moment().year()}/${_day}`, 'YYYY/DD/MM');
+    const docs = _.map(data.data, (meta) => {
+      return new this.orderMatchingModel({
+        code,
+        type,
+        meta,
+        date: syncDate.toDate(),
+      });
+    });
+
+    // Xoá các bản ghi của ngày hôm đó
+    await this.orderMatchingModel.deleteMany({
+      date: {
+        $gte: syncDate.toDate(),
+      },
+    });
+
+    // save docs
+    const _saveRes = await this.orderMatchingModel.bulkSave(docs);
+
+    if (
+      _saveRes?.result?.ok == 1 &&
+      _saveRes?.result?.writeErrors?.length === 0
+    ) {
+    } else {
+      throw new Error('Error save data');
+    }
+
+    await this.jobSyncStatusService.saveSuccessStatus(
+      this.getJobIdInfo(code, type),
+      {
+        k: this.getJobIdInfo(code, type),
+        s: true,
+        date: moment().toDate(),
+        meta: null,
+      },
+    );
   }
 }
