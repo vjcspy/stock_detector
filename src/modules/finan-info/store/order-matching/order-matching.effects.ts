@@ -49,14 +49,14 @@ export class SyncOrderMatchingEffects {
         });
         return from(this.jobSyncStatusService.getStatus(syncStatusKey)).pipe(
           map((syncStatus) => {
+            this.log.log({
+              source: 'fi',
+              group: 'sync_om',
+              group1: code,
+              group2: type,
+              message: `_________ [${action.payload.code}|${type}] START _________`,
+            });
             if (syncStatus && !force) {
-              this.log.log({
-                source: 'fi',
-                group: 'sync_om',
-                group1: code,
-                group2: type,
-                message: `_________ [${action.payload.code}|${type}] START _________`,
-              });
               // check current date
               const date = moment(syncStatus.date);
               const curDate = moment();
