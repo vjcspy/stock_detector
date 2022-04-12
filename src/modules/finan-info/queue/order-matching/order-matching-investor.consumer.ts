@@ -9,7 +9,7 @@ export class OrderMatchingInvestorConsumer {
   @RabbitSubscribe({
     exchange: FinancialInfoValues.EXCHANGE_KEY,
     routingKey: FinancialInfoValues.ORDER_MATCHING_KEY,
-    queue: FinancialInfoValues.ORDER_MATCHING_KEY + '_QUEUE',
+    queue: FinancialInfoValues.ORDER_MATCHING_KEY + '_INVESTOR_QUEUE',
     queueOptions: {
       durable: true,
     },

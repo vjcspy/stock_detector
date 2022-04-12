@@ -20,7 +20,6 @@ import moment from 'moment';
 import { LogService } from '@module/core/service/log.service';
 import { HttpService } from '@nestjs/axios';
 import { Levels } from '@module/core/schemas/log-db.schema';
-import _ from 'lodash';
 import { Nack } from '@golevelup/nestjs-rabbitmq';
 
 @Injectable()
@@ -144,9 +143,11 @@ export class SyncOrderMatchingEffects {
                   group2: type,
                   message: `[${action.payload.code}|${type}] Không có dữ liệu giao dịch ${page}`,
                 });
-                return syncOrderMatching.AFTER({
+                return requestOrderMatchingPage.AFTER({
                   code,
+                  page,
                   type,
+                  data: res.data,
                 });
               }
 
@@ -365,15 +366,17 @@ export class SyncOrderMatchingEffects {
   }
 
   private async saveOrderMatching(code: string, type: number, data: any) {
-    if (!(data?.data?.length > 0)) {
-      throw new Error('Không có dữ liệu để save');
+    let syncDate = moment().startOf('day');
+    if (Array.isArray(data.data) && data.data.length > 0) {
+      const _day = data.d;
+      if (typeof _day !== 'string') {
+        throw new Error(
+          'Dữ liệu trả về bị lỗi, không parse được ngày hiện tại',
+        );
+      }
+      syncDate = moment.utc(`${moment().year()}/${_day}`, 'YYYY/DD/MM');
     }
-    const _day = data.d;
 
-    if (typeof _day !== 'string') {
-      throw new Error('Dữ liệu trả về bị lỗi, không parse được ngày hiện tại');
-    }
-    const syncDate = moment.utc(`${moment().year()}/${_day}`, 'YYYY/DD/MM');
     // Xoá các bản ghi của ngày hôm đó
     await this.orderMatchingModel.deleteMany({
       date: {
