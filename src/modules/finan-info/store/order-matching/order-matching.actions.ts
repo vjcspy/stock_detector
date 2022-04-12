@@ -7,6 +7,7 @@ export const syncOrderMatching = generateAction<
     code: string;
     type: OrderMatchingType;
     resolve?: any;
+    force?: boolean;
   },
   { code: string; type: OrderMatchingType },
   { code: string; type: OrderMatchingType; error: any }

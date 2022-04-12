@@ -42,7 +42,7 @@ export class SyncOrderMatchingEffects {
     action$.pipe(
       ofType(syncOrderMatching.ACTION),
       mergeMap((action) => {
-        const { code, type, resolve } = action.payload;
+        const { code, type, resolve, force = false } = action.payload;
         const syncStatusKey = this.getJobIdInfo(code, type);
 
         this.jobSyncStatusService.saveInfo(syncStatusKey, {
@@ -50,7 +50,7 @@ export class SyncOrderMatchingEffects {
         });
         return from(this.jobSyncStatusService.getStatus(syncStatusKey)).pipe(
           map((syncStatus) => {
-            if (syncStatus) {
+            if (syncStatus && !force) {
               this.log.log({
                 source: 'fi',
                 group: 'sync_om',
