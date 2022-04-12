@@ -21,6 +21,7 @@ export class OrderMatchingInvestorConsumer {
           syncOrderMatching.ACTION({
             code: msg,
             type: OrderMatchingType.INVESTOR,
+            force: true,
             resolve,
           }),
         );

@@ -18,7 +18,6 @@ import { catchError, EMPTY, from, map, mergeMap, of } from 'rxjs';
 import { JobSyncStatusService } from '@module/finan-info/service/job-sync-status.service';
 import moment from 'moment';
 import { LogService } from '@module/core/service/log.service';
-import { filter } from 'rxjs/operators';
 import { HttpService } from '@nestjs/axios';
 import { Levels } from '@module/core/schemas/log-db.schema';
 import _ from 'lodash';
@@ -137,7 +136,7 @@ export class SyncOrderMatchingEffects {
 
             if (Array.isArray(res.data.data)) {
               const total = res?.data?.total;
-              if (res.data.data.length === 0 || total === 0) {
+              if (total === 0 || res.data.data.length === 0) {
                 this.log.log({
                   source: 'fi',
                   group: 'sync_om',
@@ -164,6 +163,23 @@ export class SyncOrderMatchingEffects {
                   page,
                   type,
                   data: res.data,
+                });
+              } else if (total > res?.data?.size) {
+                this.log.log({
+                  level: Levels.error,
+                  source: 'fi',
+                  group: 'sync_om',
+                  group1: code,
+                  group2: type,
+                  message: `[${action.payload.code}|${type}] Số lượng bản ghi nhiều hơn page size`,
+                });
+
+                return syncOrderMatching.ERROR({
+                  code,
+                  type,
+                  error: new Error(
+                    'Số lượng bản ghi nhiều hơn page size, không hỗ trợ nhiều page',
+                  ),
                 });
               }
 
@@ -355,18 +371,9 @@ export class SyncOrderMatchingEffects {
     const _day = data.d;
 
     if (typeof _day !== 'string') {
-      throw new Error('Dữ liệu trả về bị lỗi');
+      throw new Error('Dữ liệu trả về bị lỗi, không parse được ngày hiện tại');
     }
-    const syncDate = moment(`${moment().year()}/${_day}`, 'YYYY/DD/MM');
-    const docs = _.map(data.data, (meta) => {
-      return new this.orderMatchingModel({
-        code,
-        type,
-        meta,
-        date: syncDate.toDate(),
-      });
-    });
-
+    const syncDate = moment.utc(`${moment().year()}/${_day}`, 'YYYY/DD/MM');
     // Xoá các bản ghi của ngày hôm đó
     await this.orderMatchingModel.deleteMany({
       date: {
@@ -377,12 +384,14 @@ export class SyncOrderMatchingEffects {
     });
 
     // save docs
-    const _saveRes = await this.orderMatchingModel.bulkSave(docs);
+    const _saveRes = await this.orderMatchingModel.create({
+      code,
+      type,
+      date: syncDate.toDate(),
+      meta: data,
+    });
 
-    if (
-      _saveRes?.result?.ok == 1 &&
-      _saveRes?.result?.writeErrors?.length === 0
-    ) {
+    if (_saveRes?._id) {
     } else {
       throw new Error('Error save data');
     }

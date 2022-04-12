@@ -21,6 +21,7 @@ export class OrderMatchingHistoryConsumer {
           syncOrderMatching.ACTION({
             code: msg,
             type: OrderMatchingType.HISTORY,
+            force: true,
             resolve,
           }),
         );
