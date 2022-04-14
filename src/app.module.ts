@@ -8,7 +8,7 @@ import { ConfigService } from '@nestjs/config';
 import databaseCfg from '@cfg/database.cfg';
 import { ScheduleModule } from '@nestjs/schedule';
 import { MongooseModule } from '@nestjs/mongoose';
-import { FinanAnalysisModule } from './modules/finan-analysis/finan-analysis.module';
+import { FinanAnalysisModule } from '@module/finan-analysis/finan-analysis.module';
 import mongoCfg from '@cfg/mongo.cfg';
 
 @Module({
@@ -27,7 +27,7 @@ import mongoCfg from '@cfg/mongo.cfg';
     MongooseModule.forRoot(
       `mongodb://${mongoCfg().user}:${mongoCfg().pass}@${mongoCfg().host}:${
         mongoCfg().port
-      }`,
+      }/nstock`,
       {
         dbName: 'nstock',
       },
@@ -43,11 +43,5 @@ export class AppModule {
   private readonly logger = new Logger('Application');
   constructor(private configService: ConfigService) {
     this.logger.log('App version: ', this.configService.get('APP_VERSION'));
-    this.logger.log(
-      'mongourl: ',
-      `mongodb://${mongoCfg().user}:${mongoCfg().pass}@${mongoCfg().host}:${
-        mongoCfg().port
-      }`,
-    );
   }
 }
