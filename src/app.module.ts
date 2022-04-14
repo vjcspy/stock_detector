@@ -43,5 +43,11 @@ export class AppModule {
   private readonly logger = new Logger('Application');
   constructor(private configService: ConfigService) {
     this.logger.log('App version: ', this.configService.get('APP_VERSION'));
+    this.logger.log(
+      'mongourl: ',
+      `mongodb://${mongoCfg().user}:${mongoCfg().pass}@${mongoCfg().host}:${
+        mongoCfg().port
+      }`,
+    );
   }
 }
