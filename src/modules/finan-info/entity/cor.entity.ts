@@ -54,8 +54,10 @@ export class CorEntity {
     let firstTradeDate = null;
     const reTime = new RegExp('(/Date\\()(.*)(\\)/)');
     const _r: any = reTime.exec(vsData['FirstTradeDate']);
-    if (_r.length === 4 && !isNaN(_r[2])) {
+    if (_r?.length === 4 && !isNaN(_r[2])) {
       firstTradeDate = new Date(parseInt(_r[2]));
+    } else {
+      console.log(`Cổ phiếu ${vsData['Code']} không có dữ liệu firstTradeDate`);
     }
     return {
       refId: vsData['ID'],
