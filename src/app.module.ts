@@ -22,7 +22,7 @@ import mongoCfg from '@cfg/mongo.cfg';
       password: databaseCfg().pass,
       database: 'nstock',
       autoLoadEntities: true,
-      synchronize: true,
+      synchronize: false,
     }),
     MongooseModule.forRoot(
       `mongodb://${mongoCfg().user}:${mongoCfg().pass}@${mongoCfg().host}:${
