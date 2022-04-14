@@ -11,11 +11,6 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { FinanAnalysisModule } from './modules/finan-analysis/finan-analysis.module';
 import mongoCfg from '@cfg/mongo.cfg';
 
-console.log(
-  `mongodb://${mongoCfg().user}:${mongoCfg().pass}@${mongoCfg().host}:${
-    mongoCfg().port
-  }`,
-);
 @Module({
   imports: [
     ScheduleModule.forRoot(),
