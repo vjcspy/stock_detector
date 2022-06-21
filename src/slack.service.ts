@@ -20,7 +20,37 @@ export class SlackService {
     this.boltApp.event('app_mention', this.onAppMention.bind(this));
     this.boltApp.message('hello', async ({ message, say }) => {
       // say() sends a message to the channel where the event was triggered
-      await say(`Hey there!`);
+      let user = 'X';
+      if ('user' in message) {
+        user = message.user;
+      }
+
+      await say({
+        blocks: [
+          {
+            type: 'section',
+            text: {
+              type: 'mrkdwn',
+              text: `Hey there <@${user}>!`,
+            },
+            accessory: {
+              type: 'button',
+              text: {
+                type: 'plain_text',
+                text: 'Click Me',
+              },
+              action_id: 'button_click',
+            },
+          },
+        ],
+        text: `Hey there <@${user}>!`,
+      });
+    });
+
+    this.boltApp.action('button_click', async ({ body, ack, say }) => {
+      // Acknowledge the action
+      await ack();
+      await say(`<@${body.user.id}> clicked the button`);
     });
   }
 
