@@ -1,4 +1,4 @@
-import { App, ExpressReceiver } from '@slack/bolt';
+import { App, ExpressReceiver, LogLevel } from '@slack/bolt';
 import { Application } from 'express';
 
 export class SlackService {
@@ -14,6 +14,7 @@ export class SlackService {
     this.boltApp = new App({
       token: process.env.SLACK_BOT_TOKEN,
       receiver: this.receiver,
+      logLevel: LogLevel.DEBUG,
     });
 
     this.boltApp.event('app_mention', this.onAppMention.bind(this));
