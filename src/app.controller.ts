@@ -18,14 +18,7 @@ export class AppController {
 
   @Get()
   async index() {
-    console.log('here');
-    const jobResult = new this.jobResultModel({
-      jobKey: 'from_nest',
-      result: {
-        is_ok: true,
-      },
-    });
-    jobResult.save();
+    console.log('index');
   }
 
   @Get('/bctc')
