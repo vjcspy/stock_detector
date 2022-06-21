@@ -10,6 +10,7 @@ import { ScheduleModule } from '@nestjs/schedule';
 import { MongooseModule } from '@nestjs/mongoose';
 import { FinanAnalysisModule } from '@module/finan-analysis/finan-analysis.module';
 import mongoCfg from '@cfg/mongo.cfg';
+import { SlackService } from './slack.service';
 
 @Module({
   imports: [
@@ -37,7 +38,7 @@ import mongoCfg from '@cfg/mongo.cfg';
     FinanAnalysisModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, SlackService],
 })
 export class AppModule {
   private readonly logger = new Logger('Application');

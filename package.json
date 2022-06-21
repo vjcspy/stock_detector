@@ -33,6 +33,7 @@
       "@nestjs/schedule": "^1.0.2",
       "@nestjs/typeorm": "^8.0.3",
       "@reduxjs/toolkit": "^1.8.0",
+      "@slack/bolt": "^3.11.3",
       "immutable": "^4.0.0",
       "json-stringify-safe": "^5.0.1",
       "moment": "^2.29.1",
