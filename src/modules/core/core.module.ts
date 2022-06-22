@@ -28,6 +28,12 @@ import { SlackService } from '@module/core/service/slack.service';
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
+      envFilePath: [
+        '.env.production',
+        '.env.development.local',
+        '.env.development',
+        '.env',
+      ],
       load: [rabbitmqCfg, databaseCfg, slackCfg],
     }),
     MongooseModule.forFeature([

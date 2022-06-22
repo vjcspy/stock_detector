@@ -8,3 +8,6 @@ docker_data/
 logs/
 
 .env
+.env.development.local
+.env.development
+.env.production
