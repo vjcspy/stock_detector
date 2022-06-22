@@ -43,7 +43,7 @@ export class AppModule {
   private readonly logger = new Logger('Application');
   constructor(private configService: ConfigService) {
     this.logger.log(
-      `App version: ${this.configService.get(
+      `[${process.env.INSTANCE_ID}]App version: ${this.configService.get(
         'APP_VERSION',
       )}, Running on PORT: ${this.configService.get('PORT')}`,
     );

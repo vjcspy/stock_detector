@@ -3,6 +3,10 @@ import mongoose, { Document } from 'mongoose';
 
 export type OrderMatchingDocument = OrderMatching & Document;
 
+/*
+ * Có 2 kiểu là lấy theo lịch sử,
+ * hoặc là phân loại theo nhà đầu tư, hay ho ở chỗ là techcombank nó group các lệnh theo người đặt
+ * */
 export enum OrderMatchingType {
   HISTORY = 0,
   INVESTOR = 1,

@@ -2,12 +2,15 @@ import { Injectable } from '@nestjs/common';
 import { Cron } from '@nestjs/schedule';
 import { LogService } from '@module/core/service/log.service';
 import { OrderMatchingPublisher } from '@module/finan-info/queue/order-matching/order-matching.publisher';
+import { SLACK_CHANNEL } from '@cfg/slack.cfg';
+import { SlackService } from '@module/core/service/slack.service';
 
 @Injectable()
 export class SyncOmJob {
   constructor(
     private orderMatchingPublisher: OrderMatchingPublisher,
     private log: LogService,
+    private slackService: SlackService,
   ) {}
 
   /*
@@ -18,6 +21,11 @@ export class SyncOmJob {
     timeZone: 'Asia/Ho_Chi_Minh',
   })
   sync1() {
+    if (process.env.INSTANCE_ID !== '0') return;
+
+    this.slackService.postMessage(SLACK_CHANNEL.GENERAL_CHIAKI_BOT_CHANNEL, {
+      text: 'Trigger sync order matching',
+    });
     this.log.log({
       source: 'cron',
       group: 'fi',
@@ -33,6 +41,10 @@ export class SyncOmJob {
     timeZone: 'Asia/Ho_Chi_Minh',
   })
   sync2() {
+    if (process.env.INSTANCE_ID !== '0') return;
+    this.slackService.postMessage(SLACK_CHANNEL.GENERAL_CHIAKI_BOT_CHANNEL, {
+      text: 'Trigger sync order matching',
+    });
     this.log.log({
       source: 'cron',
       group: 'fi',

@@ -131,7 +131,9 @@ export class SlackService {
           channel: registeredChannel?.id,
           ...messageOptions,
         });
-      } catch (e) {}
+      } catch (e) {
+        this.logger.error(`Error Post message to channel ${channelName}`, e);
+      }
     } else {
       this.logger.error('Could not post message to unregistered channel');
     }

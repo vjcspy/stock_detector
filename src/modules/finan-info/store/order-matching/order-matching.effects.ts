@@ -21,6 +21,8 @@ import { LogService } from '@module/core/service/log.service';
 import { HttpService } from '@nestjs/axios';
 import { Levels } from '@module/core/schemas/log-db.schema';
 import { Nack } from '@golevelup/nestjs-rabbitmq';
+import { SlackService } from '@module/core/service/slack.service';
+import { SLACK_CHANNEL } from '@cfg/slack.cfg';
 
 @Injectable()
 export class SyncOrderMatchingEffects {
@@ -33,6 +35,7 @@ export class SyncOrderMatchingEffects {
     private readonly jobSyncStatusService: JobSyncStatusService,
     private log: LogService,
     private httpService: HttpService,
+    private slackService: SlackService,
   ) {}
 
   @Effect()
@@ -55,6 +58,8 @@ export class SyncOrderMatchingEffects {
               group2: type,
               message: `_________ [${action.payload.code}|${type}] START _________`,
             });
+
+            //TODO: not appropriate
             if (syncStatus && !force) {
               // check current date
               const date = moment(syncStatus.date);
@@ -313,6 +318,10 @@ export class SyncOrderMatchingEffects {
         const info = this.jobSyncStatusService.getInfo(
           this.getJobIdInfo(code, type),
         );
+
+        this.slackService.postMessage(SLACK_CHANNEL.JOB_MONITORING_OM, {
+          text: `sync om error code|type ${code}|${type} `,
+        });
 
         return from(
           this.jobSyncStatusService.saveErrorStatus(
