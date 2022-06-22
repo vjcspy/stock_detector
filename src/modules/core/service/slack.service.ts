@@ -1,13 +1,20 @@
 import { App, ExpressReceiver, LogLevel } from '@slack/bolt';
 import { Application } from 'express';
 import WebClient from '@slack/web-api/dist/WebClient';
+import { Injectable, Logger } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import _ from 'lodash';
 
+@Injectable()
 export class SlackService {
+  private readonly logger = new Logger('SlackService');
   private boltApp: App;
   private readonly receiver: ExpressReceiver;
   private boltClient: WebClient;
 
-  constructor() {
+  protected channels: any[] = [];
+
+  constructor(private readonly configService: ConfigService) {
     this.receiver = new ExpressReceiver({
       signingSecret: process.env.SLACK_SIGNING_SECRET,
       endpoints: '/',
@@ -56,8 +63,6 @@ export class SlackService {
       await ack();
       await say(`<@${body.user.id}> clicked the button`);
     });
-
-    this.listenInitDefaultChannel();
   }
 
   public async onAppMention({ event, client, logger }) {
@@ -72,53 +77,63 @@ export class SlackService {
     return this.receiver.app;
   }
 
-  private listenInitDefaultChannel() {
-    this.boltApp.message('init channel', async ({ message, say }) => {
-      // say() sends a message to the channel where the event was triggered
-      let user = 'X';
-      if ('user' in message) {
-        user = message.user;
+  async getAllChannel(): Promise<any[]> {
+    try {
+      const result = await this.boltClient.conversations.list();
+
+      return Array.isArray(result.channels) ? result.channels : [];
+    } catch (e) {
+      this.logger.error('get slack channel error');
+      return [];
+    }
+  }
+
+  async registerChannels() {
+    const channels = await this.getAllChannel();
+    const expectedChannels = this.configService.get('slack.channels') ?? [];
+    const channelsNeedCreate = _.filter(expectedChannels, (_ec: string) => {
+      const channel = channels.find((_cc) => _cc?.name === _ec);
+
+      if (channel) {
+        this.channels.push(channel);
       }
 
-      await say({
-        blocks: [
-          {
-            type: 'section',
-            text: {
-              type: 'mrkdwn',
-              text: `Hey there <@${user}>!, Are you sure to init channel?`,
-            },
-            accessory: {
-              type: 'button',
-              text: {
-                type: 'plain_text',
-                text: 'Click Me',
-              },
-              action_id: 'button_init_channel_click',
-            },
-          },
-        ],
-        text: `Hey there <@${user}>!, Are you sure to init channel?`,
-      });
+      return !channel;
     });
-
-    this.boltApp.action(
-      'button_init_channel_click',
-      async ({ body, ack, say }) => {
-        // Acknowledge the action
-        await ack();
-        await say(`<@${body.user.id}> clicked the button init channel`);
+    try {
+      for (let i = 0; i < channelsNeedCreate.length; i++) {
         const result = await this.boltClient.conversations.create({
-          name: 'general-chiaki-bot-channel',
+          name: channelsNeedCreate[i],
         });
-        console.log('result create general channel', result);
+
         if (result?.channel?.id) {
-          await this.boltClient.chat.postMessage({
-            channel: result?.channel?.id,
-            text: 'Hello world',
-          });
+          this.channels.push(result.channel);
         }
-      },
+      }
+    } catch (e) {
+      this.logger.error('create channel error', e);
+    }
+
+    this.logger.log('Register slack channels successfully');
+    this.postMessage('general-chiaki-bot-channel', {
+      text: `Chiaki server[${process.env.INSTANCE_ID}] boot successfully`,
+    });
+  }
+
+  async postMessage(channelName: string, messageOptions: any) {
+    const registeredChannel = _.find(
+      this.channels,
+      (_rc) => _rc?.name === channelName,
     );
+    if (registeredChannel && registeredChannel?.id) {
+      try {
+        await this.boltClient.chat.postMessage({
+          channel: registeredChannel?.id,
+          ...messageOptions,
+        });
+      } catch (e) {}
+    } else {
+      this.logger.error('Could not post message to unregistered channel');
+    }
   }
 }

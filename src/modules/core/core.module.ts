@@ -20,12 +20,15 @@ import { StockPriceValues } from '@module/finan-info/store/stock-price/stock-pri
 import { FinancialInfoValues } from '@module/finan-info/store/financial-info/financial-info.values';
 import rabbitmq from '@cfg/rabbitmq.cfg';
 import { FinanAnalysisQueueValue } from '@module/finan-analysis/values/finan-analysis-queue.value';
+import { CORE_SERVICES } from '@module/core/service';
+import slackCfg from '@cfg/slack.cfg';
+import { SlackService } from '@module/core/service/slack.service';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      load: [rabbitmqCfg, databaseCfg],
+      load: [rabbitmqCfg, databaseCfg, slackCfg],
     }),
     MongooseModule.forFeature([
       {
@@ -69,9 +72,9 @@ import { FinanAnalysisQueueValue } from '@module/finan-analysis/values/finan-ana
           },
         },
       ],
-      uri: `amqp://${rabbitmq().user}:${rabbitmq().pass}@${rabbitmq().host}:${
-        rabbitmq().port
-      }`,
+      uri: `amqp://${rabbitmq().rabbitmq.user}:${rabbitmq().rabbitmq.pass}@${
+        rabbitmq().rabbitmq.host
+      }:${rabbitmq().rabbitmq.port}`,
       channels: {
         'nstock.channel-1': {
           prefetchCount: 1,
@@ -80,7 +83,7 @@ import { FinanAnalysisQueueValue } from '@module/finan-analysis/values/finan-ana
       },
     }),
   ],
-  providers: [StateManager, FileLogger, LogService, CoreEffects],
+  providers: [...CORE_SERVICES, StateManager, FileLogger, CoreEffects],
   exports: [
     StateManager,
     HttpModule,
@@ -88,14 +91,20 @@ import { FinanAnalysisQueueValue } from '@module/finan-analysis/values/finan-ana
     LogService,
     RabbitMQModule,
     MongooseModule,
+    ...CORE_SERVICES,
   ],
 })
 export class CoreModule {
   constructor(
     protected stateManager: StateManager,
     protected coreEffects: CoreEffects,
+    protected slackService: SlackService,
   ) {
     this.stateManager.addFeatureEffect('core', coreEffects);
     this.stateManager.getStore().dispatch(appInitAction.ACTION());
+  }
+
+  onModuleInit() {
+    this.slackService.registerChannels();
   }
 }

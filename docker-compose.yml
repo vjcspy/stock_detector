@@ -36,7 +36,7 @@ services:
       RABBITMQ_DEFAULT_PASS: 123456aA@
 
   mongo:
-    image: mongo:5.0.6
+    image: mongo:latest
     container_name: nstock-mongolog
     restart: always
     ports:
@@ -44,7 +44,7 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: root
-      MONGO_INITDB_DATABASE: nstocklog
+      MONGO_INITDB_DATABASE: nstock
     volumes:
       - ./docker_data/mongodb/mnesia/:/data/db
 

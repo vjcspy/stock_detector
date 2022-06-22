@@ -1,4 +1,4 @@
-import { Controller, Get } from '@nestjs/common';
+import { All, Controller, Get, Req } from '@nestjs/common';
 import { AppService } from './app.service';
 import { fetch } from '@module/core/util/fetch';
 import { InjectModel } from '@nestjs/mongoose';
@@ -7,6 +7,7 @@ import {
   JobResultDocument,
 } from '@module/core/schemas/job-result.schema';
 import { Model } from 'mongoose';
+import { Request } from 'express';
 
 @Controller()
 export class AppController {
@@ -19,6 +20,16 @@ export class AppController {
   @Get()
   async index() {
     console.log('index');
+  }
+
+  @All('/ping')
+  async test(@Req() request: Request) {
+    const { ip, method, originalUrl } = request;
+    return {
+      ip,
+      method,
+      originalUrl,
+    };
   }
 
   @Get('/bctc')

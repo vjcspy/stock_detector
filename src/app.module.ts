@@ -10,25 +10,24 @@ import { ScheduleModule } from '@nestjs/schedule';
 import { MongooseModule } from '@nestjs/mongoose';
 import { FinanAnalysisModule } from '@module/finan-analysis/finan-analysis.module';
 import mongoCfg from '@cfg/mongo.cfg';
-import { SlackService } from './slack.service';
 
 @Module({
   imports: [
     ScheduleModule.forRoot(),
     TypeOrmModule.forRoot({
       type: 'mysql',
-      host: databaseCfg().host,
-      port: databaseCfg().port,
-      username: databaseCfg().user,
-      password: databaseCfg().pass,
+      host: databaseCfg().defaultDatabase.host,
+      port: databaseCfg().defaultDatabase.port,
+      username: databaseCfg().defaultDatabase.user,
+      password: databaseCfg().defaultDatabase.pass,
       database: 'nstock',
       autoLoadEntities: true,
       synchronize: false,
     }),
     MongooseModule.forRoot(
-      `mongodb://${mongoCfg().user}:${mongoCfg().pass}@${mongoCfg().host}:${
-        mongoCfg().port
-      }/nstock`,
+      `mongodb://${mongoCfg().mongodb.user}:${mongoCfg().mongodb.pass}@${
+        mongoCfg().mongodb.host
+      }:${mongoCfg().mongodb.port}/nstock`,
       {
         dbName: 'nstock',
       },
@@ -38,11 +37,15 @@ import { SlackService } from './slack.service';
     FinanAnalysisModule,
   ],
   controllers: [AppController],
-  providers: [AppService, SlackService],
+  providers: [AppService],
 })
 export class AppModule {
   private readonly logger = new Logger('Application');
   constructor(private configService: ConfigService) {
-    this.logger.log('App version: ', this.configService.get('APP_VERSION'));
+    this.logger.log(
+      `App version: ${this.configService.get(
+        'APP_VERSION',
+      )}, Running on PORT: ${this.configService.get('PORT')}`,
+    );
   }
 }
