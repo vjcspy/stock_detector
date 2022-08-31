@@ -24,6 +24,7 @@ import {
   OrderMatching,
   OrderMatchingSchema,
 } from '@module/finan-info/schema/order-matching.schema';
+import { CorService } from '@module/finan-info/service/cor.service';
 
 @Module({
   imports: [
@@ -61,10 +62,15 @@ export class FinanInfoModule {
     private stockPriceState: StockPriceState,
     private financialIndicatorState: FinancialIndicatorState,
     private orderMatchingStateDeclaration: OrderMatchingStateDeclaration,
+    private corService: CorService,
   ) {
     this.corporationState.config();
     this.stockPriceState.config();
     this.financialIndicatorState.config();
     this.orderMatchingStateDeclaration.config();
+  }
+
+  onModuleInit() {
+    this.corService.initCor();
   }
 }

@@ -15,6 +15,7 @@ import mongoCfg from '@cfg/mongo.cfg';
   imports: [
     ScheduleModule.forRoot(),
     TypeOrmModule.forRoot({
+      name: 'default',
       type: 'mysql',
       host: databaseCfg().defaultDatabase.host,
       port: databaseCfg().defaultDatabase.port,
@@ -22,7 +23,7 @@ import mongoCfg from '@cfg/mongo.cfg';
       password: databaseCfg().defaultDatabase.pass,
       database: 'nstock',
       autoLoadEntities: true,
-      synchronize: false,
+      synchronize: true,
     }),
     MongooseModule.forRoot(
       `mongodb://${mongoCfg().mongodb.user}:${mongoCfg().mongodb.pass}@${

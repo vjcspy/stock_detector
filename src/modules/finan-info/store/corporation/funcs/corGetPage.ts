@@ -1,10 +1,10 @@
-import { getRepository } from 'typeorm';
 import {
   VietStockCrds,
   VietStockCredentialsInterface,
 } from '@module/finan-info/requests/vietstock/credentials';
 import { retrieveCor } from '@module/finan-info/requests/vietstock/corporate';
 import { CorEntity } from '@module/finan-info/entity/cor.entity';
+import { CorService } from '@module/finan-info/service/cor.service';
 
 export const corGetPageFn = async (
   page: number,
@@ -21,7 +21,7 @@ export const corGetPageFn = async (
       for (let i = 0; i < _aData.length; i++) {
         values.push(CorEntity.convertToCorObject(_aData[i]));
       }
-      const corRepo = getRepository(CorEntity);
+      const corRepo = CorService.corRepo;
 
       const _res = await corRepo.upsert(values, ['code']);
 

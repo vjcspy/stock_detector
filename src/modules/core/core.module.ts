@@ -115,10 +115,10 @@ export class CoreModule {
     protected slackService: SlackService,
   ) {
     this.stateManager.addFeatureEffect('core', coreEffects);
-    this.stateManager.getStore().dispatch(appInitAction.ACTION());
   }
 
   onModuleInit() {
+    this.stateManager.getStore().dispatch(appInitAction.ACTION());
     this.slackService.registerChannels();
   }
 }
