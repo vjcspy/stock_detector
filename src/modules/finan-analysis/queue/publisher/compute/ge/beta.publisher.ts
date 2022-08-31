@@ -101,10 +101,7 @@ export class BetaPublisher {
       },
       where: {
         code,
-        date: Between(
-          startTime.format('YYYY-MM-DD'),
-          endTime.format('YYYY-MM-DD'),
-        ),
+        date: Between(startTime.toDate(), endTime.toDate()),
       },
     });
   }

@@ -22,7 +22,9 @@ export class SectorService {
       id3 = name['industryName3'];
     }
     return this.corRepo.find({
-      industryName3: id3,
+      where: {
+        industryName3: id3,
+      },
     });
   }
 

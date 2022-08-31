@@ -3,6 +3,7 @@ import { AppModule } from './app.module';
 import { ConfigService } from '@nestjs/config';
 import { FileLogger } from '@module/core/provider/file-logger';
 import { SlackService } from '@module/core/service/slack.service';
+import { isDevelopment } from '@module/core/util/env';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
@@ -11,8 +12,10 @@ async function bootstrap() {
   const configService = app.get(ConfigService);
 
   // Config Slack
-  const slack = app.get(SlackService);
-  app.use('/slack/events', slack.use());
+  if (!isDevelopment()) {
+    const slack = app.get(SlackService);
+    app.use('/slack/events', slack.use());
+  }
 
   await app.listen(configService.get('PORT'));
 }
