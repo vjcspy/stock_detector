@@ -130,6 +130,10 @@ export class SlackService {
   }
 
   async postMessage(channelName: string, messageOptions: any) {
+    if (isDevelopment()) {
+      return;
+    }
+
     const registeredChannel = _.find(
       this.channels,
       (_rc) => _rc?.name === channelName,

@@ -19,15 +19,7 @@ export class StateManager {
   public static _storeInstance = configureStore({
     reducer: StateManager._storeManager.reduce,
     middleware: [...StateManager._storeManager.middleware()],
-    devTools:
-      process?.env?.NODE_ENV == 'production' ||
-      process?.env?.NEXT_PUBLIC_NODE_ENV == 'production'
-        ? false
-        : {
-            maxAge: 50,
-            trace: true,
-            traceLimit: 10,
-          },
+    devTools: false,
   });
 
   constructor() {

@@ -12,19 +12,17 @@ export class JobSyncStatusService {
   static INFOS: { id: string; meta: any }[] = [];
   constructor(
     @InjectModel(JobSyncStatus.name)
-    private jobSyncStatusModel: Model<JobSyncStatusDocument>,
+    public jobSyncStatusModel: Model<JobSyncStatusDocument>,
   ) {}
 
   async getStatus(k: string) {
-    const doc = await this.jobSyncStatusModel.findOne(
+    return this.jobSyncStatusModel.findOne(
       {
         k,
       },
       undefined,
       { strictQuery: 'throw' },
     );
-
-    return doc;
   }
 
   async saveSuccessStatus(k: string, status: any) {
