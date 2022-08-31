@@ -4,6 +4,7 @@ import WebClient from '@slack/web-api/dist/WebClient';
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import _ from 'lodash';
+import { isDevelopment } from '@module/core/util/env';
 
 @Injectable()
 export class SlackService {
@@ -15,6 +16,11 @@ export class SlackService {
   protected channels: any[] = [];
 
   constructor(private readonly configService: ConfigService) {
+    if (isDevelopment()) {
+      this.logger.log('Skip initialize slack in development');
+      return;
+    }
+
     this.receiver = new ExpressReceiver({
       signingSecret: process.env.SLACK_SIGNING_SECRET,
       endpoints: '/',
@@ -89,6 +95,9 @@ export class SlackService {
   }
 
   async registerChannels() {
+    if (isDevelopment()) {
+      return;
+    }
     const channels = await this.getAllChannel();
     const expectedChannels = this.configService.get('slack.channels') ?? [];
     const channelsNeedCreate = _.filter(expectedChannels, (_ec: string) => {
