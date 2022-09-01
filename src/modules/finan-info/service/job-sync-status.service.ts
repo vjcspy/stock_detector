@@ -92,4 +92,10 @@ export class JobSyncStatusService {
   getInfo(id: string) {
     return JobSyncStatusService.INFOS.find((_i) => _i.id === id);
   }
+
+  async clearWithPrefix(prefix: string) {
+    await this.jobSyncStatusModel.remove({
+      k: new RegExp(`^${prefix}`),
+    });
+  }
 }

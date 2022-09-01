@@ -23,6 +23,9 @@ export class CronSchedule {
 
   @Prop({ type: mongoose.Schema.Types.Date })
   finished_at: Date;
+
+  @Prop({ type: mongoose.Schema.Types.Mixed })
+  meta?: Record<string, any>;
 }
 
 export const CronScheduleSchema = SchemaFactory.createForClass(CronSchedule);

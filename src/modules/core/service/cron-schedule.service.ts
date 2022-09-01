@@ -12,26 +12,31 @@ import moment from 'moment';
 export class CronScheduleService {
   constructor(
     @InjectModel(CronSchedule.name)
-    public cronStatusModel: Model<CronScheduleDocument>,
+    public cronScheduleModel: Model<CronScheduleDocument>,
   ) {}
 
   async cronStart(jobCode: string) {
-    return this.cronStatusModel.create({
+    return this.cronScheduleModel.create({
       jobCode,
       status: CronScheduleStatus.PENDING,
       created_at: new Date(),
     });
   }
 
-  async cronSuccess(jobId: string) {
-    await this.cronStatusModel.findByIdAndUpdate(jobId, {
+  async cronSuccess(jobId: string, meta?: any) {
+    await this.cronScheduleModel.findByIdAndUpdate(jobId, {
       finished_at: new Date(),
       status: CronScheduleStatus.SUCCESS,
+      meta,
     });
   }
 
-  async runOneTimePerDay(jobCode: string, jobFn: () => Promise<void>) {
-    const i = await this.cronStatusModel.findOne({
+  async runOneTimePerDay(
+    jobCode: string,
+    jobFn: () => Promise<any>,
+    whenSuccess?: (doc: any) => Promise<any>,
+  ) {
+    const i = await this.cronScheduleModel.findOne({
       jobCode,
       created_at: {
         $gte: moment().hour(0).minute(0).second(0).toDate(),
@@ -43,8 +48,12 @@ export class CronScheduleService {
     if (!i) {
       const j = await this.cronStart(jobCode);
       if (j?._id) {
-        await jobFn();
-        await this.cronSuccess(j._id);
+        const meta = await jobFn();
+        await this.cronSuccess(j._id, meta);
+      }
+    } else {
+      if (typeof whenSuccess === 'function') {
+        await whenSuccess(i);
       }
     }
   }
