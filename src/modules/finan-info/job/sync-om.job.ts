@@ -74,7 +74,7 @@ export class SyncOmJob {
             s: true,
           });
 
-        if (ns === 2 * n) {
+        if (parseInt(n as any) !== 0 && ns === 2 * n) {
           const e = await this.jobSyncStatusService.jobSyncStatusModel.findOne(
             {
               k: new RegExp(`^sync_om_`),
