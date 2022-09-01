@@ -24,9 +24,9 @@ import { CORE_SERVICES } from '@module/core/service';
 import slackCfg from '@cfg/slack.cfg';
 import { SlackService } from '@module/core/service/slack.service';
 import {
-  CronStatus,
-  CronStatusSchema,
-} from '@module/core/schemas/cron-status.schema';
+  CronSchedule,
+  CronScheduleSchema,
+} from '@module/core/schemas/cron-schedule.schema';
 
 @Module({
   imports: [
@@ -50,8 +50,8 @@ import {
         schema: JobResultSchema,
       },
       {
-        name: CronStatus.name,
-        schema: CronStatusSchema,
+        name: CronSchedule.name,
+        schema: CronScheduleSchema,
       },
     ]),
     HttpModule,
