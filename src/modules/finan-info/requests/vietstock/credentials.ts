@@ -85,6 +85,7 @@ export class VietStockCredentials {
         cookies: cookies + '; ' + cookiesAfterLogin,
       };
     } catch (e) {
+      console.log(e);
       console.log('login error');
     }
 
