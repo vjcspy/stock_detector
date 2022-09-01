@@ -79,6 +79,7 @@ export class VietStockCredentials {
         body: `__RequestVerificationToken=${csrf}&Email=dinhkhoi.le05%40gmail.com&Password=536723&responseCaptchaLoginPopup=&g-recaptcha-response=&Remember=false&X-Requested-With=XMLHttpRequest`,
         method: 'POST',
       });
+      console.log('login vietstock res', await res.text());
       const cookiesAfterLogin = parseCookies(res);
 
       return {
