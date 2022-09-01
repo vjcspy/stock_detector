@@ -60,7 +60,7 @@ export class SyncOrderMatchingEffects {
             });
 
             //TODO: not appropriate
-            if (syncStatus && !force) {
+            if (syncStatus) {
               // check current date
               const date = moment(syncStatus.date);
               const curDate = moment();

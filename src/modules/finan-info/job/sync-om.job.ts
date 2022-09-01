@@ -5,9 +5,12 @@ import { OrderMatchingPublisher } from '@module/finan-info/queue/order-matching/
 import { SLACK_CHANNEL } from '@cfg/slack.cfg';
 import { SlackService } from '@module/core/service/slack.service';
 import { CronScheduleService } from '@module/core/service/cron-schedule.service';
+import { isFirstProcessPm2 } from '@module/core/util/env';
 
 @Injectable()
 export class SyncOmJob {
+  static SyncOmJob_CODE = 'fi_sync_price';
+
   constructor(
     private orderMatchingPublisher: OrderMatchingPublisher,
     private log: LogService,
@@ -16,25 +19,33 @@ export class SyncOmJob {
   ) {}
 
   /*
-   * 16h hằng ngày sẽ lấy thêm giá
+   * Từ 16h mỗi 15 phuts sẽ trigger lấy giá 1 lần, check chỉ run 1 lần trong ngày
    * */
-  @Cron('0 2 16 * * *', {
-    name: 'fi_sync_price',
+  @Cron('* */15 16-23 * * *', {
+    name: SyncOmJob.SyncOmJob_CODE,
     timeZone: 'Asia/Ho_Chi_Minh',
   })
-  sync1() {
-    if (process.env.INSTANCE_ID !== '0') return;
+  sync() {
+    this.cronScheduleService.runOneTimePerDay(
+      SyncOmJob.SyncOmJob_CODE,
+      async () => {
+        if (!isFirstProcessPm2()) return;
 
-    this.slackService.postMessage(SLACK_CHANNEL.GENERAL_CHIAKI_BOT_CHANNEL, {
-      text: 'Trigger sync order matching',
-    });
-    this.log.log({
-      source: 'cron',
-      group: 'fi',
-      group1: 'sync_om',
-      message: 'Trigger sync order matching',
-    });
+        await this.slackService.postMessage(
+          SLACK_CHANNEL.GENERAL_CHIAKI_BOT_CHANNEL,
+          {
+            text: 'Trigger sync order matching',
+          },
+        );
+        await this.log.log({
+          source: 'cron',
+          group: 'fi',
+          group1: 'sync_om',
+          message: 'Trigger sync order matching',
+        });
 
-    this.orderMatchingPublisher.publish();
+        await this.orderMatchingPublisher.publish();
+      },
+    );
   }
 }

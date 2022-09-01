@@ -55,6 +55,8 @@ import {
       },
     ]),
     HttpModule,
+
+    // TODO: phải config ở các module khác, chứ không phải ở core =))
     RabbitMQModule.forRoot(RabbitMQModule, {
       exchanges: [
         {
