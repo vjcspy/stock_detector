@@ -1,0 +1,4 @@
+build
+node_modules
+docker_data
+python
