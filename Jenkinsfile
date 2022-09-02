@@ -27,7 +27,7 @@ pipeline {
         stage('Deploy') {
             steps {
                 script {
-                    docker.withRegistry('https://196761233825.dkr.ecr.ap-southeast-1.amazonaws.com/ns', 'ggg-aws-credentials') {
+                    docker.withRegistry('https://196761233825.dkr.ecr.ap-southeast-1.amazonaws.com/ns', 'ecr:ap-southeast-1:ggg-aws-credentials') {
                         app.push("${env.BUILD_NUMBER}")
                         app.push('latest')
                     }
