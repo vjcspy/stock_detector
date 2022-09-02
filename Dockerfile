@@ -5,7 +5,7 @@ WORKDIR /app
 # Copying the files of the root directory into the base directory
 ADD . /app
 # Installing the project dependencies
-RUN yarn install
+RUN npm install
 RUN npm install pm2 -g
 RUN yarn run build
 # Starting the pm2 process and keeping the docker container alive
