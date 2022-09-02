@@ -27,6 +27,7 @@ import {
   CronSchedule,
   CronScheduleSchema,
 } from '@module/core/schemas/cron-schedule.schema';
+import { HealthController } from './controller/health.controller';
 
 @Module({
   imports: [
@@ -109,6 +110,7 @@ import {
     MongooseModule,
     ...CORE_SERVICES,
   ],
+  controllers: [HealthController],
 })
 export class CoreModule {
   constructor(
