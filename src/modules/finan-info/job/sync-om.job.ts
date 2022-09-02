@@ -28,16 +28,16 @@ export class SyncOmJob {
   /*
    * Từ 16h mỗi 15 phuts sẽ trigger lấy giá 1 lần, check chỉ run 1 lần trong ngày
    * */
-  @Cron('* */15 16-23 * * *', {
+  @Cron('* */1 16-23 * * *', {
     name: SyncOmJob.SyncOmJob_CODE,
     timeZone: 'Asia/Ho_Chi_Minh',
   })
   sync() {
+    if (!isFirstProcessPm2()) return;
+
     this.cronScheduleService.runOneTimePerDay(
       SyncOmJob.SyncOmJob_CODE,
       async () => {
-        if (!isFirstProcessPm2()) return;
-
         this.isPostMess = false;
         await this.slackService.postMessage(
           SLACK_CHANNEL.GENERAL_CHIAKI_BOT_CHANNEL,
@@ -64,6 +64,12 @@ export class SyncOmJob {
         if (!isNumber(n)) {
           this.logger.debug(
             `could not found schedule job info ${SyncOmJob.SyncOmJob_CODE}`,
+          );
+          this.slackService.postMessage(
+            SLACK_CHANNEL.GENERAL_CHIAKI_BOT_CHANNEL,
+            {
+              text: `could not found schedule job info ${SyncOmJob.SyncOmJob_CODE}`,
+            },
           );
           return;
         }
@@ -105,7 +111,7 @@ export class SyncOmJob {
           this.slackService.postMessage(
             SLACK_CHANNEL.GENERAL_CHIAKI_BOT_CHANNEL,
             {
-              text: `sync OM successfully and took ${d} seconds\``,
+              text: `sync OM successfully and took ${d} seconds`,
             },
           );
           this.isPostMess = true;

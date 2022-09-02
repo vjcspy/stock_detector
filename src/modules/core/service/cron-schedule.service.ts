@@ -19,13 +19,13 @@ export class CronScheduleService {
     return this.cronScheduleModel.create({
       jobCode,
       status: CronScheduleStatus.PENDING,
-      created_at: new Date(),
+      created_at: moment().tz('Asia/Ho_Chi_Minh').toDate(),
     });
   }
 
   async cronSuccess(jobId: string, meta?: any) {
     await this.cronScheduleModel.findByIdAndUpdate(jobId, {
-      finished_at: new Date(),
+      finished_at: moment().tz('Asia/Ho_Chi_Minh').toDate(),
       status: CronScheduleStatus.SUCCESS,
       meta,
     });
