@@ -21,6 +21,11 @@ export class SlackService {
       return;
     }
 
+    if (!this.isConfiguredSlack()) {
+      this.logger.log('Skip initialize slack due to missing configurations');
+      return;
+    }
+
     this.receiver = new ExpressReceiver({
       signingSecret: process.env.SLACK_SIGNING_SECRET,
       endpoints: '/',
@@ -69,6 +74,10 @@ export class SlackService {
       await ack();
       await say(`<@${body.user.id}> clicked the button`);
     });
+  }
+
+  private isConfiguredSlack() {
+    return !!process.env.SLACK_SIGNING_SECRET && !!process.env.SLACK_BOT_TOKEN;
   }
 
   public async onAppMention({ event, client, logger }) {
