@@ -1,5 +1,5 @@
 # Base image
-FROM node:16.17.0-slim
+FROM node:16.17.0
 # Creating a directory inside the base image and defining as the base directory
 WORKDIR /app
 # Copying the files of the root directory into the base directory
