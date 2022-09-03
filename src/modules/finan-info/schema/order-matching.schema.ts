@@ -25,6 +25,9 @@ export class OrderMatching {
   @Prop({ isRequired: true, type: mongoose.Schema.Types.Number })
   type: OrderMatchingType;
 
+  /*
+   * Ngày lấy từ dữ liệu trả về
+   * */
   @Prop({
     isRequired: true,
     type: mongoose.Schema.Types.Date,

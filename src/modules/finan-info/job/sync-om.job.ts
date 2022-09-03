@@ -28,7 +28,7 @@ export class SyncOmJob {
   /*
    * Từ 16h mỗi 15 phuts sẽ trigger lấy giá 1 lần, check chỉ run 1 lần trong ngày
    * */
-  @Cron('* */1 16-23 * * *', {
+  @Cron('* */1 * * * *', {
     name: SyncOmJob.SyncOmJob_CODE,
     timeZone: 'Asia/Ho_Chi_Minh',
   })

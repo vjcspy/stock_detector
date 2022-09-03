@@ -9,9 +9,9 @@ import { isDevelopment } from '@module/core/util/env';
 @Injectable()
 export class SlackService {
   private readonly logger = new Logger('SlackService');
-  private boltApp: App;
-  private readonly receiver: ExpressReceiver;
-  private boltClient: WebClient;
+  private readonly boltApp?: App;
+  private readonly receiver?: ExpressReceiver;
+  private boltClient?: WebClient;
 
   protected channels: any[] = [];
 
@@ -80,6 +80,10 @@ export class SlackService {
     return !!process.env.SLACK_SIGNING_SECRET && !!process.env.SLACK_BOT_TOKEN;
   }
 
+  public isReady() {
+    return this.receiver && this.boltApp;
+  }
+
   public async onAppMention({ event, client, logger }) {
     try {
       console.log(this);
@@ -89,12 +93,12 @@ export class SlackService {
     }
   }
   public use(): Application {
-    return this.receiver.app;
+    return this.receiver?.app;
   }
 
   async getAllChannel(): Promise<any[]> {
     try {
-      const result = await this.boltClient.conversations.list();
+      const result = await this.boltClient?.conversations.list();
 
       return Array.isArray(result.channels) ? result.channels : [];
     } catch (e) {
@@ -104,7 +108,7 @@ export class SlackService {
   }
 
   async registerChannels() {
-    if (isDevelopment()) {
+    if (!this.isReady()) {
       return;
     }
     const channels = await this.getAllChannel();
@@ -139,7 +143,7 @@ export class SlackService {
   }
 
   async postMessage(channelName: string, messageOptions: any) {
-    if (isDevelopment()) {
+    if (!this.isReady()) {
       return;
     }
 
