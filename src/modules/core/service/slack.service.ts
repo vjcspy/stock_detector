@@ -138,7 +138,7 @@ export class SlackService {
 
     this.logger.log('Register slack channels successfully');
     this.postMessage('general-chiaki-bot-channel', {
-      text: `Chiaki server[${process.env.INSTANCE_ID}] boot successfully`,
+      text: `Chiaki server[${process.env.INSTANCE_ID}:${process.env.PORT}] boot successfully`,
     });
   }
 
