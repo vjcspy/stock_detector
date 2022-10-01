@@ -7,8 +7,6 @@ from stock import cli, __app_name__
 
 
 def main():
-    print_cfg()
-    connect_mongo_db()
     cli.app(prog_name=__app_name__)
 
 
