@@ -5,7 +5,7 @@ from typing import Optional
 
 import typer
 
-from worker import __app_name__, __version__
+from stock import __app_name__, __version__
 
 app = typer.Typer()
 

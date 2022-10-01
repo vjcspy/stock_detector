@@ -1,5 +1,5 @@
-"""Top-level package for Stock Worker."""
-# worker/__init__.py
+"""Top-level package for Stock"""
+# stock/__init__.py
 
 __app_name__ = "worker"
 __version__ = "0.1.0"
