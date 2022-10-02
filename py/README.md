@@ -48,3 +48,5 @@ pip freeze > requirements.txt
 ## Active workspace interpreter (VsCode)
 1. Make sure installed plugin `Python Environment Manager`
 2. Go to python tab and active env
+
+However recommended to use `pycharm`
