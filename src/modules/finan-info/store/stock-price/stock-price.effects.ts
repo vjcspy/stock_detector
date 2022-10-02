@@ -1,8 +1,6 @@
 import moment from 'moment';
 import { concatMap, EMPTY, from, map, switchMap, withLatestFrom } from 'rxjs';
 
-import { getCurrentStatus, saveErrorStatus } from './fns/getCurrentStatus';
-import { savePrices } from './fns/savePrices';
 import { createEffect } from '@module/core/util/store/createEffect';
 import { ofType } from '@module/core/util/store/ofType';
 import { getPriceFromBSC } from '@module/finan-info/requests/bsc/price.request';
@@ -22,17 +20,27 @@ import { Effect } from '@module/core/decorator/store-effect';
 import { LogService } from '@module/core/service/log.service';
 import { Levels } from '@module/core/schemas/log-db.schema';
 import { StockPriceState } from '@module/finan-info/store/stock-price/stock-price.reducer';
+import { StockPriceSyncStatusService } from '@module/finan-info/service/stock-price-sync-status.service';
+import { StockPriceService } from '@module/finan-info/service/stock-price.service';
 
 @Injectable()
 export class StockPriceEffects {
-  constructor(private log: LogService) {}
+  constructor(
+    private log: LogService,
+    private stockPriceSyncStatusService: StockPriceSyncStatusService,
+    private stockPriceService: StockPriceService,
+  ) {}
 
   @Effect()
   checkStockPriceStatus$ = createEffect((action$) =>
     action$.pipe(
       ofType(stockPricesStartAction),
       concatMap((action) => {
-        return from(getCurrentStatus(action.payload.code)).pipe(
+        return from(
+          this.stockPriceSyncStatusService.getCurrentStatus(
+            action.payload.code,
+          ),
+        ).pipe(
           map((currentStatus) => {
             const curDate = moment();
             this.log.log({
@@ -142,7 +150,9 @@ export class StockPriceEffects {
       concatMap((d) => {
         const action = d[0];
         return from(
-          savePrices(action.payload.code, { items: action.payload.data }),
+          this.stockPriceService.savePrices(action.payload.code, {
+            items: action.payload.data,
+          }),
         ).pipe(
           map((res) => {
             if (res.syncSuccess === true) {
@@ -224,7 +234,10 @@ export class StockPriceEffects {
         const stockPriceState: StockPriceState = d[1];
 
         return from(
-          saveErrorStatus(stockPriceState.code, action?.payload?.error),
+          this.stockPriceSyncStatusService.saveErrorStatus(
+            stockPriceState.code,
+            action?.payload?.error,
+          ),
         ).pipe(
           map((currentStatus) => {
             if (currentStatus) {

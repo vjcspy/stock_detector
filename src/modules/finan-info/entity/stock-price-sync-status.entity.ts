@@ -1,8 +1,14 @@
-import { Entity, PrimaryGeneratedColumn, Column, Unique } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  Unique,
+  BaseEntity,
+} from 'typeorm';
 
 @Entity()
 @Unique(['code', 'lastDate'])
-export class StockPriceSyncStatusEntity {
+export class StockPriceSyncStatusEntity extends BaseEntity {
   @PrimaryGeneratedColumn()
   id?: number;
 
