@@ -16,7 +16,7 @@ export class SyncStockPriceConsumer extends RabbitmqSubscribeConsumerAbstract {
       durable: true,
     },
   })
-  public async pubSubHandler(msg: any, amqpMsg: ConsumeMessage) {
+  public async pubSubHandler(msg: any, _amqpMsg: ConsumeMessage) {
     return new Promise<any>((resolve) => {
       if (typeof msg === 'string') {
         getStateManager().store.dispatch(

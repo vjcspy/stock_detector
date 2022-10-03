@@ -4,6 +4,8 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import _ from 'lodash';
 import { Repository } from 'typeorm';
+import { StockPriceValues } from '@module/finan-info/store/stock-price/stock-price.values';
+import { FinanInfoConstant } from '@module/finan-info/constant/finan-info.constant';
 
 @Injectable()
 export class SyncStockPricePublisher {
@@ -17,8 +19,8 @@ export class SyncStockPricePublisher {
     const cors = await this.corRepository.find();
     _.forEach(cors, (cor) => {
       this.amqpConnection.publish(
-        'finan.info.sync-stock-price',
-        'finan.info.sync-stock-price.cor',
+        StockPriceValues.EXCHANGE_KEY,
+        StockPriceValues.PUBLISHER_ROUTING_KEY,
         cor.code,
         {},
       );
@@ -30,9 +32,9 @@ export class SyncStockPricePublisher {
   public async publishVnIndex() {
     // Lưu ý mã VNINDEX này chỉ valid trên BSC
     this.amqpConnection.publish(
-      'finan.info.sync-stock-price',
-      'finan.info.sync-stock-price.cor',
-      'HOSTC',
+      StockPriceValues.EXCHANGE_KEY,
+      StockPriceValues.PUBLISHER_ROUTING_KEY,
+      FinanInfoConstant.VNINDEX_CODE,
       {},
     );
   }

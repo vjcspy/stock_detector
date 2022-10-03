@@ -6,6 +6,7 @@ import { CoreModule } from '@module/core/core.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { FinanAnalysisEntities } from '@module/finan-analysis/entity';
 import { FA_SERVICES } from '@module/finan-analysis/service';
+import { ComputeController } from '@module/finan-analysis/controller/compute.controller';
 
 @Module({
   imports: [
@@ -13,7 +14,7 @@ import { FA_SERVICES } from '@module/finan-analysis/service';
     FinanInfoModule,
     TypeOrmModule.forFeature([...FinanAnalysisEntities]),
   ],
-  controllers: [FinanAnalysisController],
+  controllers: [FinanAnalysisController, ComputeController],
   providers: [...FA_SERVICES, ...ANALYSIS_QUEUE],
 })
 export class FinanAnalysisModule {}
