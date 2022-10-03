@@ -39,9 +39,10 @@ import mongoCfg from '@cfg/mongo.cfg';
   ],
   controllers: [AppController],
   providers: [AppService],
+  exports: [],
 })
 export class AppModule {
-  private readonly logger = new Logger('Application');
+  private readonly logger = new Logger('AppModule');
   constructor(private configService: ConfigService) {
     this.logger.log(
       `[${process.env.INSTANCE_ID}]App version: ${this.configService.get(

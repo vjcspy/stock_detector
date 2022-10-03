@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Logger, Module } from '@nestjs/common';
 import { appInitAction } from '@module/core/store/actions';
 import { CoreEffects } from '@module/core/store/effects';
 import { StateManager } from '@module/core/provider/state-manager';
@@ -6,7 +6,6 @@ import { ConfigModule } from '@nestjs/config';
 import rabbitmqCfg from '@cfg/rabbitmq.cfg';
 import databaseCfg from '@cfg/database.cfg';
 import { HttpModule } from '@nestjs/axios';
-import { FileLogger } from '@module/core/provider/file-logger';
 import { MongooseModule } from '@nestjs/mongoose';
 import { LogDb, LogDbSchema } from '@module/core/schemas/log-db.schema';
 import { LogService } from '@module/core/service/log.service';
@@ -100,14 +99,14 @@ import { HealthController } from './controller/health.controller';
       },
     }),
   ],
-  providers: [...CORE_SERVICES, StateManager, FileLogger, CoreEffects],
+  providers: [...CORE_SERVICES, StateManager, CoreEffects, Logger],
   exports: [
     StateManager,
     HttpModule,
-    FileLogger,
     LogService,
     RabbitMQModule,
     MongooseModule,
+    Logger,
     ...CORE_SERVICES,
   ],
   controllers: [HealthController],
